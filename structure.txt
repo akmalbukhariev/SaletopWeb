@@ -1,0 +1,178 @@
+src/
+├─ app/                        # App shell & entry
+│  ├─ App.tsx
+│  ├─ main.tsx
+│  ├─ routes.tsx              # route config (lazy)
+│  └─ providers/              # top-level providers
+│     ├─ ThemeProvider.tsx    # MUI theme + color mode
+│     ├─ QueryProvider.tsx    # TanStack Query (optional)
+│     └─ I18nProvider.tsx     # i18n (optional)
+│
+├─ core/                      # Infrastructure & cross-cutting concerns
+│  ├─ api/
+│  │  ├─ apiClient.ts         # axios instance, interceptors
+│  │  └─ endpoints.ts         # path helpers
+│  ├─ auth/
+│  │  ├─ auth.guard.tsx       # route guards
+│  │  └─ token.ts             # token utils (get/set/refresh helpers)
+│  ├─ config/
+│  │  └─ env.ts               # typed env loader
+│  ├─ errors/
+│  │  ├─ ErrorBoundary.tsx
+│  │  └─ errorMapping.ts
+│  └─ storage/
+│     └─ local.ts             # local/session storage helpers
+│
+├─ shared/                    # framework-agnostic reusable blocks
+│  ├─ ui/                     # generic UI (atoms/molecules)
+│  │  ├─ DataTable/
+│  │  ├─ FormTextField.tsx
+│  │  └─ Section.tsx
+│  ├─ forms/                  # zod schemas, form resolvers
+│  ├─ hooks/                  # generic hooks: useDebounce, usePagination
+│  ├─ utils/                  # formatters, date, number, etc.
+│  ├─ constants/              # APP_NAME, breakpoints, etc.
+│  └─ types/                  # global/shared TS types
+│
+├─ features/                  # Vertical slices (DDD-ish)
+│  ├─ auth/
+│  │  ├─ api/                 # login, register, refresh
+│  │  ├─ components/          # LoginForm, RegisterForm
+│  │  ├─ hooks/               # useAuth
+│  │  ├─ pages/               # Login.page, Register.page
+│  │  ├─ models.ts            # DTO/Entity types
+│  │  └─ index.ts             # barrel exports
+│  ├─ plates/
+│  │  ├─ api/                 # list, byId, create, update, remove
+│  │  ├─ components/          # PlateCard, PlateList
+│  │  ├─ hooks/               # usePlatesList, useCreatePlate
+│  │  ├─ pages/               # Plates.page, PlateDetail.page
+│  │  ├─ models.ts
+│  │  └─ index.ts
+│  ├─ orders/
+│  │  ├─ api/
+│  │  ├─ components/          # CartDrawer, OrderSummary
+│  │  ├─ hooks/               # useCart, useOrders
+│  │  ├─ pages/               # Cart.page, Checkout.page
+│  │  ├─ models.ts
+│  │  └─ index.ts
+│  └─ profile/
+│     ├─ api/
+│     ├─ components/          # ProfileHeader, OrderHistoryTable
+│     ├─ hooks/               # useProfile
+│     ├─ pages/               # Profile.page
+│     ├─ models.ts
+│     └─ index.ts
+│
+├─ theme/                     # MUI theming centralized
+│  ├─ index.ts                # createTheme + ThemeProvider wrapper
+│  ├─ palette.ts
+│  ├─ typography.ts
+│  └─ components.ts           # MUI component overrides/variants
+│
+├─ styles/
+│  ├─ tailwind.css            # @tailwind components; @tailwind utilities
+│  └─ globals.css             # rare global rules (if needed)
+│
+├─ store/                     # app-wide state (zustand/redux)
+│  └─ user.store.ts
+│
+├─ pages/                     # very thin top-level pages (optional)
+│  ├─ Home.page.tsx
+│  └─ NotFound.page.tsx
+
+
+#Info
+Tushunarli qilaman 🙂. Sen ko‘rsatgan strukturada ikkita tushuncha bor: **core** va **features**.
+
+# 🔹 1. `core/` (infrastructure & cross-cutting concerns)
+
+👉 **Core** — bu **ilova yuragi**. Unda **infrastructure-level** kodlar bo‘ladi:
+ya’ni, **umumiy, domenlarga tegishli bo‘lmagan**, lekin butun dastur ishlashi uchun zarur bo‘lgan narsalar.
+
+### Misollar:
+
+* **api/** → axios instance, request interceptors, base URL.
+
+  * `apiClient.ts` — bitta umumiy axios/fetch client.
+  * `endpoints.ts` — API endpointlarni markazlashtirish.
+
+* **auth/** → global autentifikatsiya helperlari.
+
+  * `auth.guard.tsx` — route guard (agar user login qilmagan bo‘lsa, `/login` ga redirect qiladi).
+  * `token.ts` — tokenlarni olish, saqlash, yangilash funksiyalari.
+
+* **config/** → muhit sozlamalari.
+
+  * `env.ts` — `.env` fayldan typed konfiguratsiya olish.
+
+* **errors/** → error handling.
+
+  * `ErrorBoundary.tsx` — React Error Boundary.
+  * `errorMapping.ts` — server xatolarini foydalanuvchi tiliga o‘girish.
+
+* **storage/** → local/session storage helperlari.
+
+  * `local.ts` — `getItem`, `setItem`, `removeItem` kabi wrapperlar.
+
+📌 **Qisqa qilib:** `core/` ilovaga xizmat qiladigan umumiy servislar va “infrastructure-level components” joyi.
+
+---
+
+# 🔹 2. `features/` (vertical slices, domain-driven)
+
+👉 **Features** — bu **domen modullari**. Har bir feature o‘z ichida **butunlay mustaqil** bo‘lishi kerak.
+Masalan: `auth`, `plates`, `orders`, `profile`.
+
+### Har bir feature ichida:
+
+* **api/** → shu feature uchun API chaqiriqlari (`auth.api.ts`, `plates.api.ts`)
+* **components/** → shu feature ichida ishlatiladigan komponentlar (`LoginForm`, `PlateCard`).
+* **hooks/** → shu feature logic-ni boshqaradigan custom hooklar (`useAuth`, `usePlates`).
+* **pages/** → shu feature bilan bog‘liq sahifalar (`Login.page.tsx`, `Plates.page.tsx`).
+* **models.ts** → shu feature’ga oid TypeScript turlar/DTO lar (`Plate`, `Order`).
+* **index.ts** → “barrel export” (importlarni ixchamlashtirish uchun).
+
+📌 **Qisqa qilib:** `features/` — foydalanuvchi uchun ko‘rinadigan **ilova imkoniyatlari** (modules/domain slices).
+
+---
+
+# 🔍 Farqni misol bilan tushuntiraman
+
+Masalan: foydalanuvchi `Plates` sahifasiga kiradi:
+
+1. **UI** da → `Plates.page.tsx` (feature ichida) ishlaydi.
+2. `usePlates` hook orqali API chaqiriladi → `features/plates/api/plates.api.ts`.
+3. Bu API chaqiruvi **axios client** orqali ketadi → `core/api/apiClient.ts`.
+4. Agar token kerak bo‘lsa → `core/auth/token.ts` dan olinadi.
+5. Agar error chiqsa → `core/errors/ErrorBoundary.tsx` ishlaydi.
+
+⚡ Ko‘rib turganingdek:
+
+* **core/** → xizmat (infrastructure, umumiy qoidalar).
+* **features/** → aniq domen (Auth, Plates, Orders).
+
+---
+
+# 🔹 3. `components/` bilan bog‘liq farq
+
+* **features/** ichidagi `components/` → faqat shu modulga tegishli (masalan: `PlateCard` → faqat plates uchun).
+* **shared/ui/** ichidagi komponentlar → **umumiy ishlatiladigan** komponentlar (`Button`, `DataTable`, `FormTextField`).
+
+👉 Ya’ni:
+
+* `features/auth/components/LoginForm.tsx` → faqat `auth` ishlatadi.
+* `shared/ui/FormTextField.tsx` → barcha feature’lar ishlatishi mumkin.
+
+---
+
+✅ **Xulosa**:
+
+* **core/** = butun app ishlashi uchun kerak bo‘lgan, domen bilan bog‘liq bo‘lmagan umumiy servis va helperlar.
+* **features/** = domen (module) bo‘yicha guruhlangan, foydalanuvchiga ko‘rinadigan imkoniyatlar.
+* **shared/** = umumiy qayta ishlatiladigan komponentlar/hooklar/util-lar.
+
+---
+
+Xohlaysanmi, men senga **Auth** va **Plates** modullarida `core` bilan qanday ishlashini diagramma shaklida chizib beray?
+
