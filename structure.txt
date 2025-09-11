@@ -1,85 +1,154 @@
 src/
-├─ app/                        # App shell & entry
+├─ app/                        # Ilovaning "qobig‘i" va kirish nuqtasi
+│  ├─ App.tsx                  # Asosiy React komponent (root component)
+│  ├─ main.tsx                 # ReactDOM orqali App ni DOM ga ulash
+│  ├─ routes.tsx               # Marshrut (routing) konfiguratsiyasi (lazy load bilan)
+│  └─ providers/               # Yuqori darajadagi provider’lar (butun app uchun)
+│     ├─ ThemeProvider.tsx     # MUI theme va rang rejimi (dark/light) boshqaruvchisi
+│     ├─ QueryProvider.tsx     # TanStack Query provider (serverdan data boshqarish uchun, ixtiyoriy)
+│     └─ I18nProvider.tsx      # I18n (ko‘p tillilik) provider, ixtiyoriy
+│
+├─ core/                       # Infrastruktura va "cross-cutting concerns" (butun app bo‘yicha umumiy xizmatlar)
+│  ├─ api/
+│  │  ├─ apiClient.ts          # Axios instance va interceptor’lar (so‘rovlarni markazdan boshqarish)
+│  │  └─ endpoints.ts          # API endpointlarni markazlashtirib saqlash
+│  ├─ auth/
+│  │  ├─ auth.guard.tsx        # Route guard (faqat login bo‘lsa sahifaga kiritadi)
+│  │  └─ token.ts              # Token’ni olish/saqlash/yangilash funksiyalari
+│  ├─ config/
+│  │  └─ env.ts                # Muhit sozlamalari (`.env`) ni typed qilib olish
+│  ├─ errors/
+│  │  ├─ ErrorBoundary.tsx     # React Error Boundary (xatoni tutib foydalanuvchiga ko‘rsatish)
+│  │  └─ errorMapping.ts       # Serverdan kelgan xatoni foydalanuvchi uchun tushunarli matnga o‘girish
+│  └─ storage/
+│     └─ local.ts              # LocalStorage / SessionStorage helper funksiyalari
+│
+├─ shared/                     # Framework’dan mustaqil qayta foydalaniladigan bloklar
+│  ├─ ui/                      # Umumiy UI komponentlar (atom/molecule darajasida)
+│  │  ├─ DataTable/            # Jadval uchun umumiy komponent
+│  │  ├─ FormTextField.tsx     # Input uchun qayta ishlatiladigan form component
+│  │  └─ Section.tsx           # Bo‘lim/sahifa layout elementi
+│  ├─ forms/                   # Zod schemas va form resolvers (validation uchun)
+│  ├─ hooks/                   # Umumiy hook’lar (masalan: useDebounce, usePagination)
+│  ├─ utils/                   # Foydali funksiyalar (formatter, sanalar, sonlar va h.k.)
+│  ├─ constants/               # Global konstantalar (APP_NAME, breakpoints va h.k.)
+│  └─ types/                   # Global / shared TypeScript turlari
+│
+├─ features/                   # Domen bo‘yicha kesilgan modullar (vertical slices, DDDga yaqin)
+│  ├─ auth/
+│  │  ├─ api/                  # Login, register, refresh API chaqiriqlari
+│  │  ├─ components/           # Auth’ga oid komponentlar (LoginForm, RegisterForm)
+│  │  ├─ hooks/                # Auth bilan ishlovchi hook’lar (useAuth)
+│  │  ├─ pages/                # Auth sahifalari (Login.page, Register.page)
+│  │  ├─ models.ts             # Auth bilan bog‘liq DTO va entity turlari
+│  │  └─ index.ts              # Barrel export (importlarni ixcham qilish uchun)
+│  ├─ plates/
+│  │  ├─ api/                  # Plates CRUD API (list, byId, create, update, remove)
+│  │  ├─ components/           # PlateCard, PlateList va shu domen UI komponentlari
+│  │  ├─ hooks/                # Plates uchun hook’lar (usePlatesList, useCreatePlate)
+│  │  ├─ pages/                # Plates sahifalari (Plates.page, PlateDetail.page)
+│  │  ├─ models.ts             # Plates uchun turlar
+│  │  └─ index.ts
+│  ├─ orders/
+│  │  ├─ api/                  # Orders API
+│  │  ├─ components/           # CartDrawer, OrderSummary kabi komponentlar
+│  │  ├─ hooks/                # useCart, useOrders hook’lari
+│  │  ├─ pages/                # Cart.page, Checkout.page sahifalari
+│  │  ├─ models.ts             # Orders bilan bog‘liq turlar
+│  │  └─ index.ts
+│  └─ profile/
+│     ├─ api/                  # Profile API
+│     ├─ components/           # ProfileHeader, OrderHistoryTable
+│     ├─ hooks/                # useProfile hook
+│     ├─ pages/                # Profile.page sahifasi
+│     ├─ models.ts             # Profile turlari
+│     └─ index.ts
+│
+├─ theme/                      # MUI Theme markazlashtirilgan joy
+│  ├─ index.ts                 # createTheme va ThemeProvider yig‘ilishi
+│  ├─ palette.ts               # Rang sxemasi (brand ranglar, fon, text ranglar)
+│  ├─ typography.ts            # Matn/shrift sozlamalari
+│  └─ components.ts            # MUI komponentlarining global override va variantlari
+│
+├─ styles/                     # Global CSS fayllar
+│  ├─ tailwind.css             # Tailwind CSS utilities (base components/utilities)
+│  └─ globals.css              # Juda kam hollarda ishlatiladigan global qoidalar
+│
+├─ store/                      # Butun app bo‘yicha state boshqaruvi (zustand/redux)
+│  └─ user.store.ts            # User bilan bog‘liq global state
+│
+├─ pages/                      # Juda ingichka (thin) top-level sahifalar (routing darajasida)
+│  ├─ Home.page.tsx            # Bosh sahifa
+│  └─ NotFound.page.tsx        # 404 sahifa
+
+
+src/
+├─ app/
 │  ├─ App.tsx
 │  ├─ main.tsx
-│  ├─ routes.tsx              # route config (lazy)
-│  └─ providers/              # top-level providers
-│     ├─ ThemeProvider.tsx    # MUI theme + color mode
-│     ├─ QueryProvider.tsx    # TanStack Query (optional)
-│     └─ I18nProvider.tsx     # i18n (optional)
+│  ├─ routes.tsx
+│  └─ providers/
+│     ├─ ThemeProvider.tsx
+│     ├─ QueryProvider.tsx
+│     └─ I18nProvider.tsx
 │
-├─ core/                      # Infrastructure & cross-cutting concerns
+├─ core/
 │  ├─ api/
-│  │  ├─ apiClient.ts         # axios instance, interceptors
-│  │  └─ endpoints.ts         # path helpers
+│  │  ├─ apiClient.ts
+│  │  └─ endpoints.ts
 │  ├─ auth/
-│  │  ├─ auth.guard.tsx       # route guards
-│  │  └─ token.ts             # token utils (get/set/refresh helpers)
+│  │  ├─ auth.guard.tsx
+│  │  └─ token.ts
 │  ├─ config/
-│  │  └─ env.ts               # typed env loader
+│  │  └─ env.ts
 │  ├─ errors/
 │  │  ├─ ErrorBoundary.tsx
 │  │  └─ errorMapping.ts
 │  └─ storage/
-│     └─ local.ts             # local/session storage helpers
+│     └─ local.ts
 │
-├─ shared/                    # framework-agnostic reusable blocks
-│  ├─ ui/                     # generic UI (atoms/molecules)
-│  │  ├─ DataTable/
+├─ shared/
+│  ├─ ui/
 │  │  ├─ FormTextField.tsx
 │  │  └─ Section.tsx
-│  ├─ forms/                  # zod schemas, form resolvers
-│  ├─ hooks/                  # generic hooks: useDebounce, usePagination
-│  ├─ utils/                  # formatters, date, number, etc.
-│  ├─ constants/              # APP_NAME, breakpoints, etc.
-│  └─ types/                  # global/shared TS types
+│  ├─ hooks/useDebounce.ts
+│  ├─ utils/formatters.ts
+│  ├─ constants/index.ts
+│  └─ types/global.d.ts
 │
-├─ features/                  # Vertical slices (DDD-ish)
+├─ features/
 │  ├─ auth/
-│  │  ├─ api/                 # login, register, refresh
-│  │  ├─ components/          # LoginForm, RegisterForm
-│  │  ├─ hooks/               # useAuth
-│  │  ├─ pages/               # Login.page, Register.page
-│  │  ├─ models.ts            # DTO/Entity types
-│  │  └─ index.ts             # barrel exports
-│  ├─ plates/
-│  │  ├─ api/                 # list, byId, create, update, remove
-│  │  ├─ components/          # PlateCard, PlateList
-│  │  ├─ hooks/               # usePlatesList, useCreatePlate
-│  │  ├─ pages/               # Plates.page, PlateDetail.page
+│  │  ├─ api/auth.api.ts
+│  │  ├─ components/LoginForm.tsx
+│  │  ├─ hooks/useAuth.ts
+│  │  ├─ pages/Login.page.tsx
 │  │  ├─ models.ts
 │  │  └─ index.ts
-│  ├─ orders/
-│  │  ├─ api/
-│  │  ├─ components/          # CartDrawer, OrderSummary
-│  │  ├─ hooks/               # useCart, useOrders
-│  │  ├─ pages/               # Cart.page, Checkout.page
-│  │  ├─ models.ts
-│  │  └─ index.ts
-│  └─ profile/
-│     ├─ api/
-│     ├─ components/          # ProfileHeader, OrderHistoryTable
-│     ├─ hooks/               # useProfile
-│     ├─ pages/               # Profile.page
+│  └─ plates/
+│     ├─ api/plates.api.ts
+│     ├─ components/PlateCard.tsx
+│     ├─ hooks/usePlates.ts
+│     ├─ pages/Plates.page.tsx
 │     ├─ models.ts
 │     └─ index.ts
 │
-├─ theme/                     # MUI theming centralized
-│  ├─ index.ts                # createTheme + ThemeProvider wrapper
+├─ theme/
+│  ├─ index.ts
 │  ├─ palette.ts
 │  ├─ typography.ts
-│  └─ components.ts           # MUI component overrides/variants
+│  └─ components.ts
 │
 ├─ styles/
-│  ├─ tailwind.css            # @tailwind components; @tailwind utilities
-│  └─ globals.css             # rare global rules (if needed)
+│  ├─ tailwind.css
+│  └─ globals.css
 │
-├─ store/                     # app-wide state (zustand/redux)
+├─ store/
 │  └─ user.store.ts
 │
-├─ pages/                     # very thin top-level pages (optional)
+├─ pages/
 │  ├─ Home.page.tsx
 │  └─ NotFound.page.tsx
+
 
 
 #Info
