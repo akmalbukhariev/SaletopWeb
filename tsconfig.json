@@ -9,6 +9,9 @@
     "moduleResolution": "bundler",
     "strict": true,
     "baseUrl": ".",
+    "types": [
+      "node"
+    ],
     "paths": {
       "@/*": [
         "src/*"

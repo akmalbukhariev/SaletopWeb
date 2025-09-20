@@ -5,54 +5,55 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import VerifiedUserRoundedIcon from '@mui/icons-material/VerifiedUserRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { ROUTES } from '@/shared/constants/routes';
 
 const sideBarList = [
   { 
     id: 1, 
     name: "Dashboard", 
-    path: "/admin/dashboard", 
+    path: ROUTES.HOME || ROUTES.ADMIN.DASHBOARD, 
     selected: false, 
     icon: HomeRoundedIcon 
   },
    { 
     id: 2, 
     name: "Admins", 
-    path: "/admin/admins", 
+    path: ROUTES.ADMIN.ADMINS, 
     selected: false, 
     icon: AdminPanelSettingsIcon
   },
   { 
     id: 3, 
     name: "Users", 
-    path: "/admin/users", 
+    path: ROUTES.ADMIN.USERS, 
     selected: false, 
     icon: PeopleRoundedIcon
   },
   { 
     id: 4, 
     name: "Companies", 
-    path: "/admin/companies", 
+    path: ROUTES.ADMIN.COMPANIES, 
     selected: false, 
     icon: StoreRoundedIcon 
   },
   { 
     id: 5, 
     name: "Moderation", 
-    path: "/admin/moderation", 
+    path: ROUTES.ADMIN.MODERATION, 
     selected: false, 
     icon: VerifiedUserRoundedIcon 
   },
   { 
     id: 6, 
     name: "Notifications", 
-    path: "/admin/notifications", 
+    path: ROUTES.ADMIN.NOTIFICATIONS, 
     selected: false,
     icon: NotificationsRoundedIcon 
   },
   { 
     id: 7, 
     name: "Settings", 
-    path: "/admin/settings", 
+    path: ROUTES.ADMIN.SETTINGS, 
     selected: false, 
     icon: TuneRoundedIcon 
   },

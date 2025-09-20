@@ -2,25 +2,23 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
-import { fileURLToPath } from 'url';
+import eslint from 'vite-plugin-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const root = process.cwd();
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: [
-      { find: '@', replacement: path.resolve(__dirname, 'src') },
-      { find: '@app', replacement: path.resolve(__dirname, 'src/app') },
-      { find: '@core', replacement: path.resolve(__dirname, 'src/core') },
-      { find: '@shared', replacement: path.resolve(__dirname, 'src/shared') },
-      { find: '@features', replacement: path.resolve(__dirname, 'src/features') },
-      { find: '@theme', replacement: path.resolve(__dirname, 'src/theme') },
-      { find: '@store', replacement: path.resolve(__dirname, 'src/store') },
-      { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
+      { find: '@', replacement: path.resolve(root, 'src') },
+      { find: '@app', replacement: path.resolve(root, 'src/app') },
+      { find: '@core', replacement: path.resolve(root, 'src/core') },
+      { find: '@shared', replacement: path.resolve(root, 'src/shared') },
+      { find: '@features', replacement: path.resolve(root, 'src/features') },
+      { find: '@theme', replacement: path.resolve(root, 'src/theme') },
+      { find: '@store', replacement: path.resolve(root, 'src/store') },
+      { find: '@styles', replacement: path.resolve(root, 'src/styles') },
     ],
-  },
-
+  }
 })

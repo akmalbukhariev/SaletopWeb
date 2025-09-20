@@ -1,5 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router"
 import React from "react"
+import { ROUTES } from "@/shared/constants/routes"
+import { Box } from "@mui/material"
+import AuthGuard from "@/core/auth/AuthGuard"
 
 const MainLayout =  React.lazy(() => import("@app/layouts/MainLayout"))
 const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout"))
@@ -17,35 +20,61 @@ const NotFound = React.lazy(() => import("@/pages/NotFound"))
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    Component: MainLayout,
+    path: ROUTES.HOME,
+    element: 
+        <AuthGuard>
+          <MainLayout/>
+        </AuthGuard>,
     children: [
       {
-        path: 'admin/dashboard',
-        Component: DashboardPage
+        path: ROUTES.ADMIN.DASHBOARD,
+        element:
+          <AuthGuard> 
+            <DashboardPage/>
+          </AuthGuard>
       },
       {
-        path: 'admin/admins',
-        Component: AdminPage
+        path: ROUTES.ADMIN.ADMINS,
+        element:  
+            <AuthGuard> 
+              <AdminPage/> 
+            </AuthGuard> 
       },
       {
-        path: 'admin/users',
-        Component: UserPage
+        path: ROUTES.ADMIN.USERS,
+        element:
+          <AuthGuard>
+            <UserPage/>
+          </AuthGuard>
       },
       {
-        path: 'admin/companies',
-        Component: CompanyPage
+        path: ROUTES.ADMIN.COMPANIES,
+        element:
+          <AuthGuard>
+            <CompanyPage/>
+          </AuthGuard>
       },
       {
-        path: 'admin/moderation',
-        Component: ModerationPage
+        path: ROUTES.ADMIN.MODERATION,
+        element:
+          <AuthGuard>
+            <ModerationPage/>
+          </AuthGuard>
       },
       {
-        path: 'admin/notifications',
-        Component: NotificationPage
+        path: ROUTES.ADMIN.NOTIFICATIONS,
+        element:
+          <AuthGuard>
+            <NotificationPage/>
+          </AuthGuard>
       },
       {
-        path: 'admin/settings',
+        path:  ROUTES.ADMIN.SETTINGS,
+        element:
+          <AuthGuard>
+            {/* TODO: Add Settings page component when available */} 
+            <Box />
+          </AuthGuard>
       }
     ],
   },
@@ -54,21 +83,24 @@ const router = createBrowserRouter([
     Component: AuthLayout,
     children: [
       {
-        path: 'login',
+        path: ROUTES.AUTH.LOGIN,
         element: <LoginPage />
       },
       {
-        path: 'register',
-        element: <RegisterPage />
+        path: ROUTES.AUTH.REGISTER,
+        element: 
+          <AuthGuard>
+            <RegisterPage />
+          </AuthGuard>
       },
-      
     ]
   },
   {
-    path: '*',
+    path: ROUTES.NOT_FOUND,
     element: <NotFound />
   }
 ])  
+
 
 function Router() {
   return (

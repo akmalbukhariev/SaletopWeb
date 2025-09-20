@@ -1,8 +1,23 @@
+import { useAuth } from "@/features/auth/hooks/useAuth" 
+import { ROUTES } from "@/shared/constants/routes"
+import { Navigate, useLocation } from "react-router"
 
-function authGuard() {
+
+interface AuthGuardProps {
+  children: React.ReactNode
+}
+
+function AuthGuard({children}: AuthGuardProps) {
+  const { isAuth } = useAuth()
+  const location = useLocation()
+
+  if (!isAuth) {
+    return <Navigate to={ROUTES.AUTH.LOGIN} state ={{from: location}} />
+  }
+
   return (
-    <div>authGuard</div>
+    <>{children}</>
   )
 }
 
-export default authGuard
+export default AuthGuard
