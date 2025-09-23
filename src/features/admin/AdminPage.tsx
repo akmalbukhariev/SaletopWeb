@@ -13,10 +13,10 @@ function AdminPage() {
 
   useEffect(() => {
     const fetchAdmins = async () => {
-      const response = await AdminApi.getAllAdmin();
+      const data = await AdminApi.getAllAdmin();
 
-      if (response.data?.resultData) {
-        setAdmins(response.data?.resultData);
+      if (data?.resultData) {
+        setAdmins(data?.resultData);
       } else {
         setAdmins([]);
       }

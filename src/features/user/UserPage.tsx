@@ -5,33 +5,12 @@ import {
   Avatar,
   Box,
   Chip,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
   Switch,
-  Typography,
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
 import UserAPI from "./api/UserAPI";
-
-function formatDate(value: string): string {
-  try {
-    const date = new Date(value);
-    return new Intl.DateTimeFormat(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(date);
-  } catch {
-    return value;
-  }
-}
 
 function UserPage() {
   const [rows, setRows] = useState<UserRow[]>();
@@ -42,7 +21,6 @@ function UserPage() {
   })
 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize)
-  const [selectUser, setSelectUser] = useState<string>("All");
   
   useEffect(()=>{
     const fetchUsers = async() => {
@@ -62,28 +40,17 @@ function UserPage() {
     fetchUsers()
   },[pageFormat])
 
+const handleChangingUserStatus = () => {
+
+}
 
 
-  const handleChangeSy
 
 
 
-  const handleToggleField = (
-    id: string,
-    field: "notification_enabled" | "deleted"
-  ) => {
-    // setRows(prev =>
-    //   prev.map(row =>
-    //     row.user_id === id
-    //       ? {
-    //           ...row,
-    //           [field]: (row[field] === 1 ? 0 : 1) as 0 | 1,
-    //           updated_at: new Date().toISOString(),
-    //         }
-    //       : row
-    //   )
-    // );
-  };
+
+
+
 
   const columns: GridColDef<UserRow>[] = useMemo(
     () => [
@@ -137,9 +104,6 @@ function UserPage() {
         renderCell: params => (
           <Switch
             checked={params.row.notification_enabled === 1}
-            onChange={() =>
-              handleToggleField(params.row?.user_id, "notification_enabled")
-            }
             size="small"
           />
         ),
@@ -153,7 +117,6 @@ function UserPage() {
         renderCell: params => (
           <Switch
             checked={params.row.deleted === 1}
-            onChange={() => handleToggleField(params.row.user_id, "deleted")}
             size="small"
             color="warning"
           />
@@ -163,18 +126,15 @@ function UserPage() {
         field: "created_at",
         headerName: "Created",
         width: 170,
-        valueGetter: params => formatDate(params as string),
       },
       {
         field: "updated_at",
         headerName: "Updated",
         width: 170,
-        valueGetter: params => formatDate(params as string),
       },
     ],
     []
   );
-
 
   return (
     <Grid
@@ -189,29 +149,6 @@ function UserPage() {
         overflow: "hidden",
       }}
     >
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ mb: 2, flexShrink: 0 }}
-      >
-        <Typography variant="h6">Users</Typography>
-        <FormControl size="small" sx={{ width: "180px" }}>
-          <InputLabel id="demo-simple-select-label">Users</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectUser}
-            label="Age"
-            onChange={event => setSelectUser(event.target.value)}
-          >
-            <MenuItem value="All">All</MenuItem>
-            <MenuItem value="Active">Active</MenuItem>
-            <MenuItem value="Inactive">Inactive</MenuItem>
-            <MenuItem value="Banned">Banned</MenuItem>
-          </Select>
-        </FormControl>
-      </Stack>
       <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
         <DataGrid
           getRowId={(row) => row.user_id}

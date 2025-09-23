@@ -1,4 +1,4 @@
-import { post } from "@/core/auth/api/apiClient";
+import { loginPost } from "@/core/auth/api/apiClient";
 import { ENDPOINTS } from "@/core/auth/api/endpoints";
 import { IUserState } from "@/shared/types/IUserState";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -8,49 +8,6 @@ export const useAuth = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
 
-  // Token validation function
-  const validateToken = async (token: string) => {
-    try {
-      // Server bilan token tekshirish
-      const response = await post(ENDPOINTS.AUTH.VALIDATE_TOKEN || '/auth/validate', { token });
-      return response?.data?.valid || false;
-    } catch (error) {
-      console.error("Token validation error:", error);
-      return false;
-    }
-  };
-
-  // Auto login from storage
-  const autoLogin = async () => {
-    try {
-      // Avval localStorage'dan, keyin sessionStorage'dan token olish
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-      const userData = localStorage.getItem("user");
-
-      if (token && userData) {
-        // Token server bilan tekshirish
-        // const isValid = await validateToken(token);
-        // console.log("isValid",isValid)
-        
-        // if (isValid) {
-        //   const user = JSON.parse(userData);
-        //   dispatch(login({ ...user, isAuthenticated: true }));
-        //   return true;
-        // } else {
-        //   // Token eskirgan, storage'dan o'chirish
-        //   localStorage.removeItem("token");
-        //   localStorage.removeItem("user");
-        //   sessionStorage.removeItem("token");
-        //   return false;
-        // }
-      }
-      // return false;
-      return true;
-    } catch (error) {
-      console.error("Auto login error:", error);
-      return false;
-    }
-  };
 
   const signIn = async (
     data: { admin_id: string; password: string },
@@ -59,13 +16,11 @@ export const useAuth = () => {
     try {
       // Call API to login, expect response to include user and token
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response = (await post(ENDPOINTS.AUTH.LOGIN, data)) as any;
+      const response = (await loginPost(ENDPOINTS.AUTH.LOGIN, data)) as any;
       console.log("Login response:", response);
 
       if (response?.data?.resultData) {
       
-
-        // Map API response to IUserState; adjust keys as per backend
         const payload: IUserState = {
           id: String(response?.data?.resultData?.id ?? "") || null,
           admin_id: String(response?.data?.resultData.admin_id ?? "") || null,
@@ -89,7 +44,7 @@ export const useAuth = () => {
             }
       }
 
-      return response?.data;
+      return response;
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -109,7 +64,5 @@ export const useAuth = () => {
     isAuth: user.isAuthenticated,
     signIn,
     signOut,
-    autoLogin,
-    validateToken,
   };
 };

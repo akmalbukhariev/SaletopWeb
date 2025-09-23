@@ -29,7 +29,7 @@ function LoginForm() {
     try {
       const response = await signIn({ admin_id, password }, isRememberMe);
       console.log("res", response);
-      if (response.resultData) {
+      if (response) {
         navigate(ROUTES.HOME, { replace: true });
       }
     } catch (err) {

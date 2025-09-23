@@ -29,6 +29,7 @@ service.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
+
     return response;
   },
   function (error) {
@@ -70,6 +71,12 @@ export const post = async (url: string, data = {}) => {
   return await service.post(url, data).then(res => {
     console.log("post:", res);
     return res.data;
+  });
+};
+
+export const loginPost = async (url: string, data = {}) => {
+  return await service.post(url, data).then(res => {
+    return res;
   });
 };
 
