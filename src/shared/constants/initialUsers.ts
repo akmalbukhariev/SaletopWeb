@@ -46,7 +46,7 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-    {
+  {
     id: "4",
     phone_number: "+998 90 123 45 67",
     email: "alex@example.uz",
@@ -61,7 +61,7 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-    {
+  {
     id: "5",
     phone_number: "+998 90 123 45 67",
     email: "alex@example.uz",
@@ -76,7 +76,7 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-    {
+  {
     id: "6",
     phone_number: "+998 90 123 45 67",
     email: "alex@example.uz",
@@ -91,7 +91,7 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-    {
+  {
     id: "7",
     phone_number: "+998 90 123 45 67",
     email: "alex@example.uz",
@@ -106,7 +106,7 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-    {
+  {
     id: "8",
     phone_number: "+998 90 123 45 67",
     email: "alex@example.uz",
@@ -121,7 +121,7 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-    {
+  {
     id: "9",
     phone_number: "+998 90 123 45 67",
     email: "alex@example.uz",

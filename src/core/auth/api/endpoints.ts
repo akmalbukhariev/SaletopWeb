@@ -4,31 +4,29 @@
 
 export const ENDPOINTS = {
   AUTH: {
-    LOGIN: 'admin/login',
-    REGISTER: 'admin/register',
-    REFRESH: 'admin/refresh',
+    LOGIN: "admin/login",
+    REGISTER: "admin/register",
+    REFRESH: "admin/refresh",
+    VALIDATE_TOKEN: "admin/validate-token",
   },
   ADMIN: {
-    ADMINS: 'admin/getAllAdmins',
+    ADMINS: "admin/getAllAdmins",
     ADMIN_BY_ID: (id: string | number) => `admin/getAdminById/${id}`,
-    DELETE_BY_ID: (id: string | number ) => `admin/deleteAdminById/${id}`
+    DELETE_BY_ID: (adminId: string) => `admin/deleteAdminById/${adminId}`,
   },
   USERS: {
-    ROOT: 'users',
-    PAGINATED_LIST: 'user/getPaginatedUsers',
-    CHANGE_STATUS: 'user/changeUserStatus',
-    CHANGE_DELETION_STATUS: 'changeUserDeletionStatus',
-    BY_ID: (id: string | number) => `users/${id}`,
+    PAGINATED_LIST: "user/getPaginatedUsers",
+    CHANGE_STATUS: "user/changeUserStatus",
+    CHANGE_DELETION_STATUS: "user/changeUserDeletionStatus", //{  "deleted": true, "phone_number": "string" }
+    BY_PHONE_NUM: (phone: string | number) => `user/getUserByPhone/${phone}`,
   },
 
   COMPANIES: {
-    CHANGE_STATUS: 'company/changeUserStatus',
+    CHANGE_STATUS: "company/changeUserStatus",
     PAGINATED_LIST: `company/getPaginatedUsers`,
-    CHANGE_DELETION_STATUS: 'company/changeUserDeletionStatus',
+    CHANGE_DELETION_STATUS: "company/changeUserDeletionStatus",
     BY_PHONE: (phone: string | number) => `company/getUserByPhone/${phone}`,
   },
-
 } as const;
 
 export type Endpoints = typeof ENDPOINTS;
-

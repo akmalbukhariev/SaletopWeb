@@ -1,111 +1,123 @@
-import { createBrowserRouter, RouterProvider } from "react-router"
-import React from "react"
-import { ROUTES } from "@/shared/constants/routes"
-import { Box } from "@mui/material"
-import AuthGuard from "@/core/auth/AuthGuard"
+import AuthGuard from "@/core/auth/authGuard";
+import { ROUTES } from "@/shared/constants/routes";
+import { Box } from "@mui/material";
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
-const MainLayout =  React.lazy(() => import("@app/layouts/MainLayout"))
-const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout"))
+const MainLayout = React.lazy(() => import("@app/layouts/MainLayout"));
+const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout"));
 
-const AdminPage  = React.lazy(() => import("@features/admin/AdminPage"))  
-const DashboardPage = React.lazy(() => import("@features/dashboard/MainPage"))
-const UserPage = React.lazy(() => import("@features/user/UserPage"))  
-const CompanyPage = React.lazy(() => import("@features/company/CompanyPage"))
-const ModerationPage = React.lazy(() => import("@features/moderation/ModerationPage"))
-const NotificationPage = React.lazy(() => import("@features/notification/NotificationPage"))
-const LoginPage = React.lazy(()=>  import("@/features/auth/pages/LoginPage"))
-const RegisterPage = React.lazy(() => import("@/features/auth/pages/RegisterPage"))
+const AdminPage = React.lazy(() => import("@features/admin/AdminPage"));
+const DashboardPage = React.lazy(() => import("@features/dashboard/MainPage"));
+const UserPage = React.lazy(() => import("@features/user/UserPage"));
+const CompanyPage = React.lazy(() => import("@features/company/CompanyPage"));
+const ModerationPage = React.lazy(
+  () => import("@features/moderation/ModerationPage")
+);
+const NotificationPage = React.lazy(
+  () => import("@features/notification/NotificationPage")
+);
+const LoginPage = React.lazy(() => import("@/features/auth/pages/LoginPage"));
+const RegisterPage = React.lazy(
+  () => import("@/features/auth/pages/RegisterPage")
+);
 
-const NotFound = React.lazy(() => import("@/pages/NotFound"))
+const NotFound = React.lazy(() => import("@/pages/NotFound"));
 
 const router = createBrowserRouter([
   {
     path: ROUTES.HOME,
-    element: 
-        <AuthGuard>
-          <MainLayout/>
-        </AuthGuard>,
+    element: (
+      <AuthGuard>
+        <MainLayout />
+      </AuthGuard>
+    ),
     children: [
       {
         path: ROUTES.ADMIN.DASHBOARD,
-        element:
-          <AuthGuard> 
-            <DashboardPage/>
+        element: (
+          <AuthGuard>
+            <DashboardPage />
           </AuthGuard>
+        ),
       },
       {
         path: ROUTES.ADMIN.ADMINS,
-        element:  
-            <AuthGuard> 
-              <AdminPage/> 
-            </AuthGuard> 
+        element: (
+          <AuthGuard>
+            <AdminPage />
+          </AuthGuard>
+        ),
       },
       {
         path: ROUTES.ADMIN.USERS,
-        element:
+        element: (
           <AuthGuard>
-            <UserPage/>
+            <UserPage />
           </AuthGuard>
+        ),
       },
       {
         path: ROUTES.ADMIN.COMPANIES,
-        element:
+        element: (
           <AuthGuard>
-            <CompanyPage/>
+            <CompanyPage />
           </AuthGuard>
+        ),
       },
       {
         path: ROUTES.ADMIN.MODERATION,
-        element:
+        element: (
           <AuthGuard>
-            <ModerationPage/>
+            <ModerationPage />
           </AuthGuard>
+        ),
       },
       {
         path: ROUTES.ADMIN.NOTIFICATIONS,
-        element:
+        element: (
           <AuthGuard>
-            <NotificationPage/>
+            <NotificationPage />
           </AuthGuard>
+        ),
       },
       {
-        path:  ROUTES.ADMIN.SETTINGS,
-        element:
+        path: ROUTES.ADMIN.SETTINGS,
+        element: (
           <AuthGuard>
-            {/* TODO: Add Settings page component when available */} 
+            {/* TODO: Add Settings page component when available */}
             <Box />
           </AuthGuard>
-      }
+        ),
+      },
     ],
   },
   {
-    path: '/',
+    path: "/",
     Component: AuthLayout,
     children: [
       {
         path: ROUTES.AUTH.LOGIN,
-        element: <LoginPage />
+        element: <LoginPage />,
       },
       {
         path: ROUTES.AUTH.REGISTER,
-        element: 
+        element: (
           <AuthGuard>
             <RegisterPage />
           </AuthGuard>
+        ),
       },
-    ]
+    ],
   },
   {
     path: ROUTES.NOT_FOUND,
-    element: <NotFound />
-  }
-])  
-
+    element: <NotFound />,
+  },
+]);
 
 function Router() {
-  return (
-    <RouterProvider router={router} />
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default Router
+export default Router;

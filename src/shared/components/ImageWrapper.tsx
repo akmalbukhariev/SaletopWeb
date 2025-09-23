@@ -1,14 +1,14 @@
-import { Box } from '@mui/material';
-import { ImageProps } from '@shared/types/ImageProps';
+import { Box } from "@mui/material";
+import { ImageProps } from "@shared/types/ImageProps";
 const ImageWrapper = ({
   src,
-  alt = '',
+  alt = "",
   styleBox = {},
   styleImg = {},
   onClick = () => {},
-  loading = 'lazy',
+  loading = "lazy",
 }: ImageProps) => {
-  const defaultPath = '/images/';
+  const defaultPath = "/images/";
   return (
     <Box sx={styleBox}>
       <img

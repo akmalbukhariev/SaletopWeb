@@ -6,7 +6,13 @@ export type Company = {
   phone_number?: string | null;
   email?: string | null;
   logo_url?: string | null;
-  business_type: "RESTAURANT" | "BAKERY" | "CAFE" | "FAST_FOOD" | "SUPERMARKET" | "OTHER";
+  business_type:
+    | "RESTAURANT"
+    | "BAKERY"
+    | "CAFE"
+    | "FAST_FOOD"
+    | "SUPERMARKET"
+    | "OTHER";
   user_need_to_know: string; // text
   rating: number; // decimal(3,2)
   location_latitude?: number | null;
@@ -24,4 +30,3 @@ export type Company = {
   created_at?: string | null; // ISO
   deleted: 0 | 1; // 1=yes, 0=no
 };
-

@@ -6,7 +6,8 @@ export const initialCompanies: Company[] = [
     company_name: "Green Bites",
     phone_number: "+1 555-100-2000",
     email: "hello@greenbites.com",
-    logo_url: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=64&h=64&fit=crop&auto=format",
+    logo_url:
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=64&h=64&fit=crop&auto=format",
     business_type: "RESTAURANT",
     user_need_to_know: "Vegan-friendly menu",
     rating: 4.35,
@@ -30,7 +31,8 @@ export const initialCompanies: Company[] = [
     company_name: "Sunrise Bakery",
     phone_number: "+44 20 7999 1000",
     email: "contact@sunrisebakery.co.uk",
-    logo_url: "https://images.unsplash.com/photo-1549576490-b0b4831ef60a?w=64&h=64&fit=crop&auto=format",
+    logo_url:
+      "https://images.unsplash.com/photo-1549576490-b0b4831ef60a?w=64&h=64&fit=crop&auto=format",
     business_type: "BAKERY",
     user_need_to_know: "Freshly baked daily",
     rating: 4.8,
@@ -54,7 +56,8 @@ export const initialCompanies: Company[] = [
     company_name: "City Cafe",
     phone_number: "+998 90 111 22 33",
     email: "info@citycafe.uz",
-    logo_url: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=64&h=64&fit=crop&auto=format",
+    logo_url:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=64&h=64&fit=crop&auto=format",
     business_type: "CAFE",
     user_need_to_know: "Fast Wi-Fi, great coffee",
     rating: 3.9,
@@ -74,4 +77,3 @@ export const initialCompanies: Company[] = [
     deleted: 1,
   },
 ];
-

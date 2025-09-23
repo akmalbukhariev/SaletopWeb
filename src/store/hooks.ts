@@ -1,6 +1,5 @@
-import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import type {RootState, AppDispatch} from '@store/index';
-
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "@store/index";
 
 // useDispatch va useSelector uchun maxsus hooklar
 export const useAppDispatch = () => useDispatch<AppDispatch>();
