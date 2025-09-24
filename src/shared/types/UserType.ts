@@ -11,8 +11,8 @@ export type UserRow = {
   status: UserStatus;
   location_latitude: string;
   location_longitude: string;
-  notification_enabled: 0 | 1; // 1=yes, 0=no
+  notification_enabled: boolean; // true=yes, false=no
   updated_at: string; // ISO
   created_at: string; // ISO
-  deleted: 0 | 1; // 1=yes, 0=no
+  deleted: boolean; // true=yes, false=no
 };

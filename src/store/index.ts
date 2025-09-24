@@ -1,10 +1,20 @@
+import { userAPI } from "@/features/user/api";
 import { configureStore } from "@reduxjs/toolkit";
 import { userSliceReducer } from "@store/slices/userSlice";
 
 export const store = configureStore({
   reducer: {
+    //slice
     user: userSliceReducer,
+
+    //api
+    [userAPI.reducerPath]: userAPI.reducer
   },
+  
+  // api middleware
+  middleware: (getDefaultMiddleware)=>
+    getDefaultMiddleware()
+    .concat(userAPI.middleware),
 
   devTools: import.meta.env.MODE !== "production", // devtool faqat dev muhitida yoqiladi
 });

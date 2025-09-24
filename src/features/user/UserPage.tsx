@@ -1,56 +1,43 @@
 import CustomAlert from "@/shared/components/CustomAlert";
-import { UserRow, UserStatus } from "@/shared/types/UserType";
+import { UserRow } from "@/shared/types/UserType";
 import { RESULTCODE } from "@/shared/utils/ResultCode";
 import {
   Avatar,
   Box,
-  Chip,
+  FormControl,
   Grid,
-  Switch,
+  MenuItem,
+  Select,
+  Switch
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
-import UserAPI from "./api/UserAPI";
+import { useChangeUserDeletionStatusMutation, useChangeUserStatusMutation, useGetAllUsersQuery } from "./api";
 
 function UserPage() {
   const [rows, setRows] = useState<UserRow[]>();
-
   const [pageFormat, setPageFormat] = useState({
-      offset: 2,
+      offset: 0,
       pageSize: 10
   })
-
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize)
-  
-  useEffect(()=>{
-    const fetchUsers = async() => {
-      const res = await UserAPI.getAllUsers(pageFormat);
-      if(res.resultCode == RESULTCODE.SUCCESS){
-          
-        setRows(res.resultData?.users)    
-        setTotalRows(res.resultData?.total)
-      }
-      else{
-        CustomAlert({
-          message: res.resultMsg,
-          type:'error',
-        })
+  const { data: allUsers, isSuccess } = useGetAllUsersQuery({
+    offset: pageFormat.offset * pageFormat.pageSize,
+    pageSize: pageFormat.pageSize,
+  });
+
+  const [changeUserStatus] = useChangeUserStatusMutation();
+  const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation();
+
+  useEffect(() => {
+    if (isSuccess && allUsers?.resultData) {
+      console.log(allUsers.resultData.users)
+      setRows(allUsers.resultData.users || []);
+      if (typeof allUsers.resultData.total === 'number') {
+        setTotalRows(allUsers.resultData.total);
       }
     }
-    fetchUsers()
-  },[pageFormat])
-
-const handleChangingUserStatus = () => {
-
-}
-
-
-
-
-
-
-
-
+  }, [isSuccess, allUsers]);
 
   const columns: GridColDef<UserRow>[] = useMemo(
     () => [
@@ -76,22 +63,17 @@ const handleChangingUserStatus = () => {
       {
         field: "status",
         headerName: "Status",
-        width: 130,
+        width: 180,
         renderCell: params => {
-          const value = params.value as UserStatus;
-          const color =
-            value === "ACTIVE"
-              ? "success"
-              : value === "INACTIVE"
-                ? "error"
-                : "default";
           return (
-            <Chip
-              size="small"
-              label={value}
-              color={color}
-              variant={color === "default" ? "outlined" : "filled"}
-            />
+            <FormControl fullWidth variant='standard'>
+              <Select value={params.row.status} 
+                      sx={{borderRadius: '0', mt: 2, color: params.row.status == 'ACTIVE' ? 'green' : 'red' }} 
+                      onChange={(e) => handleUserStatusChange(params.row.phone_number, e.target.value)}>
+                <MenuItem value = "ACTIVE" sx={{color: 'green'}}>ACTIVE</MenuItem>
+                <MenuItem value = "INACTIVE" sx={{color: 'red'}}>INACTIVE</MenuItem>
+              </Select>
+            </FormControl>
           );
         },
       },
@@ -103,7 +85,7 @@ const handleChangingUserStatus = () => {
         filterable: false,
         renderCell: params => (
           <Switch
-            checked={params.row.notification_enabled === 1}
+            checked={params.row.notification_enabled}
             size="small"
           />
         ),
@@ -116,9 +98,10 @@ const handleChangingUserStatus = () => {
         filterable: false,
         renderCell: params => (
           <Switch
-            checked={params.row.deleted === 1}
+            checked={params.row.deleted}
             size="small"
             color="warning"
+            onChange={(e) => handleUserDeletionChange(e.target.checked, params.row.phone_number)}
           />
         ),
       },
@@ -135,6 +118,65 @@ const handleChangingUserStatus = () => {
     ],
     []
   );
+
+  const handleUserStatusChange = async (phone_number: string, status: string) => {
+    if (phone_number && status) {
+        try {
+          const res = await changeUserStatus({ phone_number, status });
+          console.log(res)
+          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+            console.log(res);
+          CustomAlert({
+              message: res.data?.resultMsg,
+              type: 'success'
+          })
+        }else {
+          CustomAlert({
+              message: res.data?.resultMsg,
+              type: 'error'
+          })
+        }
+      }
+      catch(error: any){
+        CustomAlert({
+          message: error as string,
+          type: 'error'
+        });
+      }
+    }
+  }
+
+  const handleUserDeletionChange = async (deleted: boolean, phone_number: string) => {
+    if (phone_number) {
+      try {
+        const res = await changeUserDeletionStatus({ deleted, phone_number});
+        console.log(res)
+        if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+          console.log(res);
+         CustomAlert({
+            message: res.data?.resultMsg,
+            type: 'success'
+         })
+       } else {
+         CustomAlert({
+            message: res.data?.resultMsg,
+            type: 'error'
+         })
+       }
+      }
+      catch(error: any){
+        CustomAlert({
+          message: error as string,
+          type: 'error'
+        });
+      }
+    }
+  }
+
+  const handleSearchUser = (searchText: string) => {
+    // Implement search functionality here
+    console.log("Searching for:", searchText);
+  }
 
   return (
     <Grid
@@ -178,5 +220,4 @@ const handleChangingUserStatus = () => {
     </Grid>
   );
 }
-
 export default UserPage;
