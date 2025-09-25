@@ -5,18 +5,23 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { SideBarProps } from "./SiderBarProps";
 import React from "react";
 import { useNavigate } from "react-router";
+import { SideBarProps } from "./SiderBarProps";
 
 function SideBar({ items }: { items: SideBarProps[] }) {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = React.useState<number | undefined>(
+    localStorage.getItem(atob("selectedSidebar"))
+      ? Number(localStorage.getItem(atob("selectedSidebar")))
+      : 1
+  );
 
   const navigate = useNavigate();
 
   const handleNavigation = (item: SideBarProps) => {
     navigate(item.path);
     setSelectedIndex(item.id);
+    localStorage.setItem(atob("selectedSidebar"), item.id.toString());
   };
 
   return (

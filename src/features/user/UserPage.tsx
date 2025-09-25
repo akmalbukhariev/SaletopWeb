@@ -160,7 +160,7 @@ function UserPage() {
             type: "error",
           });
         }
-      } catch (error: any) {
+      } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
@@ -189,7 +189,7 @@ function UserPage() {
             type: "error",
           });
         }
-      } catch (error: any) {
+      } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
