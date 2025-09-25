@@ -1,8 +1,8 @@
 import { ENDPOINTS } from "@/core/auth/api/endpoints";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const userAPI = createApi({
-  reducerPath: "userAPI",
+const companyAPI = createApi({
+  reducerPath: "companyAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://95.182.118.233:8088/ecoplatesadmin/api/v1",
     prepareHeaders: (headers: Headers) => {
@@ -13,50 +13,50 @@ const userAPI = createApi({
       return headers;
     },
   }),
-  tagTypes: ["UserItems"],
+  tagTypes: ["CompanyItems"],
   endpoints: builder => ({
-    getAllUsers: builder.query({
+    getAllCompanies: builder.query({
       query: (data: { offset: number; pageSize: number }) => ({
-        url: ENDPOINTS.USERS.PAGINATED_LIST,
+        url: ENDPOINTS.COMPANIES.PAGINATED_LIST,
         method: "POST",
         body: data,
       }),
-      providesTags: ["UserItems"],
+      providesTags: ["CompanyItems"],
     }),
 
-    getUserByPhoneNum: builder.query({
+    getCompanyByPhoneNum: builder.query({
       query: (phone_number: string | number) => ({
-        url: ENDPOINTS.USERS.BY_PHONE_NUM(phone_number),
+        url: ENDPOINTS.COMPANIES.BY_PHONE_NUM(phone_number),
         method: "GET",
       }),
-      providesTags: ["UserItems"],
+      providesTags: ["CompanyItems"],
     }),
 
-    changeUserDeletionStatus: builder.mutation({
+    changeCompanyDeletionStatus: builder.mutation({
       query: (data: { deleted: boolean; phone_number: string }) => ({
-        url: ENDPOINTS.USERS.CHANGE_DELETION_STATUS,
+        url: ENDPOINTS.COMPANIES.CHANGE_DELETION_STATUS,
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["UserItems"],
+      invalidatesTags: ["CompanyItems"],
     }),
 
-    changeUserStatus: builder.mutation({
+    changeCompanyStatus: builder.mutation({
       query: (data: { phone_number: string; status: string }) => ({
-        url: ENDPOINTS.USERS.CHANGE_STATUS,
+        url: ENDPOINTS.COMPANIES.CHANGE_STATUS,
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["UserItems"],
+      invalidatesTags: ["CompanyItems"],
     }),
   }),
 });
 
-export default userAPI;
+export default companyAPI;
 
 export const {
-  useGetAllUsersQuery,
-  useGetUserByPhoneNumQuery,
-  useChangeUserDeletionStatusMutation,
-  useChangeUserStatusMutation,
-} = userAPI;
+  useGetAllCompaniesQuery,
+  useGetCompanyByPhoneNumQuery,
+  useChangeCompanyDeletionStatusMutation,
+  useChangeCompanyStatusMutation,
+} = companyAPI;

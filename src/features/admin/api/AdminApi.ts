@@ -15,9 +15,8 @@ class AdminAPI {
   }
 
   async register(data: object) {
-     return await post(ENDPOINTS.AUTH.REGISTER, data);
+    return await post(ENDPOINTS.AUTH.REGISTER, data);
   }
-
 }
 
 export default new AdminAPI();

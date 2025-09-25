@@ -1,4 +1,5 @@
-import { userAPI } from "@/features/user/api";
+import companyAPI from "@/features/company/api/companyAPI";
+import userAPI from "@/features/user/api/UserAPI";
 import { configureStore } from "@reduxjs/toolkit";
 import { userSliceReducer } from "@store/slices/userSlice";
 
@@ -8,14 +9,17 @@ export const store = configureStore({
     user: userSliceReducer,
 
     //api
-    [userAPI.reducerPath]: userAPI.reducer
+    [userAPI.reducerPath]: userAPI.reducer,
+    [companyAPI.reducerPath]: companyAPI.reducer,
   },
-  
-  // api middleware
-  middleware: (getDefaultMiddleware)=>
-    getDefaultMiddleware()
-    .concat(userAPI.middleware),
 
+  // api middleware
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware()
+      .concat(userAPI.middleware)
+      .concat(companyAPI.middleware),
+
+  // Redux DevTools konfiguratsiyasi
   devTools: import.meta.env.MODE !== "production", // devtool faqat dev muhitida yoqiladi
 });
 

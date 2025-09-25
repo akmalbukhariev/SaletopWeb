@@ -85,7 +85,6 @@ const router = createBrowserRouter([
         path: ROUTES.ADMIN.SETTINGS,
         element: (
           <AuthGuard>
-            {/* TODO: Add Settings page component when available */}
             <Box />
           </AuthGuard>
         ),

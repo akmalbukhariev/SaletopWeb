@@ -8,19 +8,23 @@ import {
   Grid,
   MenuItem,
   Select,
-  Switch
+  Switch,
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
-import { useChangeUserDeletionStatusMutation, useChangeUserStatusMutation, useGetAllUsersQuery } from "./api";
+import {
+  useChangeUserDeletionStatusMutation,
+  useChangeUserStatusMutation,
+  useGetAllUsersQuery,
+} from "./api/UserAPI";
 
 function UserPage() {
   const [rows, setRows] = useState<UserRow[]>();
   const [pageFormat, setPageFormat] = useState({
-      offset: 0,
-      pageSize: 10
-  })
-  const [totalRows, setTotalRows] = useState(pageFormat.pageSize)
+    offset: 0,
+    pageSize: 10,
+  });
+  const [totalRows, setTotalRows] = useState(pageFormat.pageSize);
   const { data: allUsers, isSuccess } = useGetAllUsersQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
@@ -31,9 +35,9 @@ function UserPage() {
 
   useEffect(() => {
     if (isSuccess && allUsers?.resultData) {
-      console.log(allUsers.resultData.users)
+      console.log(allUsers.resultData.users);
       setRows(allUsers.resultData.users || []);
-      if (typeof allUsers.resultData.total === 'number') {
+      if (typeof allUsers.resultData.total === "number") {
         setTotalRows(allUsers.resultData.total);
       }
     }
@@ -66,12 +70,27 @@ function UserPage() {
         width: 180,
         renderCell: params => {
           return (
-            <FormControl fullWidth variant='standard'>
-              <Select value={params.row.status} 
-                      sx={{borderRadius: '0', mt: 2, color: params.row.status == 'ACTIVE' ? 'green' : 'red' }} 
-                      onChange={(e) => handleUserStatusChange(params.row.phone_number, e.target.value)}>
-                <MenuItem value = "ACTIVE" sx={{color: 'green'}}>ACTIVE</MenuItem>
-                <MenuItem value = "INACTIVE" sx={{color: 'red'}}>INACTIVE</MenuItem>
+            <FormControl fullWidth variant="standard">
+              <Select
+                value={params.row.status}
+                sx={{
+                  borderRadius: "0",
+                  mt: 2,
+                  color: params.row.status == "ACTIVE" ? "green" : "red",
+                }}
+                onChange={e =>
+                  handleUserStatusChange(
+                    params.row.phone_number,
+                    e.target.value
+                  )
+                }
+              >
+                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
+                  ACTIVE
+                </MenuItem>
+                <MenuItem value="INACTIVE" sx={{ color: "red" }}>
+                  INACTIVE
+                </MenuItem>
               </Select>
             </FormControl>
           );
@@ -84,10 +103,7 @@ function UserPage() {
         sortable: false,
         filterable: false,
         renderCell: params => (
-          <Switch
-            checked={params.row.notification_enabled}
-            size="small"
-          />
+          <Switch checked={params.row.notification_enabled} size="small" />
         ),
       },
       {
@@ -101,7 +117,12 @@ function UserPage() {
             checked={params.row.deleted}
             size="small"
             color="warning"
-            onChange={(e) => handleUserDeletionChange(e.target.checked, params.row.phone_number)}
+            onChange={e =>
+              handleUserDeletionChange(
+                e.target.checked,
+                params.row.phone_number
+              )
+            }
           />
         ),
       },
@@ -119,64 +140,68 @@ function UserPage() {
     []
   );
 
-  const handleUserStatusChange = async (phone_number: string, status: string) => {
+  const handleUserStatusChange = async (
+    phone_number: string,
+    status: string
+  ) => {
     if (phone_number && status) {
-        try {
-          const res = await changeUserStatus({ phone_number, status });
-          console.log(res)
-          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-            console.log(res);
-          CustomAlert({
-              message: res.data?.resultMsg,
-              type: 'success'
-          })
-        }else {
-          CustomAlert({
-              message: res.data?.resultMsg,
-              type: 'error'
-          })
-        }
-      }
-      catch(error: any){
-        CustomAlert({
-          message: error as string,
-          type: 'error'
-        });
-      }
-    }
-  }
-
-  const handleUserDeletionChange = async (deleted: boolean, phone_number: string) => {
-    if (phone_number) {
       try {
-        const res = await changeUserDeletionStatus({ deleted, phone_number});
-        console.log(res)
+        const res = await changeUserStatus({ phone_number, status });
+        console.log(res);
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
           console.log(res);
-         CustomAlert({
+          CustomAlert({
             message: res.data?.resultMsg,
-            type: 'success'
-         })
-       } else {
-         CustomAlert({
+            type: "success",
+          });
+        } else {
+          CustomAlert({
             message: res.data?.resultMsg,
-            type: 'error'
-         })
-       }
-      }
-      catch(error: any){
+            type: "error",
+          });
+        }
+      } catch (error: any) {
         CustomAlert({
           message: error as string,
-          type: 'error'
+          type: "error",
         });
       }
     }
-  }
+  };
 
-  const handleSearchUser = (searchText: string) => {
-    // Implement search functionality here
-    console.log("Searching for:", searchText);
-  }
+  const handleUserDeletionChange = async (
+    deleted: boolean,
+    phone_number: string
+  ) => {
+    if (phone_number) {
+      try {
+        const res = await changeUserDeletionStatus({ deleted, phone_number });
+        console.log(res);
+        if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+          console.log(res);
+          CustomAlert({
+            message: res.data?.resultMsg,
+            type: "success",
+          });
+        } else {
+          CustomAlert({
+            message: res.data?.resultMsg,
+            type: "error",
+          });
+        }
+      } catch (error: any) {
+        CustomAlert({
+          message: error as string,
+          type: "error",
+        });
+      }
+    }
+  };
+
+  // const handleSearchUser = (searchText: string) => {
+  //   // Implement search functionality here
+  //   console.log("Searching for:", searchText);
+  // }
 
   return (
     <Grid
@@ -193,12 +218,17 @@ function UserPage() {
     >
       <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
         <DataGrid
-          getRowId={(row) => row.user_id}
+          getRowId={row => row.user_id}
           rows={rows || []}
           columns={columns}
           disableRowSelectionOnClick
           initialState={{
-            pagination: { paginationModel: { pageSize: pageFormat.pageSize, page: pageFormat.offset } },
+            pagination: {
+              paginationModel: {
+                pageSize: pageFormat.pageSize,
+                page: pageFormat.offset,
+              },
+            },
           }}
           pageSizeOptions={[5, 10, 25, 50]}
           paginationModel={{
@@ -208,7 +238,6 @@ function UserPage() {
           rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
           paginationMode="server" // <-- Enable server-side pagination
           onPaginationModelChange={({ page, pageSize }) => {
-            console.log(page, pageSize)
             setPageFormat(prev => ({
               ...prev,
               offset: page,

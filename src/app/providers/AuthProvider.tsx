@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/store/hooks";
-import { login } from "@/store/slices/userSlice";
+import { login, logout } from "@/store/slices/userSlice";
 import React, { useEffect, useState } from "react";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -9,12 +9,14 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-          const user = localStorage.getItem("user");
-          if (user) {
-            const userData = JSON.parse(user);
-            // Token yo'q bo'lsa ham, user ma'lumotlarini ko'rsatish (lekin authenticated emas)
-            dispatch(login({ ...userData, isAuthenticated: false }));
-          }
+        const user = localStorage.getItem("user");
+        if (user) {
+          const userData = JSON.parse(user);
+          // Token yo'q bo'lsa ham, user ma'lumotlarini ko'rsatish (lekin authenticated emas)
+          dispatch(login({ ...userData, isAuthenticated: false }));
+        } else {
+          dispatch(logout());
+        }
       } catch (error) {
         console.error("Auth initialization error:", error);
       } finally {
@@ -28,12 +30,14 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   // Loading holatida spinner ko'rsatish
   if (isLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         Loading...
       </div>
     );

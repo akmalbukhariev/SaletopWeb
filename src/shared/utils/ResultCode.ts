@@ -81,8 +81,10 @@ export const RESULTCODE = {
  * @param code number
  * @returns keyof typeof RESULTCODE | undefined
  */
-export function getResultByCode(code: number): keyof typeof RESULTCODE | undefined {
+export function getResultByCode(
+  code: number
+): keyof typeof RESULTCODE | undefined {
   return (Object.keys(RESULTCODE) as (keyof typeof RESULTCODE)[]).find(
-    (key) => RESULTCODE[key] === code
+    key => RESULTCODE[key] === code
   );
 }

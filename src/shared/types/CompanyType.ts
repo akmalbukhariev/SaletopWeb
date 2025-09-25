@@ -3,16 +3,10 @@ export type CompanyStatus = "ACTIVE" | "INACTIVE";
 export type Company = {
   company_id: string; // using string for DataGrid id compatibility
   company_name: string;
-  phone_number?: string | null;
+  phone_number: string;
   email?: string | null;
   logo_url?: string | null;
-  business_type:
-    | "RESTAURANT"
-    | "BAKERY"
-    | "CAFE"
-    | "FAST_FOOD"
-    | "SUPERMARKET"
-    | "OTHER";
+  business_type: string | null; // enum
   user_need_to_know: string; // text
   rating: number; // decimal(3,2)
   location_latitude?: number | null;
@@ -24,9 +18,9 @@ export type Company = {
   token_mb?: string | null;
   token_frb?: string | null;
   status: CompanyStatus;
-  notification_enabled: 0 | 1; // 1=yes, 0=no
+  notification_enabled: boolean; // 1=yes, 0=no
   about?: string | null;
   updated_at?: string | null; // ISO
   created_at?: string | null; // ISO
-  deleted: 0 | 1; // 1=yes, 0=no
+  deleted: boolean; // 1=yes, 0=no
 };

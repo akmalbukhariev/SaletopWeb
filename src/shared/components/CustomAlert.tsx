@@ -14,17 +14,16 @@ function CustomAlert(options: CustomAlertOptions) {
   container.style.top = "20px";
   container.style.right = "20px";
   container.style.zIndex = "9999";
-  
+
   // Add to body
   document.body.appendChild(container);
-  
+
   // Create React root and render alert
   const root = createRoot(container);
-  
-  const AlertComponent = () => (
 
+  const AlertComponent = () => (
     <Alert
-      variant="filled" 
+      variant="filled"
       severity={options.type}
       onClose={() => {
         root.unmount();
@@ -34,9 +33,9 @@ function CustomAlert(options: CustomAlertOptions) {
       {options.message}
     </Alert>
   );
-  
+
   root.render(<AlertComponent />);
-  
+
   // Auto-close after duration (default 3 seconds)
   const duration = options.duration || 5000;
   setTimeout(() => {

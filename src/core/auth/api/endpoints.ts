@@ -23,9 +23,9 @@ export const ENDPOINTS = {
 
   COMPANIES: {
     CHANGE_STATUS: "company/changeUserStatus",
-    PAGINATED_LIST: `company/getPaginatedUsers`,
+    PAGINATED_LIST: "company/getPaginatedUsers",
     CHANGE_DELETION_STATUS: "company/changeUserDeletionStatus",
-    BY_PHONE: (phone: string | number) => `company/getUserByPhone/${phone}`,
+    BY_PHONE_NUM: (phone: string | number) => `company/getUserByPhone/${phone}`,
   },
 } as const;
 

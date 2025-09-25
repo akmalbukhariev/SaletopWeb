@@ -14,7 +14,7 @@ export const userSlice = createSlice({
       state.id = action.payload.id;
       state.admin_id = action.payload.admin_id;
       state.admin_role = action.payload.admin_role;
-      state.isAuthenticated = true;
+      state.isAuthenticated = action.payload.isAuthenticated;
     },
     logout(state) {
       state.id = null;

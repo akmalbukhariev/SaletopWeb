@@ -29,36 +29,34 @@ function RegisterPage() {
     admin_id: "",
     admin_role: AdminRole[0].name,
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
-  const  handleSubmit = async () => {
-
-    if(!adminInfo.admin_id.length || 
-      !adminInfo.admin_role || 
-      (adminInfo.password !== adminInfo.confirmPassword)
-    )
-    {
+  const handleSubmit = async () => {
+    if (
+      !adminInfo.admin_id.length ||
+      !adminInfo.admin_role ||
+      adminInfo.password !== adminInfo.confirmPassword
+    ) {
       return CustomAlert({
-        message: "Please check information.", 
-        type: 'warning',
-        duration: 2000
+        message: "Please check information.",
+        type: "warning",
+        duration: 2000,
       });
     }
 
     const user = {
       admin_id: adminInfo.admin_id,
       admin_role: adminInfo.admin_role,
-      password: adminInfo.password
-    }
+      password: adminInfo.password,
+    };
 
-    console.log(user)
+    console.log(user);
 
-    const res =  await AdminApi.register(user)
+    const res = await AdminApi.register(user);
 
     console.log(res);
-
-  } 
+  };
 
   return (
     <Box
@@ -92,10 +90,12 @@ function RegisterPage() {
               label="User Name"
               variant="outlined"
               value={adminInfo.admin_id}
-              onChange={(e)=> setAdminInfo({
-                ...adminInfo,
-                admin_id: e.target?.value
-              })}
+              onChange={e =>
+                setAdminInfo({
+                  ...adminInfo,
+                  admin_id: e.target?.value,
+                })
+              }
             />
           </Box>
           {/* <Box>
@@ -113,10 +113,12 @@ function RegisterPage() {
             <OutlinedInput
               fullWidth
               value={adminInfo.password}
-              onChange={(e)=> setAdminInfo({
-                ...adminInfo,
-                password: e.target?.value
-              })}
+              onChange={e =>
+                setAdminInfo({
+                  ...adminInfo,
+                  password: e.target?.value,
+                })
+              }
               id="outlined-adornment-password"
               type={showPassword ? "text" : "password"}
               endAdornment={
@@ -141,7 +143,7 @@ function RegisterPage() {
             <OutlinedInput
               error={adminInfo.password !== adminInfo.confirmPassword}
               value={adminInfo.confirmPassword}
-              onChange={(e) =>
+              onChange={e =>
                 setAdminInfo({
                   ...adminInfo,
                   confirmPassword: e.target?.value,
@@ -163,11 +165,12 @@ function RegisterPage() {
               }
               label="Password Confirm"
             />
-            {adminInfo.confirmPassword && adminInfo.password !== adminInfo.confirmPassword && (
-              <Typography variant="caption" color="error" sx={{ ml: 1 }}>
-                Passwords do not match.
-              </Typography>
-            )}
+            {adminInfo.confirmPassword &&
+              adminInfo.password !== adminInfo.confirmPassword && (
+                <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+                  Passwords do not match.
+                </Typography>
+              )}
           </FormControl>
           <FormControl fullWidth size="small">
             <InputLabel id="demo-simple-select-label">
@@ -178,10 +181,12 @@ function RegisterPage() {
               id="demo-simple-select"
               value={adminInfo.admin_role}
               label="Select user role"
-              onChange={event => setAdminInfo({
-                ...adminInfo,
-                admin_role: event.target.value
-              })}
+              onChange={event =>
+                setAdminInfo({
+                  ...adminInfo,
+                  admin_role: event.target.value,
+                })
+              }
             >
               {AdminRole.map(role => (
                 <MenuItem key={role.id} value={role.value}>

@@ -3,12 +3,12 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default [
-  { 
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
-    languageOptions: { globals: globals.browser }, 
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    languageOptions: { globals: globals.browser },
     rules: {
-       '@typescript-eslint/no-unused-vars': 'warn',
-    }
+      "@typescript-eslint/no-unused-vars": "warn",
+    },
   },
   ...tseslint.configs.recommended,
   {

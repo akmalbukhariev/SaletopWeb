@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const service = axios.create({
   //baseURL: '/api',
   baseURL: "http://95.182.118.233:8088/ecoplatesadmin/api/v1",
@@ -46,13 +45,13 @@ service.interceptors.response.use(
         break;
       case 403:
         console.log("403");
-        //store.commit('removeToken')
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         break;
       case 404:
         console.log("404");
         break;
       case 500:
-        //  store.dispatch('logout')
         console.log("500");
         break;
 
@@ -89,13 +88,14 @@ export const put = async (url: string, data = {}) => {
 
 export const get = async (url: string, params = {}) => {
   return await service.get(url, { params }).then(res => {
+    console.log("get:", res);
     return res.data;
   });
 };
 
 export const remove = async (url: string, data = {}) => {
   return await service.delete(url, data).then(res => {
-    console.log('get:', res);
+    console.log("get:", res);
     return res.data;
   });
 };
