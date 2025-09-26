@@ -1,3 +1,4 @@
+import authAPI from "@/features/auth/api/authAPI";
 import companyAPI from "@/features/company/api/companyAPI";
 import userAPI from "@/features/user/api/UserAPI";
 import { configureStore } from "@reduxjs/toolkit";
@@ -11,13 +12,15 @@ export const store = configureStore({
     //api
     [userAPI.reducerPath]: userAPI.reducer,
     [companyAPI.reducerPath]: companyAPI.reducer,
+    [authAPI.reducerPath]: authAPI.reducer,
   },
 
   // api middleware
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
       .concat(userAPI.middleware)
-      .concat(companyAPI.middleware),
+      .concat(companyAPI.middleware)
+      .concat(authAPI.middleware),
 
   // Redux DevTools konfiguratsiyasi
   devTools: import.meta.env.MODE !== "production", // devtool faqat dev muhitida yoqiladi

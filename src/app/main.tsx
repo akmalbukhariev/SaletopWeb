@@ -1,4 +1,4 @@
-import { store } from "@/store";
+import { store } from "@/store/store";
 import "@/styles/global.css";
 import "@/styles/tailwind.css";
 import { StrictMode } from "react";

@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Chip,
   FormControl,
   Grid,
   MenuItem,
@@ -33,8 +32,6 @@ function CompanyPage() {
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
   });
-
-
 
 
 
@@ -180,7 +177,7 @@ function CompanyPage() {
             type: "error",
           });
         }
-      } catch (error: any) {
+      } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
@@ -209,7 +206,7 @@ function CompanyPage() {
             type: "error",
           });
         }
-      } catch (error: any) {
+      } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
