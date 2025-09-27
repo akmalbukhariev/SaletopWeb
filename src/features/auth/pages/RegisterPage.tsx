@@ -1,4 +1,3 @@
-import AdminApi from "@/features/admin/api/AdminApi";
 import CustomAlert from "@/shared/components/CustomAlert";
 import { ROUTES } from "@/shared/constants/routes";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -20,10 +19,16 @@ import {
 import { useState } from "react";
 import { AdminRole } from "../type/AdminRole";
 import { IRegistretInfo } from "../type/IRegisterInfo";
+import { useRegisterUserMutation } from "../api/authAPI"; 
+import { RESULTCODE } from "@/shared/utils/ResultCode";
+import { useNavigate } from "react-router";
 
 function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPassworConfirm] = useState(false);
+  const [registerUser] = useRegisterUserMutation();
+
+  const navigate = useNavigate();
 
   const [adminInfo, setAdminInfo] = useState<IRegistretInfo>({
     admin_id: "",
@@ -51,11 +56,23 @@ function RegisterPage() {
       password: adminInfo.password,
     };
 
-    console.log(user);
+    const{ data }= await registerUser(user);
 
-    const res = await AdminApi.register(user);
+    if(data.resultCode == RESULTCODE.SUCCESS){
+      CustomAlert({
+        message: "User successfully registered.",
+        type: "success",
+        duration: 2000,
+      });
 
-    console.log(res);
+      navigate(ROUTES.AUTH.LOGIN);
+    } else {
+      CustomAlert({
+        message: "Registration failed. Please try again.",
+        type: "error",
+        duration: 2000,
+      });
+    }
   };
 
   return (

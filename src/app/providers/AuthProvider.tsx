@@ -10,10 +10,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const initializeAuth = async () => {
       try {
         const user = localStorage.getItem("user");
-        if (user) {
+        const token = localStorage.getItem("token");
+        if (user && token) {
           const userData = JSON.parse(user);
           // Token yo'q bo'lsa ham, user ma'lumotlarini ko'rsatish (lekin authenticated emas)
-          dispatch(login({ ...userData, isAuthenticated: false }));
+          dispatch(login({ ...userData, isAuthenticated: true }));
         } else {
           dispatch(logout());
         }

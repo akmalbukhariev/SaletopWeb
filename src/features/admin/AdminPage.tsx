@@ -1,30 +1,83 @@
 import { Avatar, Box, Button, Grid, Switch } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-
 import { useEffect, useState } from "react";
-
 import { ROUTES } from "@/shared/constants/routes";
 import { useNavigate } from "react-router";
-import AdminApi from "./api/AdminApi";
+import { useGetAllAdminQuery, useDeleteAdminByIdMutation } from "./api/adminAPI";
+import { RESULTCODE } from "@/shared/utils/ResultCode";
+import CustomAlert from "@/shared/components/CustomAlert";
+
 
 function AdminPage() {
   const [admins, setAdmins] = useState([]);
   const navigate = useNavigate();
+  const [deleteAdminById] = useDeleteAdminByIdMutation();
+
+
+  const  {data: allAdmins, isSuccess } =  useGetAllAdminQuery({});
 
   useEffect(() => {
-    const fetchAdmins = async () => {
-      const data = await AdminApi.getAllAdmin();
+    if (isSuccess && allAdmins?.resultData) {
+      console.log("allAdmins", allAdmins);
+      setAdmins(allAdmins.resultData || []);
+    }
+  }, [allAdmins?.resultData, isSuccess]);
 
-      if (data?.resultData) {
-        setAdmins(data?.resultData);
+  //Grid Format
+    const columns: GridColDef[] = [
+    {
+      field: "avatar",
+      headerName: "User",
+      width: 90,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <Avatar
+          src={params.value as string}
+          alt={(params.row as { name?: string }).name || ""}
+          sx={{ width: 36, height: 36 }}
+        />
+      ),
+    },
+    { field: "admin_id", headerName: "Name", width: 300, flex: 1 },
+    { field: "admin_role", headerName: "Role", width: 300 },
+    { field: "created_at", headerName: "Created At", width: 250 },
+    { field: "updated_at", headerName: "Updated At", width: 250 },
+    {
+      field: "deleted",
+      headerName: "Deleted",
+      width: 150,
+      editable: false,
+      renderCell: params => (
+        <Switch
+          checked={params.row.deleted}
+          onChange={() => handleAdminDelete(params.row.admin_id)}
+        ></Switch>
+      ),
+    },
+  ];
+
+
+  const handleAdminDelete = async (admin_id: number | string) => {
+
+    if (admin_id) {
+    console.log("admin_id", admin_id);
+      const res = await deleteAdminById(`${admin_id}`);
+
+      console.log(res);
+      if (res?.data?.resultCode == RESULTCODE.SUCCESS) {
+        CustomAlert({ 
+          message: "Admin successfully deleted.", 
+          type: "success"
+        });
       } else {
-        setAdmins([]);
+        CustomAlert({
+          message: "Admin can't be deleted.", 
+          type: "error"
+        });
       }
-    };
-    fetchAdmins();
-  }, []);
-
-  console.log("admins: ", admins);
+    }
+  };
 
   return (
     <Grid
@@ -67,48 +120,5 @@ function AdminPage() {
 
 export default AdminPage;
 
-const columns: GridColDef[] = [
-  {
-    field: "avatar",
-    headerName: "User",
-    width: 90,
-    sortable: false,
-    filterable: false,
-    renderCell: (params: GridRenderCellParams) => (
-      <Avatar
-        src={params.value as string}
-        alt={(params.row as { name?: string }).name || ""}
-        sx={{ width: 36, height: 36 }}
-      />
-    ),
-  },
-  { field: "admin_id", headerName: "Name", width: 300, flex: 1 },
-  { field: "admin_role", headerName: "Role", width: 300 },
-  { field: "created_at", headerName: "Created At", width: 250 },
-  { field: "updated_at", headerName: "Updated At", width: 250 },
-  {
-    field: "deleted",
-    headerName: "Deleted",
-    width: 150,
-    editable: false,
-    renderCell: params => (
-      <Switch
-        checked={params.row.deleted}
-        onChange={() => handleAdminDelete(params.row.admin_id)}
-      ></Switch>
-    ),
-  },
-];
 
-const handleAdminDelete = async (admin_id: number | string) => {
-  if (admin_id) {
-    const res = await AdminApi.deleteById(`${admin_id}`);
 
-    console.log(res);
-    if (res.data?.resultMsg == "Success") {
-      //CustomAlert("Admin successfully deleted.", "success");
-    } else {
-      //CustomAlert("Admin can't be deleted.", "error");
-    }
-  }
-};

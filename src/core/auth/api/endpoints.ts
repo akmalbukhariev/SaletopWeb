@@ -27,6 +27,10 @@ export const ENDPOINTS = {
     CHANGE_DELETION_STATUS: "company/changeUserDeletionStatus",
     BY_PHONE_NUM: (phone: string | number) => `company/getUserByPhone/${phone}`,
   },
+  NOTIFICATIONS: {
+    PAGINATED_LIST: "notification/getAllNotifications",
+    SEND: "notification/register",
+  },
 } as const;
 
 export type Endpoints = typeof ENDPOINTS;

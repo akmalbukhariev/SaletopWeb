@@ -1,11 +1,11 @@
 export const AdminRole = [
   {
-    id: 1,
+    id: 0,
     value: "SUPER_ADMIN",
     name: "Super Admin",
   },
   {
-    id: 2,
+    id: 1,
     value: "ADMIN",
     name: "Admin",
   },

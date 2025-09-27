@@ -1,12 +1,14 @@
-import { loginPost } from "@/core/auth/api/apiClient";
-import { ENDPOINTS } from "@/core/auth/api/endpoints";
 import { IUserState } from "@/shared/types/IUserState";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { login, logout } from "@/store/slices/userSlice";
+import { useLoginUserMutation } from "@/features/auth/api/authAPI";
+
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user);
+  const [loginUser] = useLoginUserMutation();
+
 
   const signIn = async (
     data: { admin_id: string; password: string },
@@ -15,8 +17,9 @@ export const useAuth = () => {
     try {
       // Call API to login, expect response to include user and token
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response = (await loginPost(ENDPOINTS.AUTH.LOGIN, data)) as any;
+      const response = (await loginUser(data));
 
+      console.log("Login response:", response);
       if (response?.data?.resultData) {
         const payload: IUserState = {
           id: String(response?.data?.resultData?.id ?? "") || null,
@@ -33,7 +36,7 @@ export const useAuth = () => {
           // Save token if present
           localStorage.setItem("user", JSON.stringify(payload));
 
-          const token = response?.headers["access-token"];
+          const token = response?.data.accessToken;
           if (token) {
             localStorage.setItem("token", token);
             sessionStorage.setItem("token", token);

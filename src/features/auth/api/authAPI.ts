@@ -1,22 +1,36 @@
 import { ENDPOINTS } from "@/core/auth/api/endpoints";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const authAPI = createApi({
   reducerPath: "authAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://95.182.118.233:8088/ecoplatesadmin/api/v1",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (token) {
+        headers.set("Authorization", "Bearer " + token);
+      }
+      return headers;
+    },
   }),
     tagTypes: ["AuthItems"],
     endpoints: builder => ({
-        login: builder.mutation({
+        loginUser: builder.mutation({
             query: (data: { admin_id: string; password: string }) => ({
                 url: ENDPOINTS.AUTH.LOGIN, 
                 method: "POST",
                 body: data,
             }),
+            transformResponse: (response, meta)=>{
+                const accessToken = meta?.response?.headers.get("access-token");
+                if(accessToken){
+                    response.accessToken = accessToken;
+                }
+                return response;
+            }
         }),
-        register: builder.mutation({
-            query: (data: { admin_id: string; admin_role: 'SUPER_ADMIN' | 'ADMIN'; password: string }) => ({
+        registerUser: builder.mutation({
+            query: (data: { admin_id: string; admin_role: string; password: string }) => ({
                 url: ENDPOINTS.AUTH.REGISTER,
                 method: "POST",
                 body: data,
@@ -25,10 +39,6 @@ const authAPI = createApi({
     }),
 });
 
+export const { useLoginUserMutation, useRegisterUserMutation } = authAPI;
+
 export default authAPI;
-
-export const {
-    useLoginMutation,
-    useRegisterMutation,
-} = authAPI;
-

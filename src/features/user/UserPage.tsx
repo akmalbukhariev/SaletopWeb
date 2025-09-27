@@ -76,7 +76,8 @@ function UserPage() {
                 sx={{
                   borderRadius: "0",
                   mt: 2,
-                  color: params.row.status == "ACTIVE" ? "green" : "red",
+                  color: params.row.status == "INACTIVE" ? "red" : 
+                  params.row.status == "BANNED" ? "orange" : "green",
                 }}
                 onChange={e =>
                   handleUserStatusChange(
@@ -85,11 +86,14 @@ function UserPage() {
                   )
                 }
               >
-                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
+                 <MenuItem value="ACTIVE" sx={{ color: "green" }}>
                   ACTIVE
                 </MenuItem>
                 <MenuItem value="INACTIVE" sx={{ color: "red" }}>
                   INACTIVE
+                </MenuItem>
+                 <MenuItem value="BANNED" sx={{ color: 'orange' }}>
+                  BANNED
                 </MenuItem>
               </Select>
             </FormControl>
@@ -197,11 +201,6 @@ function UserPage() {
       }
     }
   };
-
-  // const handleSearchUser = (searchText: string) => {
-  //   // Implement search functionality here
-  //   console.log("Searching for:", searchText);
-  // }
 
   return (
     <Grid

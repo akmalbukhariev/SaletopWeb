@@ -1,4 +1,4 @@
-export type UserStatus = "ACTIVE" | "INACTIVE";
+export type UserStatus = "ACTIVE" | "INACTIVE"| "BANNED";
 
 export type UserRow = {
   user_id: string;

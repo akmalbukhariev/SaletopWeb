@@ -1,4 +1,4 @@
-export type CompanyStatus = "ACTIVE" | "INACTIVE";
+export type CompanyStatus = "ACTIVE" |  "INACTIVE" | "BANNED";
 
 export type Company = {
   company_id: string; // using string for DataGrid id compatibility

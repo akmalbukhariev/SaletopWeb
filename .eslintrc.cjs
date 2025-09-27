@@ -36,7 +36,16 @@ module.exports = {
     "prettier/prettier": "warn",
     "react/react-in-jsx-scope": "off",
     "import/no-unresolved": "off",
-    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+    ],
+    "react/prop-types": "off",
+    "react/jsx-uses-react": "off",
+    "react/jsx-uses-vars": "warn",
+    "jsx-a11y/anchor-is-valid": "off",
+    "no-console": ["warn", { allow: ["warn", "error"] }],
   },
   ignorePatterns: ["dist", "build", "node_modules"],
 };

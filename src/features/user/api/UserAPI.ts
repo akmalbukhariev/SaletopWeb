@@ -1,18 +1,10 @@
 import { ENDPOINTS } from "@/core/auth/api/endpoints";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 const userAPI = createApi({
   reducerPath: "userAPI",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://95.182.118.233:8088/ecoplatesadmin/api/v1",
-    prepareHeaders: (headers: Headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.set("Authorization", "Bearer " + token);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: usefetchBaseQueryWithAuth,
   tagTypes: ["UserItems"],
   endpoints: builder => ({
     getAllUsers: builder.query({

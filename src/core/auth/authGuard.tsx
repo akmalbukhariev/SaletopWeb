@@ -10,6 +10,7 @@ function AuthGuard({ children }: AuthGuardProps) {
   const { isAuth } = useAuth();
   const navigate = useNavigate();
   if (!isAuth) {
+    console.log("User is not authenticated, redirecting to login.");
     navigate(ROUTES.AUTH.LOGIN);
   }
 

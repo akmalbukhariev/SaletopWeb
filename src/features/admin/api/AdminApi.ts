@@ -1,22 +1,41 @@
-import { get, post, remove } from "@/core/auth/api/apiClient";
 import { ENDPOINTS } from "@/core/auth/api/endpoints";
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-class AdminAPI {
-  async getAllAdmin() {
-    return await get(ENDPOINTS.ADMIN.ADMINS);
-  }
+const adminAPI =  createApi({
+  reducerPath: "adminAPI",
+  baseQuery: usefetchBaseQueryWithAuth,
+  tagTypes: ["AdminItems"],
+  endpoints: (builder) => ({
+    getAllAdmin: builder.query({
+      query: () => ({
+        url: ENDPOINTS.ADMIN.ADMINS,
+        method: "GET",
+      }),
+      providesTags: ["AdminItems"],
+    }),
+    getAdminById: builder.query({
+      query: (adminId) => ({
+        url: ENDPOINTS.ADMIN.ADMIN_BY_ID(adminId),
+        method: "GET",
+      }),
+      providesTags: ["AdminItems"],
+    }),
+    deleteAdminById: builder.mutation({
+      query: (adminId) => ({
+        url: ENDPOINTS.ADMIN.DELETE_BY_ID(adminId),
+        method: "DELETE",
+      }),
+      invalidatesTags: ["AdminItems"],
+    })
+  }),
+});
 
-  async getAdminById(Id: number | string) {
-    return await post(ENDPOINTS.ADMIN.ADMIN_BY_ID(Id));
-  }
+export const {
+  useGetAllAdminQuery,
+  useGetAdminByIdQuery,
+  useDeleteAdminByIdMutation,
+} = adminAPI;
 
-  async deleteById(Id: string) {
-    return await remove(ENDPOINTS.ADMIN.DELETE_BY_ID(Id));
-  }
 
-  async register(data: object) {
-    return await post(ENDPOINTS.AUTH.REGISTER, data);
-  }
-}
-
-export default new AdminAPI();
+export default adminAPI;

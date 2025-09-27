@@ -90,7 +90,8 @@ function CompanyPage() {
                 sx={{
                   borderRadius: "0",
                   mt: 2,
-                  color: params.row.status == "ACTIVE" ? "green" : "red",
+                  color: params.row.status == "INACTIVE" ? "red" : 
+                  params.row.status == "BANNED" ? "orange" : "green",
                 }}
                 onChange={e =>
                   handleUserStatusChange(
@@ -99,11 +100,14 @@ function CompanyPage() {
                   )
                 }
               >
-                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
-                  ACTIVE
-                </MenuItem>
+                 <MenuItem value="ACTIVE" sx={{ color: "green" }}>
+                    ACTIVE
+                  </MenuItem>
                 <MenuItem value="INACTIVE" sx={{ color: "red" }}>
                   INACTIVE
+                </MenuItem>
+                 <MenuItem value="BANNED" sx={{ color: 'orange' }}>
+                  BANNED
                 </MenuItem>
               </Select>
             </FormControl>
@@ -234,7 +238,7 @@ function CompanyPage() {
         justifyContent="space-between"
         sx={{ mb: 2, flexShrink: 0 }}
       >
-        <Typography variant="h6">Companies</Typography>
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>Companies</Typography>
       </Stack>
       <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
         <DataGrid 

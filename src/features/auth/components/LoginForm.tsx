@@ -30,6 +30,7 @@ function LoginForm() {
       const response = await signIn({ admin_id, password }, isRememberMe);
       console.log("res", response);
       if (response) {
+        localStorage.removeItem(atob("selectedSidebar"));
         navigate(ROUTES.HOME, { replace: true });
       }
     } catch (err) {
