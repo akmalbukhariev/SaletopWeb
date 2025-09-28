@@ -8,6 +8,7 @@ const root = process.cwd()
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()], // error bo‘lsa ham server to‘xtamasin},
+  base: "/admin-page/",
   resolve: {
     alias: [
       { find: "@", replacement: path.resolve(root, "src") },
