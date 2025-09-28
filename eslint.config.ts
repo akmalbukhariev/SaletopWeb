@@ -7,9 +7,9 @@ export default [
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     languageOptions: { globals: globals.browser },
     rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
+      "typescript-eslint/no-unused-vars": "off",
       "no-unused-vars": "off",
+      "typescript-eslint/no-explicit-any": 'off',
     },
   },
   ...tseslint.configs.recommended,

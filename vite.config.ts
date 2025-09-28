@@ -22,8 +22,9 @@ export default defineConfig({
     ],
   },
   server: {
-    hmr: {
-      overlay: false,
-    },
-  },
+    host: '0.0.0.0',
+    port: 2000,
+    allowedHosts: ['saletop.uz'],   // 👈 bu yerda domeningizni yozasiz
+    strictPort: true,
+      },
 });

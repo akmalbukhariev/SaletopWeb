@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 2000",
+    "dev": "vite --host 0.0.0.0 --port 2000",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0",
