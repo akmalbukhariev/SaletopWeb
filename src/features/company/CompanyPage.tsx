@@ -27,6 +27,7 @@ function CompanyPage() {
 
   const {
     data: allCompanies,
+    isLoading,
     isSuccess,
   } = useGetAllCompaniesQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
@@ -259,6 +260,7 @@ function CompanyPage() {
             page: pageFormat.offset,
             pageSize: pageFormat.pageSize,
           }}
+          loading={isLoading}
           rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
           paginationMode="server" // <-- Enable server-side pagination
           onPaginationModelChange={({ page, pageSize }) => {

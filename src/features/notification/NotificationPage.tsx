@@ -9,7 +9,7 @@ function NotificationPage() {
 
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 });
-  const [totalRows, setTotalRows] = useState(0);
+  const [totalRows, setTotalRows] = useState(pageFormat.pageSize);
   
   const {isSuccess, isError, data: allNofications } = useGetAllNotificationsQuery(null);
 

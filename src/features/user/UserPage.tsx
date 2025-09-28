@@ -234,7 +234,7 @@ function UserPage() {
             page: pageFormat.offset,
             pageSize: pageFormat.pageSize,
           }}
-          rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
+         rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
           paginationMode="server" // <-- Enable server-side pagination
           onPaginationModelChange={({ page, pageSize }) => {
             setPageFormat(prev => ({
