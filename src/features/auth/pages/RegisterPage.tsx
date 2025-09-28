@@ -56,7 +56,7 @@ function RegisterPage() {
       password: adminInfo.password,
     } 
 
-    const{ data }= await registerUser(user) 
+    const{ data } = await registerUser(user) 
 
     if(data.resultCode == RESULTCODE.SUCCESS){
       CustomAlert({
@@ -184,10 +184,10 @@ function RegisterPage() {
             />
             {adminInfo.confirmPassword &&
               adminInfo.password !== adminInfo.confirmPassword && (
-                <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+              <Typography variant="caption" color="error" sx={{ ml: 1 }}>
                   Passwords do not match.
-                </Typography>
-              )}
+              </Typography>
+            )}
           </FormControl>
           <FormControl fullWidth size="small">
             <InputLabel id="demo-simple-select-label">
