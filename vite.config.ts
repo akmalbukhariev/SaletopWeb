@@ -1,13 +1,13 @@
-import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
-import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react"
+import path from "path"
+import { defineConfig } from "vite"
+import eslint from "vite-plugin-eslint"
 
-const root = process.cwd();
+const root = process.cwd()
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()], // error bo‘lsa ham server to‘xtamasin},
+  plugins: [react(), eslint()], // error bo‘lsa ham server to‘xtamasin},
   resolve: {
     alias: [
       { find: "@", replacement: path.resolve(root, "src") },
@@ -25,5 +25,5 @@ export default defineConfig({
     port: 2000,
     allowedHosts: ['saletop.uz', 'www.saletop.uz'],   // 👈 bu yerda domeningizni yozasiz
     strictPort: true,
-      },
-});
+  },
+})

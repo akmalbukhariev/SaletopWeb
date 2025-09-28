@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import LoginForm from "../components/LoginForm";
+import { Box, Typography } from "@mui/material" 
+import LoginForm from "../components/LoginForm" 
 
 function LoginPage() {
   return (
@@ -27,7 +27,7 @@ function LoginPage() {
         <LoginForm />
       </Box>
     </Box>
-  );
+  ) 
 }
 
-export default LoginPage;
+export default LoginPage 

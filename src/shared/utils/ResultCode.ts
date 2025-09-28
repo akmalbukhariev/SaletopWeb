@@ -3,7 +3,7 @@
  * Each result code is a number. See comments for meaning.
  */
 
-export type ResultCodeType = number;
+export type ResultCodeType = number 
 
 export const RESULTCODE = {
   // Success and failure
@@ -74,7 +74,7 @@ export const RESULTCODE = {
 
   // Role
   ROLE_INVALID: 410, // Role is invalid
-} as const;
+} as const 
 
 /**
  * Get the ResultCode key by code.
@@ -86,5 +86,5 @@ export function getResultByCode(
 ): keyof typeof RESULTCODE | undefined {
   return (Object.keys(RESULTCODE) as (keyof typeof RESULTCODE)[]).find(
     key => RESULTCODE[key] === code
-  );
+  ) 
 }

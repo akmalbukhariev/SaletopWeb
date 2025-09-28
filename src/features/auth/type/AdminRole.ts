@@ -9,4 +9,4 @@ export const AdminRole = [
     value: "ADMIN",
     name: "Admin",
   },
-];
+] 

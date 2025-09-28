@@ -1,4 +1,4 @@
-import { UserRow } from "../types/UserType";
+import { UserRow } from "../types/UserType"
 
 export const initialRows: UserRow[] = [
   {
@@ -136,4 +136,4 @@ export const initialRows: UserRow[] = [
     created_at: new Date(Date.now() - 86400000 * 70).toISOString(),
     deleted: 1,
   },
-];
+]

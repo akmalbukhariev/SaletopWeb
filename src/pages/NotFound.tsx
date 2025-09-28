@@ -1,5 +1,5 @@
-import { Typography, Button } from "@mui/material";
-import { Link } from "react-router";
+import { Typography, Button } from "@mui/material" 
+import { Link } from "react-router" 
 
 export default function NotFoundPage() {
   return (
@@ -9,5 +9,5 @@ export default function NotFoundPage() {
         Go Home
       </Button>
     </div>
-  );
+  ) 
 }

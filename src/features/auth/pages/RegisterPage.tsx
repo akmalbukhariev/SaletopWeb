@@ -1,6 +1,6 @@
-import CustomAlert from "@/shared/components/CustomAlert";
-import { ROUTES } from "@/shared/constants/routes";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import CustomAlert from "@/shared/components/CustomAlert" 
+import { ROUTES } from "@/shared/constants/routes" 
+import { Visibility, VisibilityOff } from "@mui/icons-material" 
 import {
   Box,
   Button,
@@ -15,27 +15,27 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { AdminRole } from "../type/AdminRole";
-import { IRegistretInfo } from "../type/IRegisterInfo";
-import { useRegisterUserMutation } from "../api/authAPI"; 
-import { RESULTCODE } from "@/shared/utils/ResultCode";
-import { useNavigate } from "react-router";
+} from "@mui/material" 
+import { useState } from "react" 
+import { AdminRole } from "../type/AdminRole" 
+import { IRegistretInfo } from "../type/IRegisterInfo" 
+import { useRegisterUserMutation } from "../api/authAPI"  
+import { RESULTCODE } from "@/shared/utils/ResultCode" 
+import { useNavigate } from "react-router" 
 
 function RegisterPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirm, setShowPassworConfirm] = useState(false);
-  const [registerUser] = useRegisterUserMutation();
+  const [showPassword, setShowPassword] = useState(false) 
+  const [showPasswordConfirm, setShowPassworConfirm] = useState(false) 
+  const [registerUser] = useRegisterUserMutation() 
 
-  const navigate = useNavigate();
+  const navigate = useNavigate() 
 
   const [adminInfo, setAdminInfo] = useState<IRegistretInfo>({
     admin_id: "",
     admin_role: AdminRole[0].name,
     password: "",
     confirmPassword: "",
-  });
+  }) 
 
   const handleSubmit = async () => {
     if (
@@ -47,33 +47,33 @@ function RegisterPage() {
         message: "Please check information.",
         type: "warning",
         duration: 2000,
-      });
+      }) 
     }
 
     const user = {
       admin_id: adminInfo.admin_id,
       admin_role: adminInfo.admin_role,
       password: adminInfo.password,
-    };
+    } 
 
-    const{ data }= await registerUser(user);
+    const{ data }= await registerUser(user) 
 
     if(data.resultCode == RESULTCODE.SUCCESS){
       CustomAlert({
         message: "User successfully registered.",
         type: "success",
         duration: 2000,
-      });
+      }) 
 
-      navigate(ROUTES.AUTH.LOGIN);
+      navigate(ROUTES.AUTH.LOGIN) 
     } else {
       CustomAlert({
         message: "Registration failed. Please try again.",
         type: "error",
         duration: 2000,
-      });
+      }) 
     }
-  };
+  } 
 
   return (
     <Box
@@ -233,7 +233,7 @@ function RegisterPage() {
         </Stack>
       </Box>
     </Box>
-  );
+  ) 
 }
 
-export default RegisterPage;
+export default RegisterPage 

@@ -1,28 +1,28 @@
-import AuthGuard from "@/core/auth/authGuard";
-import { ROUTES } from "@/shared/constants/routes";
-import { Box } from "@mui/material";
-import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import AuthGuard from "@/core/auth/authGuard" 
+import { ROUTES } from "@/shared/constants/routes" 
+import { Box } from "@mui/material" 
+import React from "react" 
+import { createBrowserRouter, RouterProvider } from "react-router" 
 
-const MainLayout = React.lazy(() => import("@app/layouts/MainLayout"));
-const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout"));
+const MainLayout = React.lazy(() => import("@app/layouts/MainLayout")) 
+const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout")) 
 
-const AdminPage = React.lazy(() => import("@features/admin/AdminPage"));
-const DashboardPage = React.lazy(() => import("@features/dashboard/MainPage"));
-const UserPage = React.lazy(() => import("@features/user/UserPage"));
-const CompanyPage = React.lazy(() => import("@features/company/CompanyPage"));
+const AdminPage = React.lazy(() => import("@features/admin/AdminPage")) 
+const DashboardPage = React.lazy(() => import("@features/dashboard/MainPage")) 
+const UserPage = React.lazy(() => import("@features/user/UserPage")) 
+const CompanyPage = React.lazy(() => import("@features/company/CompanyPage")) 
 const ModerationPage = React.lazy(
   () => import("@features/moderation/ModerationPage")
-);
+) 
 const NotificationPage = React.lazy(
   () => import("@features/notification/NotificationPage")
-);
-const LoginPage = React.lazy(() => import("@/features/auth/pages/LoginPage"));
+) 
+const LoginPage = React.lazy(() => import("@/features/auth/pages/LoginPage")) 
 const RegisterPage = React.lazy(
   () => import("@/features/auth/pages/RegisterPage")
-);
+) 
 
-const NotFound = React.lazy(() => import("@/pages/NotFound"));
+const NotFound = React.lazy(() => import("@/pages/NotFound")) 
 
 const router = createBrowserRouter([
   {
@@ -113,10 +113,10 @@ const router = createBrowserRouter([
     path: ROUTES.NOT_FOUND,
     element: <NotFound />,
   },
-]);
+]) 
 
 function Router() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} /> 
 }
 
-export default Router;
+export default Router 

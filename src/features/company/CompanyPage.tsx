@@ -8,22 +8,22 @@ import {
   Stack,
   Switch,
   Typography,
-} from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Company } from "@/shared/types/CompanyType";
-import { useEffect, useMemo, useState } from "react";
-import { useChangeCompanyDeletionStatusMutation, useGetAllCompaniesQuery } from "./api/companyAPI";
-import { useChangeCompanyStatusMutation } from "./api/companyAPI";
-import { RESULTCODE } from "@/shared/utils/ResultCode";
-import CustomAlert from "@/shared/components/CustomAlert";
+} from "@mui/material" 
+import { DataGrid, GridColDef } from "@mui/x-data-grid" 
+import { Company } from "@/shared/types/CompanyType" 
+import { useEffect, useMemo, useState } from "react" 
+import { useChangeCompanyDeletionStatusMutation, useGetAllCompaniesQuery } from "./api/companyAPI" 
+import { useChangeCompanyStatusMutation } from "./api/companyAPI" 
+import { RESULTCODE } from "@/shared/utils/ResultCode" 
+import CustomAlert from "@/shared/components/CustomAlert" 
 
 function CompanyPage() {
-  const [rows, setRows] = useState<Company[]>();
-  const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 });
-  const [totalRows, setTotalRows] = useState(pageFormat.pageSize);
+  const [rows, setRows] = useState<Company[]>() 
+  const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
+  const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
 
-  const [changeCompanyStatus] = useChangeCompanyStatusMutation();
-  const [changeCompanyDeletionStatus] = useChangeCompanyDeletionStatusMutation();
+  const [changeCompanyStatus] = useChangeCompanyStatusMutation() 
+  const [changeCompanyDeletionStatus] = useChangeCompanyDeletionStatusMutation() 
 
   const {
     data: allCompanies,
@@ -32,19 +32,21 @@ function CompanyPage() {
   } = useGetAllCompaniesQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
-  });
-
-
+  }) 
 
   useEffect(() => {
     if (isSuccess && allCompanies?.resultData) {
-      console.log("allCompanies", allCompanies);
-      setRows(allCompanies.resultData?.users || []);
-      setTotalRows(allCompanies.total);
-      // setRows(allCompanies.data);
-      // setTotalRows(allCompanies.total);
+      console.log("allCompanies", allCompanies) 
+      setRows(allCompanies.resultData?.users || []) 
+      setTotalRows(allCompanies.total) 
     }
-  });
+    if(allCompanies?.resultCode !== RESULTCODE.SUCCESS) {
+      CustomAlert({
+        message: allCompanies?.resultMsg || "Failed to fetch companies",
+        type: "error",
+      }) 
+    }
+  }) 
 
   const columns: GridColDef<Company>[] = useMemo(
     () => [
@@ -92,7 +94,7 @@ function CompanyPage() {
                   borderRadius: "0",
                   mt: 2,
                   color: params.row.status == "INACTIVE" ? "red" : 
-                  params.row.status == "BANNED" ? "orange" : "green",
+                    params.row.status == "BANNED" ? "orange" : "green",
                 }}
                 onChange={e =>
                   handleUserStatusChange(
@@ -101,18 +103,18 @@ function CompanyPage() {
                   )
                 }
               >
-                 <MenuItem value="ACTIVE" sx={{ color: "green" }}>
+                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
                     ACTIVE
-                  </MenuItem>
+                </MenuItem>
                 <MenuItem value="INACTIVE" sx={{ color: "red" }}>
                   INACTIVE
                 </MenuItem>
-                 <MenuItem value="BANNED" sx={{ color: 'orange' }}>
+                <MenuItem value="BANNED" sx={{ color: 'orange' }}>
                   BANNED
                 </MenuItem>
               </Select>
             </FormControl>
-          );
+          ) 
         },
       },
       {
@@ -160,7 +162,7 @@ function CompanyPage() {
       },
     ],
     []
-  );
+  ) 
 
   const handleUserStatusChange = async (
     phone_number?: string,
@@ -168,57 +170,57 @@ function CompanyPage() {
   ) => {
     if (phone_number && status) {
       try {
-        const res = await changeCompanyStatus({ phone_number, status });
-        console.log(res);
+        const res = await changeCompanyStatus({ phone_number, status }) 
+        console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-          console.log(res);
+          console.log(res) 
           CustomAlert({
             message: res.data?.resultMsg,
             type: "success",
-          });
+          }) 
         } else {
           CustomAlert({
             message: res.data?.resultMsg,
             type: "error",
-          });
+          }) 
         }
       } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
-        });
+        }) 
       }
     }
-  };
+  } 
 
   const handleUserDeletionChange = async (
-  deleted: boolean,
-  phone_number: string
+    deleted: boolean,
+    phone_number: string
   ) => {
     if (phone_number) {
       try {
-        const res = await changeCompanyDeletionStatus({ deleted, phone_number });
-        console.log(res);
+        const res = await changeCompanyDeletionStatus({ deleted, phone_number }) 
+        console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-          console.log(res);
+          console.log(res) 
           CustomAlert({
             message: res.data?.resultMsg,
             type: "success",
-          });
+          }) 
         } else {
           CustomAlert({
             message: res.data?.resultMsg,
             type: "error",
-          });
+          }) 
         }
       } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
-        });
+        }) 
       }
     }
-  };
+  } 
 
   return (
     <Grid
@@ -268,14 +270,14 @@ function CompanyPage() {
               ...prev,
               offset: page,
               pageSize: pageSize,
-            }));
+            })) 
           }}
-          />
+        />
       </Box>
     </Grid>
-  );
+  ) 
 }
 
 
 
-export default CompanyPage;
+export default CompanyPage 

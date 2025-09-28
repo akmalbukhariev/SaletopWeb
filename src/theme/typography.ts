@@ -1,5 +1,5 @@
 // src/theme/typography.ts
 
-const typography = {};
+const typography = {} 
 
-export default typography;
+export default typography 

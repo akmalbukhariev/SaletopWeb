@@ -1,6 +1,6 @@
-import { ENDPOINTS } from "@/core/auth/api/endpoints";
-import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth";
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { ENDPOINTS } from "@/core/auth/api/endpoints" 
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth" 
+import { createApi } from "@reduxjs/toolkit/query/react" 
 
 const userAPI = createApi({
   reducerPath: "userAPI",
@@ -8,7 +8,7 @@ const userAPI = createApi({
   tagTypes: ["UserItems"],
   endpoints: builder => ({
     getAllUsers: builder.query({
-      query: (data: { offset: number; pageSize: number }) => ({
+      query: (data: { offset: number, pageSize: number }) => ({
         url: ENDPOINTS.USERS.PAGINATED_LIST,
         method: "POST",
         body: data,
@@ -25,7 +25,7 @@ const userAPI = createApi({
     }),
 
     changeUserDeletionStatus: builder.mutation({
-      query: (data: { deleted: boolean; phone_number: string }) => ({
+      query: (data: { deleted: boolean, phone_number: string }) => ({
         url: ENDPOINTS.USERS.CHANGE_DELETION_STATUS,
         method: "PUT",
         body: data,
@@ -34,7 +34,7 @@ const userAPI = createApi({
     }),
 
     changeUserStatus: builder.mutation({
-      query: (data: { phone_number: string; status: string }) => ({
+      query: (data: { phone_number: string, status: string }) => ({
         url: ENDPOINTS.USERS.CHANGE_STATUS,
         method: "PUT",
         body: data,
@@ -42,13 +42,13 @@ const userAPI = createApi({
       invalidatesTags: ["UserItems"],
     }),
   }),
-});
+}) 
 
-export default userAPI;
+export default userAPI 
 
 export const {
   useGetAllUsersQuery,
   useGetUserByPhoneNumQuery,
   useChangeUserDeletionStatusMutation,
   useChangeUserStatusMutation,
-} = userAPI;
+} = userAPI 

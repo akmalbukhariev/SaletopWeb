@@ -1,32 +1,32 @@
-import { useAppDispatch } from "@/store/hooks";
-import { login, logout } from "@/store/slices/userSlice";
-import React, { useEffect, useState } from "react";
+import { useAppDispatch } from "@/store/hooks" 
+import { login, logout } from "@/store/slices/userSlice" 
+import React, { useEffect, useState } from "react" 
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useAppDispatch() 
+  const [isLoading, setIsLoading] = useState(true) 
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const user = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user") 
+        const token = localStorage.getItem("token") 
         if (user && token) {
-          const userData = JSON.parse(user);
+          const userData = JSON.parse(user) 
           // Token yo'q bo'lsa ham, user ma'lumotlarini ko'rsatish (lekin authenticated emas)
-          dispatch(login({ ...userData, isAuthenticated: true }));
+          dispatch(login({ ...userData, isAuthenticated: true })) 
         } else {
-          dispatch(logout());
+          dispatch(logout()) 
         }
       } catch (error) {
-        console.error("Auth initialization error:", error);
+        console.error("Auth initialization error:", error) 
       } finally {
-        setIsLoading(false);
+        setIsLoading(false) 
       }
-    };
+    } 
 
-    initializeAuth();
-  }, [dispatch]);
+    initializeAuth() 
+  }, [dispatch]) 
 
   // Loading holatida spinner ko'rsatish
   if (isLoading) {
@@ -41,10 +41,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       >
         Loading...
       </div>
-    );
+    ) 
   }
 
-  return <>{children}</>;
+  return <>{children}</> 
 }
 
-export default AuthProvider;
+export default AuthProvider 

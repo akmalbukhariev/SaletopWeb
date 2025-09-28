@@ -31,6 +31,6 @@ export const ENDPOINTS = {
     PAGINATED_LIST: "notification/getAllNotifications",
     SEND: "notification/register",
   },
-} as const;
+} as const 
 
-export type Endpoints = typeof ENDPOINTS;
+export type Endpoints = typeof ENDPOINTS 

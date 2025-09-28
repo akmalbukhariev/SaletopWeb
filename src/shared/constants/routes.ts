@@ -14,4 +14,4 @@ export const ROUTES = {
     SETTINGS: "/admin/settings",
   },
   NOT_FOUND: "*",
-};
+} 

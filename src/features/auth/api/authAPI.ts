@@ -1,44 +1,44 @@
-import { ENDPOINTS } from "@/core/auth/api/endpoints";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ENDPOINTS } from "@/core/auth/api/endpoints" 
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react" 
 
 const authAPI = createApi({
   reducerPath: "authAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://95.182.118.233:8088/ecoplatesadmin/api/v1",
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token") 
       if (token) {
-        headers.set("Authorization", "Bearer " + token);
+        headers.set("Authorization", "Bearer " + token) 
       }
-      return headers;
+      return headers 
     },
   }),
-    tagTypes: ["AuthItems"],
-    endpoints: builder => ({
-        loginUser: builder.mutation({
-            query: (data: { admin_id: string; password: string }) => ({
-                url: ENDPOINTS.AUTH.LOGIN, 
-                method: "POST",
-                body: data,
-            }),
-            transformResponse: (response, meta)=>{
-                const accessToken = meta?.response?.headers.get("access-token");
-                if(accessToken){
-                    response.accessToken = accessToken;
-                }
-                return response;
-            }
-        }),
-        registerUser: builder.mutation({
-            query: (data: { admin_id: string; admin_role: string; password: string }) => ({
-                url: ENDPOINTS.AUTH.REGISTER,
-                method: "POST",
-                body: data,
-            }),
-        }),
+  tagTypes: ["AuthItems"],
+  endpoints: builder => ({
+    loginUser: builder.mutation({
+      query: (data: { admin_id: string, password: string }) => ({
+        url: ENDPOINTS.AUTH.LOGIN, 
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response, meta) => {
+        const accessToken = meta?.response?.headers.get("access-token") 
+        if(accessToken){
+          response.accessToken = accessToken 
+        }
+        return response 
+      }
     }),
-});
+    registerUser: builder.mutation({
+      query: (data: { admin_id: string, admin_role: string, password: string }) => ({
+        url: ENDPOINTS.AUTH.REGISTER,
+        method: "POST",
+        body: data,
+      }),
+    }),
+  }),
+}) 
 
-export const { useLoginUserMutation, useRegisterUserMutation } = authAPI;
+export const { useLoginUserMutation, useRegisterUserMutation } = authAPI 
 
-export default authAPI;
+export default authAPI 

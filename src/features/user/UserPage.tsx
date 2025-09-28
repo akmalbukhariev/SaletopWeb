@@ -1,6 +1,6 @@
-import CustomAlert from "@/shared/components/CustomAlert";
-import { UserRow } from "@/shared/types/UserType";
-import { RESULTCODE } from "@/shared/utils/ResultCode";
+import CustomAlert from "@/shared/components/CustomAlert" 
+import { UserRow } from "@/shared/types/UserType" 
+import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import {
   Avatar,
   Box,
@@ -9,39 +9,48 @@ import {
   MenuItem,
   Select,
   Switch,
-} from "@mui/material";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
+} from "@mui/material" 
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid" 
+import { useEffect, useMemo, useState } from "react" 
 import {
   useChangeUserDeletionStatusMutation,
   useChangeUserStatusMutation,
   useGetAllUsersQuery,
-} from "./api/UserAPI";
+} from "./api/UserAPI" 
 
 function UserPage() {
-  const [rows, setRows] = useState<UserRow[]>();
+  const [rows, setRows] = useState<UserRow[]>() 
   const [pageFormat, setPageFormat] = useState({
     offset: 0,
     pageSize: 10,
-  });
-  const [totalRows, setTotalRows] = useState(pageFormat.pageSize);
-  const { data: allUsers, isSuccess } = useGetAllUsersQuery({
+  }) 
+
+
+  const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
+  const { data: allUsers, isSuccess, isLoading } = useGetAllUsersQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
-  });
+  }) 
 
-  const [changeUserStatus] = useChangeUserStatusMutation();
-  const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation();
+  console.log(allUsers)
+  const [changeUserStatus] = useChangeUserStatusMutation() 
+  const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
 
   useEffect(() => {
     if (isSuccess && allUsers?.resultData) {
-      console.log(allUsers.resultData.users);
-      setRows(allUsers.resultData.users || []);
+      console.log(allUsers.resultData.users) 
+      setRows(allUsers.resultData.users || []) 
       if (typeof allUsers.resultData.total === "number") {
-        setTotalRows(allUsers.resultData.total);
+        setTotalRows(allUsers.resultData.total) 
       }
     }
-  }, [isSuccess, allUsers]);
+    if(allUsers?.resultCode !== RESULTCODE.SUCCESS) {
+      CustomAlert({
+        message: allUsers?.resultMsg || "Failed to fetch users",
+        type: "error",
+      }) 
+    }
+  }, [isSuccess, allUsers]) 
 
   const columns: GridColDef<UserRow>[] = useMemo(
     () => [
@@ -77,7 +86,7 @@ function UserPage() {
                   borderRadius: "0",
                   mt: 2,
                   color: params.row.status == "INACTIVE" ? "red" : 
-                  params.row.status == "BANNED" ? "orange" : "green",
+                    params.row.status == "BANNED" ? "orange" : "green",
                 }}
                 onChange={e =>
                   handleUserStatusChange(
@@ -86,18 +95,18 @@ function UserPage() {
                   )
                 }
               >
-                 <MenuItem value="ACTIVE" sx={{ color: "green" }}>
+                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
                   ACTIVE
                 </MenuItem>
                 <MenuItem value="INACTIVE" sx={{ color: "red" }}>
                   INACTIVE
                 </MenuItem>
-                 <MenuItem value="BANNED" sx={{ color: 'orange' }}>
+                <MenuItem value="BANNED" sx={{ color: 'orange' }}>
                   BANNED
                 </MenuItem>
               </Select>
             </FormControl>
-          );
+          ) 
         },
       },
       {
@@ -142,7 +151,7 @@ function UserPage() {
       },
     ],
     []
-  );
+  ) 
 
   const handleUserStatusChange = async (
     phone_number: string,
@@ -150,28 +159,28 @@ function UserPage() {
   ) => {
     if (phone_number && status) {
       try {
-        const res = await changeUserStatus({ phone_number, status });
-        console.log(res);
+        const res = await changeUserStatus({ phone_number, status }) 
+        console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-          console.log(res);
+          console.log(res) 
           CustomAlert({
             message: res.data?.resultMsg,
             type: "success",
-          });
+          }) 
         } else {
           CustomAlert({
             message: res.data?.resultMsg,
             type: "error",
-          });
+          }) 
         }
       } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
-        });
+        }) 
       }
     }
-  };
+  } 
 
   const handleUserDeletionChange = async (
     deleted: boolean,
@@ -179,28 +188,28 @@ function UserPage() {
   ) => {
     if (phone_number) {
       try {
-        const res = await changeUserDeletionStatus({ deleted, phone_number });
-        console.log(res);
+        const res = await changeUserDeletionStatus({ deleted, phone_number }) 
+        console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-          console.log(res);
+          console.log(res) 
           CustomAlert({
             message: res.data?.resultMsg,
             type: "success",
-          });
+          }) 
         } else {
           CustomAlert({
             message: res.data?.resultMsg,
             type: "error",
-          });
+          }) 
         }
       } catch (error) {
         CustomAlert({
           message: error as string,
           type: "error",
-        });
+        }) 
       }
     }
-  };
+  } 
 
   return (
     <Grid
@@ -220,6 +229,7 @@ function UserPage() {
           getRowId={row => row.user_id}
           rows={rows || []}
           columns={columns}
+          loading={isLoading}
           disableRowSelectionOnClick
           initialState={{
             pagination: {
@@ -234,18 +244,18 @@ function UserPage() {
             page: pageFormat.offset,
             pageSize: pageFormat.pageSize,
           }}
-         rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
+          rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
           paginationMode="server" // <-- Enable server-side pagination
           onPaginationModelChange={({ page, pageSize }) => {
             setPageFormat(prev => ({
               ...prev,
               offset: page,
               pageSize: pageSize,
-            }));
+            })) 
           }}
         />
       </Box>
     </Grid>
-  );
+  ) 
 }
-export default UserPage;
+export default UserPage 

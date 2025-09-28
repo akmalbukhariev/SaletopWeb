@@ -1,7 +1,7 @@
-import { Avatar, Box, Grid, TextField } from "@mui/material";
-import SideBar from "./components/SideBar";
-import { sideBarList } from "./constants/constant";
-import { Outlet } from "react-router";
+import { Avatar, Box, Grid, TextField } from "@mui/material" 
+import SideBar from "./components/SideBar" 
+import { sideBarList } from "./constants/constant" 
+import { Outlet } from "react-router" 
 
 function MainLayout() {
   return (
@@ -87,7 +87,7 @@ function MainLayout() {
         </Grid>
       </Grid>
     </>
-  );
+  ) 
 }
 
-export default MainLayout;
+export default MainLayout 

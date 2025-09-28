@@ -1,11 +1,11 @@
-import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import StoreRoundedIcon from "@mui/icons-material/StoreRounded";
-import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
-import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import { ROUTES } from "@/shared/constants/routes";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded" 
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded" 
+import StoreRoundedIcon from "@mui/icons-material/StoreRounded" 
+import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded" 
+import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded" 
+import TuneRoundedIcon from "@mui/icons-material/TuneRounded" 
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings" 
+import { ROUTES } from "@/shared/constants/routes" 
 
 const sideBarList = [
   {
@@ -57,6 +57,6 @@ const sideBarList = [
     selected: false,
     icon: TuneRoundedIcon,
   },
-];
+] 
 
-export { sideBarList };
+export { sideBarList } 

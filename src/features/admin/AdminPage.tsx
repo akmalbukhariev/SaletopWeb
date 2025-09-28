@@ -1,30 +1,30 @@
-import { Avatar, Box, Button, Grid, Switch } from "@mui/material";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
-import { ROUTES } from "@/shared/constants/routes";
-import { useNavigate } from "react-router";
-import { useGetAllAdminQuery, useDeleteAdminByIdMutation } from "./api/adminAPI";
-import { RESULTCODE } from "@/shared/utils/ResultCode";
-import CustomAlert from "@/shared/components/CustomAlert";
+import { Avatar, Box, Button, Grid, Switch } from "@mui/material" 
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid" 
+import { useEffect, useState } from "react" 
+import { ROUTES } from "@/shared/constants/routes" 
+import { useNavigate } from "react-router" 
+import { useGetAllAdminQuery, useDeleteAdminByIdMutation } from "./api/adminAPI" 
+import { RESULTCODE } from "@/shared/utils/ResultCode" 
+import CustomAlert from "@/shared/components/CustomAlert" 
 
 
 function AdminPage() {
-  const [admins, setAdmins] = useState([]);
-  const navigate = useNavigate();
-  const [deleteAdminById] = useDeleteAdminByIdMutation();
+  const [admins, setAdmins] = useState([]) 
+  const navigate = useNavigate() 
+  const [deleteAdminById] = useDeleteAdminByIdMutation() 
 
 
-  const  {data: allAdmins, isSuccess } =  useGetAllAdminQuery({});
+  const { data: allAdmins, isSuccess } = useGetAllAdminQuery({}) 
 
   useEffect(() => {
     if (isSuccess && allAdmins?.resultData) {
-      console.log("allAdmins", allAdmins);
-      setAdmins(allAdmins.resultData || []);
+      console.log("allAdmins", allAdmins) 
+      setAdmins(allAdmins.resultData || []) 
     }
-  }, [allAdmins?.resultData, isSuccess]);
+  }, [allAdmins?.resultData, isSuccess]) 
 
   //Grid Format
-    const columns: GridColDef[] = [
+  const columns: GridColDef[] = [
     {
       field: "avatar",
       headerName: "User",
@@ -55,29 +55,29 @@ function AdminPage() {
         ></Switch>
       ),
     },
-  ];
+  ] 
 
 
   const handleAdminDelete = async (admin_id: number | string) => {
 
     if (admin_id) {
-    console.log("admin_id", admin_id);
-      const res = await deleteAdminById(`${admin_id}`);
+      console.log("admin_id", admin_id) 
+      const res = await deleteAdminById(`${admin_id}`) 
 
-      console.log(res);
+      console.log(res) 
       if (res?.data?.resultCode == RESULTCODE.SUCCESS) {
         CustomAlert({ 
           message: "Admin successfully deleted.", 
           type: "success"
-        });
+        }) 
       } else {
         CustomAlert({
           message: "Admin can't be deleted.", 
           type: "error"
-        });
+        }) 
       }
     }
-  };
+  } 
 
   return (
     <Grid
@@ -115,10 +115,10 @@ function AdminPage() {
         />
       </Box>
     </Grid>
-  );
+  ) 
 }
 
-export default AdminPage;
+export default AdminPage 
 
 
 

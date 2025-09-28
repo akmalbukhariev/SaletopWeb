@@ -1,6 +1,6 @@
 //rang sxemasi
 
-import { PaletteOptions } from "@mui/material";
+import { PaletteOptions } from "@mui/material" 
 
 const palette: PaletteOptions = {
   mode: "light", // yoki 'dark'
@@ -18,6 +18,6 @@ const palette: PaletteOptions = {
     primary: "#212121",
     secondary: "#757575",
   },
-};
+} 
 
-export default palette;
+export default palette 

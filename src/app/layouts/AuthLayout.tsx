@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
-import { Outlet } from "react-router";
+import { Box } from "@mui/material" 
+import { Outlet } from "react-router" 
 
 function AuthLayout() {
   return (
@@ -13,7 +13,7 @@ function AuthLayout() {
     >
       <Outlet />
     </Box>
-  );
+  ) 
 }
 
-export default AuthLayout;
+export default AuthLayout 

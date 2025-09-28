@@ -1,5 +1,5 @@
-import { useAuth } from "@/features/auth";
-import { ROUTES } from "@/shared/constants/routes";
+import { useAuth } from "@/features/auth" 
+import { ROUTES } from "@/shared/constants/routes" 
 import {
   Box,
   Button,
@@ -9,37 +9,37 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+} from "@mui/material" 
+import { useState } from "react" 
+import { useNavigate } from "react-router" 
 
 function LoginForm() {
-  const navigate = useNavigate();
-  const { signIn } = useAuth();
-  const [admin_id, setAdminId] = useState("");
-  const [password, setPassword] = useState("");
-  const [isRememberMe, setIsRememberMe] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate() 
+  const { signIn } = useAuth() 
+  const [admin_id, setAdminId] = useState("") 
+  const [password, setPassword] = useState("") 
+  const [isRememberMe, setIsRememberMe] = useState(false) 
+  const [loading, setLoading] = useState(false) 
+  const [error, setError] = useState<string | null>(null) 
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault() 
+    setLoading(true) 
+    setError(null) 
     try {
-      const response = await signIn({ admin_id, password }, isRememberMe);
-      console.log("res", response);
+      const response = await signIn({ admin_id, password }, isRememberMe) 
+      console.log("res", response) 
       if (response) {
-        localStorage.removeItem(atob("selectedSidebar"));
-        navigate(ROUTES.HOME, { replace: true });
+        localStorage.removeItem(atob("selectedSidebar")) 
+        navigate(ROUTES.HOME, { replace: true }) 
       }
     } catch (err) {
-      console.log(err);
-      setError(err instanceof Error ? err.message : "Login failed");
+      console.log(err) 
+      setError(err instanceof Error ? err.message : "Login failed") 
     } finally {
-      setLoading(false);
+      setLoading(false) 
     }
-  };
+  } 
 
   return (
     <Box
@@ -128,7 +128,7 @@ function LoginForm() {
         </Box>
       </Stack>
     </Box>
-  );
+  ) 
 }
 
-export default LoginForm;
+export default LoginForm 

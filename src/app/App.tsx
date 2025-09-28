@@ -1,5 +1,5 @@
-import { CssBaseline } from "@mui/material";
-import Router from "./router";
+import { CssBaseline } from "@mui/material" 
+import Router from "./router" 
 
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
       <CssBaseline />
       <Router />
     </>
-  );
+  ) 
 }
 
-export default App;
+export default App 

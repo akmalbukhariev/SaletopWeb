@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
-import { ImageProps } from "@shared/types/ImageProps";
+import { Box } from "@mui/material" 
+import { ImageProps } from "@shared/types/ImageProps" 
 const ImageWrapper = ({
   src,
   alt = "",
@@ -8,7 +8,7 @@ const ImageWrapper = ({
   onClick = () => {},
   loading = "lazy",
 }: ImageProps) => {
-  const defaultPath = "/images/";
+  const defaultPath = "/images/" 
   return (
     <Box sx={styleBox}>
       <img
@@ -18,11 +18,11 @@ const ImageWrapper = ({
         style={styleImg}
         onClick={onClick}
         // onError={(e) => {
-        //   e.currentTarget.src = `${defaultPath}default-image.png`;
+        //   e.currentTarget.src = `${defaultPath}default-image.png` 
         // }}
       />
     </Box>
-  );
-};
+  ) 
+} 
 
-export default ImageWrapper;
+export default ImageWrapper 

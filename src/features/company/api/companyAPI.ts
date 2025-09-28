@@ -1,6 +1,6 @@
-import { ENDPOINTS } from "@/core/auth/api/endpoints";
-import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth";
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { ENDPOINTS } from "@/core/auth/api/endpoints" 
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth" 
+import { createApi } from "@reduxjs/toolkit/query/react" 
 
 const companyAPI = createApi({
   reducerPath: "companyAPI",
@@ -8,7 +8,7 @@ const companyAPI = createApi({
   tagTypes: ["CompanyItems"],
   endpoints: builder => ({
     getAllCompanies: builder.query({
-      query: (data: { offset: number; pageSize: number }) => ({
+      query: (data: { offset: number, pageSize: number }) => ({
         url: ENDPOINTS.COMPANIES.PAGINATED_LIST,
         method: "POST",
         body: data,
@@ -25,7 +25,7 @@ const companyAPI = createApi({
     }),
 
     changeCompanyDeletionStatus: builder.mutation({
-      query: (data: { deleted: boolean; phone_number: string }) => ({
+      query: (data: { deleted: boolean, phone_number: string }) => ({
         url: ENDPOINTS.COMPANIES.CHANGE_DELETION_STATUS,
         method: "PUT",
         body: data,
@@ -34,7 +34,7 @@ const companyAPI = createApi({
     }),
 
     changeCompanyStatus: builder.mutation({
-      query: (data: { phone_number: string; status: string }) => ({
+      query: (data: { phone_number: string, status: string }) => ({
         url: ENDPOINTS.COMPANIES.CHANGE_STATUS,
         method: "PUT",
         body: data,
@@ -42,13 +42,13 @@ const companyAPI = createApi({
       invalidatesTags: ["CompanyItems"],
     }),
   }),
-});
+}) 
 
-export default companyAPI;
+export default companyAPI 
 
 export const {
   useGetAllCompaniesQuery,
   useGetCompanyByPhoneNumQuery,
   useChangeCompanyDeletionStatusMutation,
   useChangeCompanyStatusMutation,
-} = companyAPI;
+} = companyAPI 
