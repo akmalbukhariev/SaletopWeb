@@ -6,7 +6,7 @@ import eslint from "vite-plugin-eslint"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()], // error bo‘lsa ham server to‘xtamasin},
-  base: "/admin-page/",
+  base: "/admin-page",
   resolve: {
     alias: {
       // Object notation o'rniga array notation ishlatish
