@@ -4,6 +4,7 @@ import authAPI from "@/features/auth/api/authAPI"
 import companyAPI from "@/features/company/api/companyAPI" 
 import notifyAPI from "@/features/notification/api/notifyAPI" 
 import userAPI from "@/features/user/api/UserAPI" 
+import adminAPI from "@/features/admin/api/adminAPI"
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [companyAPI.reducerPath]: companyAPI.reducer,
     [authAPI.reducerPath]: authAPI.reducer,
     [notifyAPI.reducerPath]: notifyAPI.reducer,
+    [adminAPI.reducerPath]: adminAPI.reducer,
   },
 
   // api middleware
@@ -23,7 +25,8 @@ export const store = configureStore({
       .concat(userAPI.middleware)
       .concat(companyAPI.middleware)
       .concat(authAPI.middleware)
-      .concat(notifyAPI.middleware),
+      .concat(notifyAPI.middleware)
+      .concat(adminAPI.middleware),
 
   // Redux DevTools konfiguratsiyasi
   devTools: import.meta.env.MODE !== "production", // devtool faqat dev muhitida yoqiladi
