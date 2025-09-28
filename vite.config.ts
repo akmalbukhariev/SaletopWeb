@@ -3,28 +3,28 @@ import path from "path"
 import { defineConfig } from "vite"
 import eslint from "vite-plugin-eslint"
 
-const root = process.cwd()
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()], // error bo‘lsa ham server to‘xtamasin},
   base: "/admin-page/",
   resolve: {
-    alias: [
-      { find: "@", replacement: path.resolve(root, "src") },
-      { find: "@app", replacement: path.resolve(root, "src/app") },
-      { find: "@core", replacement: path.resolve(root, "src/core") },
-      { find: "@shared", replacement: path.resolve(root, "src/shared") },
-      { find: "@features", replacement: path.resolve(root, "src/features") },
-      { find: "@theme", replacement: path.resolve(root, "src/theme") },
-      { find: "@store", replacement: path.resolve(root, "src/store") },
-      { find: "@styles", replacement: path.resolve(root, "src/styles") },
-    ],
+    alias: {
+      // Object notation o'rniga array notation ishlatish
+      "@": path.resolve(__dirname, "./src"),
+      "@app": path.resolve(__dirname, "./src/app"),
+      "@core": path.resolve(__dirname, "./src/core"),
+      "@shared": path.resolve(__dirname, "./src/shared"),
+      "@features": path.resolve(__dirname, "./src/features"),
+      "@theme": path.resolve(__dirname, "./src/theme"),
+      "@store": path.resolve(__dirname, "./src/store"),
+      "@styles": path.resolve(__dirname, "./src/styles"),
+    },
   },
   server: {
     host: '0.0.0.0',
     port: 2000,
-    allowedHosts: ['saletop.uz', 'www.saletop.uz'],   // 👈 bu yerda domeningizni yozasiz
+    allowedHosts: ['saletop.uz', 'www.saletop.uz', 'localhost', '127.0.0.1'],   // 👈 bu yerda domeningizni yozasiz
     strictPort: true,
+    cors: true,
   },
 })
