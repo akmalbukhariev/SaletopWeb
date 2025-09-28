@@ -1,10 +1,11 @@
+import { configureStore } from "@reduxjs/toolkit";
+import { userSliceReducer } from "@store/slices/userSlice";
 import adminAPI from "@/features/admin/api/adminAPI";
 import authAPI from "@/features/auth/api/authAPI";
 import companyAPI from "@/features/company/api/companyAPI";
 import notifyAPI from "@/features/notification/api/notifyAPI";
 import userAPI from "@/features/user/api/UserAPI";
-import { configureStore } from "@reduxjs/toolkit";
-import { userSliceReducer } from "@store/slices/userSlice";
+
 
 export const store = configureStore({
   reducer: {

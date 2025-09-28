@@ -20,7 +20,7 @@ unknown,
 FetchBaseQueryError> = async (args, api, extraOptions) => {
 const result = await rowBaseQuery(args, api, extraOptions);
         if (result.data && typeof result.data === "object") {
-            const code = (result.data as any).resultCode;
+            const code = (result.data as {resultCode: number, code: number}).resultCode;
             switch(Number(code)) {
                 case RESULTCODE.TOKEN_INVALID:
                     localStorage.removeItem("token");

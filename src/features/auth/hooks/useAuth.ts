@@ -16,7 +16,7 @@ export const useAuth = () => {
   ) => {
     try {
       // Call API to login, expect response to include user and token
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const response = (await loginUser(data));
 
       console.log("Login response:", response);
