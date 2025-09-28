@@ -24,7 +24,7 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 2000,
-    allowedHosts: ['saletop.uz'],   // 👈 bu yerda domeningizni yozasiz
+    allowedHosts: ['saletop.uz', 'www.saletop.uz'],   // 👈 bu yerda domeningizni yozasiz
     strictPort: true,
       },
 });
