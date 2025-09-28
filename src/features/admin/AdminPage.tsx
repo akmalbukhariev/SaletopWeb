@@ -3,7 +3,7 @@ import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { useEffect, useState } from "react" 
 import { ROUTES } from "@/shared/constants/routes" 
 import { useNavigate } from "react-router" 
-import { useGetAllAdminQuery, useDeleteAdminByIdMutation } from "./api/adminAPI" 
+import { useGetAllAdminQuery, useDeleteAdminByIdMutation } from "./api/adminPageAPI" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import CustomAlert from "@/shared/components/CustomAlert" 
 

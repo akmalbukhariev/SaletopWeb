@@ -2,7 +2,7 @@ import { ENDPOINTS } from "@/core/auth/api/endpoints"
 import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth" 
 import { createApi } from "@reduxjs/toolkit/query/react" 
 
-const adminAPI = createApi({
+const adminPageAPI = createApi({
   reducerPath: "adminAPI",
   baseQuery: usefetchBaseQueryWithAuth,
   tagTypes: ["AdminItems"],
@@ -35,7 +35,7 @@ export const {
   useGetAllAdminQuery,
   useGetAdminByIdQuery,
   useDeleteAdminByIdMutation,
-} = adminAPI 
+} = adminPageAPI 
 
 
-export default adminAPI 
+export default adminPageAPI 
