@@ -6,6 +6,7 @@ import eslint from "vite-plugin-eslint"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()], // error bo‘lsa ham server to‘xtamasin},
+  base: "/",
   resolve: {
     alias: {
       // Object notation o'rniga array notation ishlatish
@@ -21,9 +22,16 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 2000,
+    port: 3000,
     allowedHosts: ['saletop.uz', 'www.saletop.uz', 'localhost', '127.0.0.1'],   // 👈 bu yerda domeningizni yozasiz
     strictPort: true,
-    cors: true,
+    cors: {
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      exposedHeaders: ['Content-Length', 'X-Kuma-Revision'],
+      credentials: true,
+      preflightContinue: false,
+    }
   },
 })
