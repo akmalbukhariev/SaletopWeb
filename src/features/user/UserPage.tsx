@@ -1,15 +1,24 @@
-import CustomAlert from "@/shared/components/CustomAlert" 
+import toastNotify from "@/shared/components/toastNotify" 
 import { UserRow } from "@/shared/types/UserType" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import {
   Avatar,
   Box,
-  FormControl,
   Grid,
-  MenuItem,
-  Select,
   Switch,
+  Chip,
+  IconButton,
+  Popper,
+  PopperPlacementType,
+  Popover,
+  Button,
+  Typography,
+  ClickAwayListener,
+  // IconButton
 } from "@mui/material" 
+import BlockIcon from "@mui/icons-material/Block"
+import DeleteIcon from "@mui/icons-material/Delete"
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid" 
 import { useEffect, useMemo, useState } from "react" 
 import {
@@ -17,6 +26,7 @@ import {
   useChangeUserStatusMutation,
   useGetAllUsersQuery,
 } from "./api/UserAPI" 
+import React from "react"
 
 function UserPage() {
   const [rows, setRows] = useState<UserRow[]>() 
@@ -25,16 +35,20 @@ function UserPage() {
     pageSize: 10,
   }) 
 
+  const [openAction, setOpenAction] = useState(false)
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
-  const { data: allUsers, isSuccess, isLoading } = useGetAllUsersQuery({
+  const { data: allUsers, isSuccess, isLoading, isError } = useGetAllUsersQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
   }) 
+  const [selectedUser, setSelectedUser] = useState<UserRow | null>(null)
 
-  console.log(allUsers)
   const [changeUserStatus] = useChangeUserStatusMutation() 
   const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
+
+
 
   useEffect(() => {
     if (isSuccess && allUsers?.resultData) {
@@ -44,14 +58,29 @@ function UserPage() {
         setTotalRows(allUsers.resultData.total) 
       }
     }
-    if(allUsers?.resultCode !== RESULTCODE.SUCCESS) {
-      CustomAlert({
-        message: allUsers?.resultMsg || "Failed to fetch users",
-        type: "error",
-      }) 
+
+    if(isError && allUsers?.resultCode !== RESULTCODE.SUCCESS) {
+      toastNotify(
+        allUsers?.resultMsg || "Failed to fetch users",
+        "error",
+      ) 
     }
   }, [isSuccess, allUsers]) 
 
+  const id = openAction ? 'simple-popper' : undefined
+  const handleActionClick = (user: UserRow) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("handleActionClick", user)
+    setSelectedUser(user)
+    setAnchorEl(event.currentTarget) 
+    setOpenAction((prev) => !prev)
+  }
+
+  const handleActionClose = () => {
+    setAnchorEl(null)
+    setOpenAction(false)
+
+  }
+    
   const columns: GridColDef<UserRow>[] = useMemo(
     () => [
       {
@@ -73,39 +102,21 @@ function UserPage() {
       { field: "full_name", headerName: "Full name", width: 180, flex: 1 },
       { field: "phone_number", headerName: "Phone", width: 160 },
       { field: "email", headerName: "Email", width: 220, flex: 1 },
-      {
+      { 
         field: "status",
         headerName: "Status",
         width: 180,
         renderCell: params => {
+          let color = "green" 
+          if (params.value === "INACTIVE") color = "red" 
+          else if (params.value === "BANNED") color = "orange" 
           return (
-            <FormControl fullWidth variant="standard">
-              <Select
-                value={params.row.status}
-                sx={{
-                  borderRadius: "0",
-                  mt: 2,
-                  color: params.row.status == "INACTIVE" ? "red" : 
-                    params.row.status == "BANNED" ? "orange" : "green",
-                }}
-                onChange={e =>
-                  handleUserStatusChange(
-                    params.row.phone_number,
-                    e.target.value
-                  )
-                }
-              >
-                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
-                  ACTIVE
-                </MenuItem>
-                <MenuItem value="INACTIVE" sx={{ color: "red" }}>
-                  INACTIVE
-                </MenuItem>
-                <MenuItem value="BANNED" sx={{ color: 'orange' }}>
-                  BANNED
-                </MenuItem>
-              </Select>
-            </FormControl>
+            <Chip label={params.value} 
+              sx={{ 
+                backgroundColor: color, 
+                fontWeight: 'bold',
+                color: 'white' 
+              }}/>
           ) 
         },
       },
@@ -149,6 +160,18 @@ function UserPage() {
         headerName: "Updated",
         width: 170,
       },
+      {
+        field: "actions",
+        headerName: "Actions",
+        width: 80,
+        renderCell: params => {
+          return (
+            <IconButton id={id} onClick={handleActionClick(params.row)}>
+              <MoreVertIcon />
+            </IconButton>
+          ) 
+        },
+      },
     ],
     []
   ) 
@@ -158,26 +181,29 @@ function UserPage() {
     status: string
   ) => {
     if (phone_number && status) {
+
+
+      
       try {
         const res = await changeUserStatus({ phone_number, status }) 
         console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
           console.log(res) 
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "success",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "success"
+          ) 
         } else {
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "error",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "error",
+          ) 
         }
       } catch (error) {
-        CustomAlert({
-          message: error as string,
-          type: "error",
-        }) 
+        toastNotify(
+          error as string,
+          "error",
+        ) 
       }
     }
   } 
@@ -192,21 +218,21 @@ function UserPage() {
         console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
           console.log(res) 
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "success",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "success",
+          ) 
         } else {
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "error",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "error",
+          ) 
         }
       } catch (error) {
-        CustomAlert({
-          message: error as string,
-          type: "error",
-        }) 
+        toastNotify(
+          error as string,
+          "error",
+        ) 
       }
     }
   } 
@@ -224,7 +250,7 @@ function UserPage() {
         overflow: "hidden",
       }}
     >
-      <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
+      <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
         <DataGrid
           getRowId={row => row.user_id}
           rows={rows || []}
@@ -254,6 +280,40 @@ function UserPage() {
             })) 
           }}
         />
+        {/* <Box sx={{ display: openAction ? 'flex' : 'none', position: 'absolute', justifyContent: "flex-end", mt: 2 }} onBlur={handleActionClose}> */}
+        <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ width: 160, zIndex: 9999 }} onFocus={handleActionClose}> 
+          <ClickAwayListener onClickAway={handleActionClose}>
+            <Box sx={{ border: '1px solid #d9d9d9', p: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
+              <Button
+                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                fullWidth
+                variant="text"
+                color="error"
+                onClick={() => {
+                  handleUserStatusChange("", "BANNED") 
+                  handleActionClose() 
+                }}
+                startIcon={<BlockIcon />}
+              >
+                Block
+              </Button>
+              <Button
+                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                fullWidth
+                variant="text"
+                color="secondary"
+                startIcon={<DeleteIcon />}
+                onClick={() => {
+                  handleUserStatusChange("", "INACTIVE") 
+                  handleActionClose() 
+                }}
+              >
+                Deleted (soft)
+              </Button>
+            </Box>
+          </ClickAwayListener>
+        </Popper>
+        {/* </Box> */}
       </Box>
     </Grid>
   ) 

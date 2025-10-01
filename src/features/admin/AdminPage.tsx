@@ -5,7 +5,7 @@ import { ROUTES } from "@/shared/constants/routes"
 import { useNavigate } from "react-router" 
 import { useGetAllAdminQuery, useDeleteAdminByIdMutation } from "./api/adminPageAPI" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
-import CustomAlert from "@/shared/components/CustomAlert" 
+import toastNotify from "@/shared/components/toastNotify" 
 
 
 function AdminPage() {
@@ -66,15 +66,15 @@ function AdminPage() {
 
       console.log(res) 
       if (res?.data?.resultCode == RESULTCODE.SUCCESS) {
-        CustomAlert({ 
-          message: "Admin successfully deleted.", 
-          type: "success"
-        }) 
+        toastNotify(
+          "Admin successfully deleted.", 
+          "success"
+        ) 
       } else {
-        CustomAlert({
-          message: "Admin can't be deleted.", 
-          type: "error"
-        }) 
+        toastNotify(
+          "Admin can't be deleted.", 
+          "error"
+        ) 
       }
     }
   } 

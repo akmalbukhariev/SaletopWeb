@@ -31,7 +31,6 @@ export default defineConfig({
       allowedHeaders: ['Content-Type', 'Authorization'],
       exposedHeaders: ['Content-Length', 'X-Kuma-Revision'],
       credentials: true,
-      preflightContinue: false,
     }
   },
 })

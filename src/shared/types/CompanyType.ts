@@ -1,4 +1,4 @@
-export type CompanyStatus = "ACTIVE" |  "INACTIVE" | "BANNED" 
+export type CompanyStatus = "INACTIVE" | "BANNED" 
 
 export type Company = {
   company_id: string  // using string for DataGrid id compatibility
@@ -17,10 +17,12 @@ export type Company = {
   password_hash?: string | null 
   token_mb?: string | null 
   token_frb?: string | null 
-  status: CompanyStatus 
+  status: string  // enum 
   notification_enabled: boolean  // 1=yes, 0=no
   about?: string | null 
   updated_at?: string | null  // ISO
   created_at?: string | null  // ISO
-  deleted: boolean  // 1=yes, 0=no
+  deleted: boolean  // 1=yes, 0=no,
+  bannedStatus?: CompanyStatus,
+  [key: string]: any  // for additional dynamic fields
 } 

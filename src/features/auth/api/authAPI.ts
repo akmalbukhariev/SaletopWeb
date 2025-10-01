@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 const authAPI = createApi({
   reducerPath: "authAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://95.182.118.233:8088/ecoplatesadmin/api/v1",
+    baseUrl: import.meta.env.VITE_BACKEND_API_URL as string,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token") 
       if (token) {

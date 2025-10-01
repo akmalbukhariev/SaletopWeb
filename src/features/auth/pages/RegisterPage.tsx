@@ -1,4 +1,4 @@
-import CustomAlert from "@/shared/components/CustomAlert" 
+
 import { ROUTES } from "@/shared/constants/routes" 
 import { Visibility, VisibilityOff } from "@mui/icons-material" 
 import {
@@ -22,6 +22,7 @@ import { IRegistretInfo } from "../type/IRegisterInfo"
 import { useRegisterUserMutation } from "../api/authAPI"  
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import { useNavigate } from "react-router" 
+import toastNotify from "@/shared/components/toastNotify"
 
 function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false) 
@@ -43,11 +44,12 @@ function RegisterPage() {
       !adminInfo.admin_role ||
       adminInfo.password !== adminInfo.confirmPassword
     ) {
-      return CustomAlert({
-        message: "Please check information.",
-        type: "warning",
-        duration: 2000,
-      }) 
+      toastNotify(
+        "Please check information.",
+        "warning",
+      ) 
+
+      return
     }
 
     const user = {
@@ -59,19 +61,16 @@ function RegisterPage() {
     const{ data } = await registerUser(user) 
 
     if(data.resultCode == RESULTCODE.SUCCESS){
-      CustomAlert({
-        message: "User successfully registered.",
-        type: "success",
-        duration: 2000,
-      }) 
+      toastNotify(
+        "User successfully registered.",
+        "success") 
 
       navigate(ROUTES.AUTH.LOGIN) 
     } else {
-      CustomAlert({
-        message: "Registration failed. Please try again.",
-        type: "error",
-        duration: 2000,
-      }) 
+      toastNotify(
+        "Registration failed. Please try again.",
+        "error"
+      ) 
     }
   } 
 

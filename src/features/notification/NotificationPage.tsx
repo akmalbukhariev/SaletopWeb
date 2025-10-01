@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import { DataGrid, GridColDef } from "@mui/x-data-grid" 
 import { NotificationType } from "@/shared/types/NotificationType" 
+import toastNotify from "@/shared/components/toastNotify"
 
 function NotificationPage() {
 
@@ -11,22 +12,19 @@ function NotificationPage() {
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
   
-  const { isSuccess, isError, data: allNofications } = useGetAllNotificationsQuery(null) 
-
-  console.log("Notifications data:", allNofications) 
+  const { isSuccess, isError, data: allNofications, isLoading } = useGetAllNotificationsQuery(null) 
 
   useEffect(() => {
-    if(isSuccess && (allNofications?.resultCode == RESULTCODE.SUCCESS || allNofications?.resultCode == RESULTCODE.FOUND)) {
+    if(isSuccess && (allNofications?.resultCode == RESULTCODE.SUCCESS)) {
       setNotifications(allNofications.resultData || []) 
-      setTotalRows(allNofications.total || 0) 
-    }else if(allNofications?.resultCode == RESULTCODE.TOKEN_INVALID) {
-      console.error("Invalid token. Please log in again.") 
+      setTotalRows(allNofications?.resultData.total || 0) 
     }
-    if(isError) {
-      console.error("Error fetching notifications") 
+    
+    if(isError && allNofications?.resultCode != RESULTCODE.SUCCESS) {
+      toastNotify("Error fetching notifications", "error") 
     }
 
-  }, [allNofications]) 
+  }, [isSuccess, isError, allNofications]) 
 
   const columns: GridColDef<NotificationType>[] = useMemo(
     () => [
@@ -74,6 +72,7 @@ function NotificationPage() {
           rows={notifications || []} 
           columns={columns} 
           getRowId={r => r.id} 
+          loading={isLoading}
           disableRowSelectionOnClick
           initialState={{
             pagination: {

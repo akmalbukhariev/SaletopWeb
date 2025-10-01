@@ -15,7 +15,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useChangeCompanyDeletionStatusMutation, useGetAllCompaniesQuery } from "./api/companyAPI" 
 import { useChangeCompanyStatusMutation } from "./api/companyAPI" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
-import CustomAlert from "@/shared/components/CustomAlert" 
+import toastNotify from "@/shared/components/toastNotify"
 
 function CompanyPage() {
   const [rows, setRows] = useState<Company[]>() 
@@ -29,22 +29,32 @@ function CompanyPage() {
     data: allCompanies,
     isLoading,
     isSuccess,
+    isError,
   } = useGetAllCompaniesQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
   }) 
 
+  console.log(allCompanies)
+
   useEffect(() => {
     if (isSuccess && allCompanies?.resultData) {
-      console.log("allCompanies", allCompanies) 
-      setRows(allCompanies.resultData?.users || []) 
-      setTotalRows(allCompanies.total) 
+      
+      // const updatedRows = allCompanies.resultData.users.map((company : Company) => ({
+      //   ...company,
+      //   // bannedStatus: allCompanies.resultData.status == "BANNED" ? "BANNED" 
+      //   //   : allCompanies.resultData.status == "INACTIVE" ? "UNBANNED" : "",
+      // }))
+
+      setRows(allCompanies.resultData.users || []) 
+      setTotalRows(allCompanies.resultData.total) 
     }
-    if(allCompanies?.resultCode !== RESULTCODE.SUCCESS) {
-      CustomAlert({
-        message: allCompanies?.resultMsg || "Failed to fetch companies",
-        type: "error",
-      }) 
+
+    if(isError && allCompanies?.resultCode !== RESULTCODE.SUCCESS) {
+      toastNotify(
+        allCompanies?.resultMsg || "Failed to fetch companies",
+        "error",
+      )
     }
   }) 
 
@@ -84,6 +94,21 @@ function CompanyPage() {
       {
         field: "status",
         headerName: "Status",
+        width: 100,
+        renderCell: params => {
+          let color = "green" 
+          if (params.value === "INACTIVE") color = "red" 
+          else if (params.value === "BANNED") color = "orange" 
+          return (
+            <Typography sx={{ color: color, pt:2 }}>
+              {params.value}
+            </Typography>
+          ) 
+        },
+      },
+      {
+        field: "bannedStatus",
+        headerName: "BannedStatus",
         width: 120,
         renderCell: params => {
           return (
@@ -92,7 +117,7 @@ function CompanyPage() {
                 value={params.row.status}
                 sx={{
                   borderRadius: "0",
-                  mt: 2,
+                  pt: 1,
                   color: params.row.status == "INACTIVE" ? "red" : 
                     params.row.status == "BANNED" ? "orange" : "green",
                 }}
@@ -103,9 +128,6 @@ function CompanyPage() {
                   )
                 }
               >
-                <MenuItem value="ACTIVE" sx={{ color: "green" }}>
-                    ACTIVE
-                </MenuItem>
                 <MenuItem value="INACTIVE" sx={{ color: "red" }}>
                   INACTIVE
                 </MenuItem>
@@ -173,22 +195,21 @@ function CompanyPage() {
         const res = await changeCompanyStatus({ phone_number, status }) 
         console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-          console.log(res) 
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "success",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "success",
+          ) 
         } else {
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "error",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "error",
+          ) 
         }
       } catch (error) {
-        CustomAlert({
-          message: error as string,
-          type: "error",
-        }) 
+        toastNotify(
+          error as string,
+          "error",
+        ) 
       }
     }
   } 
@@ -203,21 +224,21 @@ function CompanyPage() {
         console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
           console.log(res) 
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "success",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "success",
+          ) 
         } else {
-          CustomAlert({
-            message: res.data?.resultMsg,
-            type: "error",
-          }) 
+          toastNotify(
+            res.data?.resultMsg,
+            "error",
+          ) 
         }
       } catch (error) {
-        CustomAlert({
-          message: error as string,
-          type: "error",
-        }) 
+        toastNotify(
+          error as string,
+          "error",
+        ) 
       }
     }
   } 

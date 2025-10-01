@@ -1,5 +1,6 @@
 import { useAuth } from "@/features/auth" 
 import { ROUTES } from "@/shared/constants/routes" 
+import { RESULTCODE } from "@/shared/utils/ResultCode"
 import {
   Box,
   Button,
@@ -10,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material" 
-import { useState } from "react" 
+import { FormEvent, useState } from "react" 
 import { useNavigate } from "react-router" 
 
 function LoginForm() {
@@ -22,16 +23,18 @@ function LoginForm() {
   const [loading, setLoading] = useState(false) 
   const [error, setError] = useState<string | null>(null) 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault() 
     setLoading(true) 
     setError(null) 
     try {
       const response = await signIn({ admin_id, password }, isRememberMe) 
       console.log("res", response) 
-      if (response) {
+      if (response.data?.resultCode == RESULTCODE.SUCCESS) {
         localStorage.removeItem(atob("selectedSidebar")) 
         navigate(ROUTES.HOME, { replace: true }) 
+      }else {
+        setError(response.data?.resultMsg || "Login failed") 
       }
     } catch (err) {
       console.log(err) 

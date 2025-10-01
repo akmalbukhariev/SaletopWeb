@@ -19,6 +19,7 @@ string | FetchArgs,
 unknown,
 FetchBaseQueryError> = async (args, api, extraOptions) => {
   const result = await rowBaseQuery(args, api, extraOptions) 
+  console.log("API Response:", result)
   if (result.data && typeof result.data === "object") {
     const code = (result.data as {resultCode: number, code: number}).resultCode 
     switch(Number(code)) {
@@ -46,12 +47,16 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
         localStorage.removeItem("token") 
         localStorage.removeItem("user") 
         window.location.href = ROUTES.AUTH.LOGIN 
+        console.error("Authentication error. Redirecting to login...", result.data)
         // Handle AUTHENTICATION_ERROR case
         break 
       case RESULTCODE.INTERNAL_ERROR:
         // Handle INTERNAL_ERROR case
         break 
       case RESULTCODE.SERVER_ERROR:
+        // localStorage.removeItem("token") 
+        // localStorage.removeItem("user") 
+        // window.location.href = ROUTES.AUTH.LOGIN 
         // Handle SERVER_ERROR case
         break 
       case RESULTCODE.TOKEN_EMPTY:
