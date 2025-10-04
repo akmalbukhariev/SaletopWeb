@@ -1,6 +1,6 @@
-import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query" 
-import { RESULTCODE } from "../utils/ResultCode" 
-import { ROUTES } from "../constants/routes" 
+import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query"
+import { ROUTES } from "../constants/routes"
+import { RESULTCODE } from "../utils/ResultCode"
 
 export const rowBaseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_BACKEND_API_URL,

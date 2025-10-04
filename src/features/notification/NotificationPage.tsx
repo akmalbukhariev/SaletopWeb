@@ -1,18 +1,21 @@
-import { Box, Chip, Grid, Stack, Typography } from "@mui/material" 
-import { useGetAllNotificationsQuery } from "./api/notifyAPI" 
-import { useEffect, useMemo, useState } from "react" 
-import { RESULTCODE } from "@/shared/utils/ResultCode" 
-import { DataGrid, GridColDef } from "@mui/x-data-grid" 
-import { NotificationType } from "@/shared/types/NotificationType" 
+import { NotificationRow } from "@/features/notification/type/NotificationType"
 import toastNotify from "@/shared/components/toastNotify"
+import { RESULTCODE } from "@/shared/utils/ResultCode"
+import { Box, Chip, Grid, Stack, Typography } from "@mui/material"
+import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import { useEffect, useMemo, useState } from "react"
+import { useGetAllNotificationsQuery } from "./api/NotifyAPI"
 
 function NotificationPage() {
 
-  const [notifications, setNotifications] = useState<NotificationType[]>([]) 
+  const [notifications, setNotifications] = useState<NotificationRow[]>([]) 
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
   
-  const { isSuccess, isError, data: allNofications, isLoading } = useGetAllNotificationsQuery(null) 
+  const { isSuccess, isError, data: allNofications, isLoading } = useGetAllNotificationsQuery({
+    offset: pageFormat.offset,
+    pageSize: pageFormat.pageSize
+  }) 
 
   useEffect(() => {
     if(isSuccess && (allNofications?.resultCode == RESULTCODE.SUCCESS)) {
@@ -26,12 +29,27 @@ function NotificationPage() {
 
   }, [isSuccess, isError, allNofications]) 
 
-  const columns: GridColDef<NotificationType>[] = useMemo(
+  const columns: GridColDef<NotificationRow>[] = useMemo(
     () => [
       { field: "id", headerName: "Id", width: 50 },
+      {
+        field:"phone_number",
+        headerName: "Phone Number",
+        width: 140
+      },
       { field: "delivery_date", headerName: "Delivery Date", width: 200 },
       { field: "message", headerName: "Message", width: 200, flex: 1 },
       { field: "sends", headerName: "Sends", width: 160 },
+      {
+        field: "company",
+        headerName: "Xabar Turi",
+        width: 180,
+        renderCell: params => {
+          return (
+            <Chip label={params.row.company ? "Kompanya" : "Foydalanuvchi"} />
+          )
+        }
+      },
       {
         field: "status",
         headerName: "Status",

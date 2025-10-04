@@ -1,6 +1,6 @@
-import { ENDPOINTS } from "@/core/auth/api/endpoints" 
-import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth" 
-import { createApi } from "@reduxjs/toolkit/query/react" 
+import { ENDPOINTS } from "@/core/auth/api/endpoints"
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth"
+import { createApi } from "@reduxjs/toolkit/query/react"
 
 const notifyAPI = createApi({
   reducerPath: "notifyAPI",
@@ -8,9 +8,10 @@ const notifyAPI = createApi({
   tagTypes: ["Notifications"],
   endpoints: (builder) => ({
     getAllNotifications: builder.query({
-      query: () => ({
+      query: (data: {offset: number, pageSize: number}) => ({
         url: ENDPOINTS.NOTIFICATIONS.PAGINATED_LIST,
-        method: "GET",
+        method: "POST",
+        body: data
       }),
       providesTags: ["Notifications"],
     }),       

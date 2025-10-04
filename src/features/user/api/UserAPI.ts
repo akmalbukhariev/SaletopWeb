@@ -1,6 +1,6 @@
-import { ENDPOINTS } from "@/core/auth/api/endpoints" 
-import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth" 
-import { createApi } from "@reduxjs/toolkit/query/react" 
+import { ENDPOINTS } from "@/core/auth/api/endpoints"
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth"
+import { createApi } from "@reduxjs/toolkit/query/react"
 
 const userAPI = createApi({
   reducerPath: "userAPI",
