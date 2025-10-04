@@ -1,6 +1,6 @@
 export type CompanyStatus = "INACTIVE" | "BANNED" 
 
-export type Company = {
+export type CompanyRow = {
   company_id: string  // using string for DataGrid id compatibility
   company_name: string 
   phone_number: string 
@@ -23,6 +23,11 @@ export type Company = {
   updated_at?: string | null  // ISO
   created_at?: string | null  // ISO
   deleted: boolean  // 1=yes, 0=no,
-  bannedStatus?: CompanyStatus,
-  [key: string]: any  // for additional dynamic fields
+  active_products: number   
+  blocked_until: string | null
+  bookmark_id : number
+  distance_km: number | null
+  liked: boolean
+  non_active_products: number
+  violation_count: number
 } 

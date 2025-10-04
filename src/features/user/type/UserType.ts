@@ -15,4 +15,8 @@ export type UserRow = {
   updated_at: string  // ISO
   created_at: string  // ISO
   deleted: boolean  // true=yes, false=no
+  violation_count: number
+  radius_km: number
+  blocked_until?: string   
+
 } 

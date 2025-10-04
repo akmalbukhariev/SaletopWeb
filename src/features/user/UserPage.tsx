@@ -1,5 +1,5 @@
 import toastNotify from "@/shared/components/toastNotify" 
-import { UserRow } from "@/shared/types/UserType" 
+import { UserRow } from "@/features/user/type/UserType" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import {
   Avatar,
@@ -27,8 +27,10 @@ import {
   useGetAllUsersQuery,
 } from "./api/UserAPI" 
 import React from "react"
+import { useConfirm } from "@/shared/hooks/useConfirm"
 
 function UserPage() {
+
   const [rows, setRows] = useState<UserRow[]>() 
   const [pageFormat, setPageFormat] = useState({
     offset: 0,
@@ -48,6 +50,7 @@ function UserPage() {
   const [changeUserStatus] = useChangeUserStatusMutation() 
   const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
 
+  const { confirm, ConfirmDialog } = useConfirm()
 
 
   useEffect(() => {
@@ -86,7 +89,7 @@ function UserPage() {
       {
         field: "profile_picture_url",
         headerName: "Profile",
-        width: 70,
+        width: 60,
         sortable: false,
         filterable: false,
         renderCell: (params: GridRenderCellParams<UserRow>) => (
@@ -100,12 +103,12 @@ function UserPage() {
       { field: "first_name", headerName: "First name", width: 100 },
       { field: "last_name", headerName: "Last name", width: 100 },
       { field: "full_name", headerName: "Full name", width: 180, flex: 1 },
-      { field: "phone_number", headerName: "Phone", width: 160 },
+      { field: "phone_number", headerName: "Phone", width: 140 },
       { field: "email", headerName: "Email", width: 220, flex: 1 },
       { 
         field: "status",
         headerName: "Status",
-        width: 180,
+        width: 120,
         renderCell: params => {
           let color = "green" 
           if (params.value === "INACTIVE") color = "red" 
@@ -123,7 +126,7 @@ function UserPage() {
       {
         field: "notification_enabled",
         headerName: "Notify",
-        width: 110,
+        width: 70,
         sortable: false,
         filterable: false,
         renderCell: params => (
@@ -131,9 +134,14 @@ function UserPage() {
         ),
       },
       {
+        field: "radius_km",
+        headerName: "Radius (km)",
+        width: 100,
+      },
+      {
         field: "deleted",
         headerName: "Deleted",
-        width: 110,
+        width: 90,
         sortable: false,
         filterable: false,
         renderCell: params => (
@@ -141,24 +149,28 @@ function UserPage() {
             checked={params.row.deleted}
             size="small"
             color="warning"
-            onChange={e =>
-              handleUserDeletionChange(
-                e.target.checked,
-                params.row.phone_number
-              )
-            }
           />
         ),
       },
       {
+        field: "violation_count",
+        headerName: "Violations",
+        width: 80,
+      },
+      {
+        field: "blocked_until",
+        headerName: "Blocked Until",
+        width: 160,
+      },
+      {
         field: "created_at",
         headerName: "Created",
-        width: 170,
+        width: 160,
       },
       {
         field: "updated_at",
         headerName: "Updated",
-        width: 170,
+        width: 160,
       },
       {
         field: "actions",
@@ -181,30 +193,32 @@ function UserPage() {
     status: string
   ) => {
     if (phone_number && status) {
-
-
-      
-      try {
-        const res = await changeUserStatus({ phone_number, status }) 
-        console.log(res) 
-        if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+      if(await confirm("Change User status", `Are you sure you want to change this user status to ${status == 'BANNED' ? "BANNED" : "UNBLOCK"}?`, 'confirm'))
+      {
+        try {
+          const res = await changeUserStatus({ phone_number, status }) 
           console.log(res) 
+          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+            console.log(res) 
+            toastNotify(
+              res.data?.resultMsg,
+              "success"
+            ) 
+          } else {
+            toastNotify(
+              res.data?.resultMsg,
+              "error",
+            ) 
+          }
+        } catch (error) {
           toastNotify(
-            res.data?.resultMsg,
-            "success"
-          ) 
-        } else {
-          toastNotify(
-            res.data?.resultMsg,
-            "error",
-          ) 
-        }
-      } catch (error) {
-        toastNotify(
           error as string,
           "error",
-        ) 
+          ) 
+        }
       }
+
+      handleActionClose()
     }
   } 
 
@@ -212,77 +226,84 @@ function UserPage() {
     deleted: boolean,
     phone_number: string
   ) => {
+    
     if (phone_number) {
-      try {
-        const res = await changeUserDeletionStatus({ deleted, phone_number }) 
-        console.log(res) 
-        if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+
+      if(await confirm("Delete soft?", `Are you sure you want to mark this user as ${deleted ? "deleted" : "not deleted"}?`, 'delete'))
+      {
+        try {
+          const res = await changeUserDeletionStatus({ deleted, phone_number }) 
           console.log(res) 
+          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+            console.log(res) 
+            toastNotify(
+              res.data?.resultMsg,
+              "success",
+            ) 
+
+          } else {
+            toastNotify(
+              res.data?.resultMsg,
+              "error",
+            ) 
+          }
+        } catch (error) {
           toastNotify(
-            res.data?.resultMsg,
-            "success",
-          ) 
-        } else {
-          toastNotify(
-            res.data?.resultMsg,
-            "error",
-          ) 
-        }
-      } catch (error) {
-        toastNotify(
           error as string,
           "error",
-        ) 
+          ) 
+        }
+
+        handleActionClose()
       }
     }
   } 
 
   return (
-    <Grid
-      sx={{
-        borderRadius: 4,
-        boxShadow: 2,
-        height: "100%",
-        width: "100%",
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
-      <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
-        <DataGrid
-          getRowId={row => row.user_id}
-          rows={rows || []}
-          columns={columns}
-          loading={isLoading}
-          disableRowSelectionOnClick
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: pageFormat.pageSize,
-                page: pageFormat.offset,
+    <>
+      <Grid
+        sx={{
+          borderRadius: 4,
+          boxShadow: 2,
+          height: "100%",
+          width: "100%",
+          p: 2,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
+          <DataGrid
+            getRowId={row => row.user_id}
+            editMode="row"
+            rows={rows || []}
+            columns={columns}
+            loading={isLoading}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: pageFormat.pageSize,
+                  page: pageFormat.offset,
+                },
               },
-            },
-          }}
-          pageSizeOptions={[5, 10, 25, 50]}
-          paginationModel={{
-            page: pageFormat.offset,
-            pageSize: pageFormat.pageSize,
-          }}
-          rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
-          paginationMode="server" // <-- Enable server-side pagination
-          onPaginationModelChange={({ page, pageSize }) => {
-            setPageFormat(prev => ({
-              ...prev,
-              offset: page,
-              pageSize: pageSize,
-            })) 
-          }}
-        />
-        {/* <Box sx={{ display: openAction ? 'flex' : 'none', position: 'absolute', justifyContent: "flex-end", mt: 2 }} onBlur={handleActionClose}> */}
-        <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ width: 160, zIndex: 9999 }} onFocus={handleActionClose}> 
-          <ClickAwayListener onClickAway={handleActionClose}>
+            }}
+            pageSizeOptions={[5, 10, 25, 50]}
+            paginationModel={{
+              page: pageFormat.offset,
+              pageSize: pageFormat.pageSize,
+            }}
+            rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
+            paginationMode="server" // <-- Enable server-side pagination
+            onPaginationModelChange={({ page, pageSize }) => {
+              setPageFormat(prev => ({
+                ...prev,
+                offset: page,
+                pageSize: pageSize,
+              })) 
+            }}
+          />
+          <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ width: 160, zIndex: 9999 }}> 
             <Box sx={{ border: '1px solid #d9d9d9', p: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
               <Button
                 sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
@@ -290,12 +311,11 @@ function UserPage() {
                 variant="text"
                 color="error"
                 onClick={() => {
-                  handleUserStatusChange("", "BANNED") 
-                  handleActionClose() 
+                  handleUserStatusChange(selectedUser?.phone_number ? selectedUser?.phone_number : "", selectedUser?.status == "BANNED" ? "INACTIVE" : "BANNED") 
                 }}
                 startIcon={<BlockIcon />}
               >
-                Block
+                { selectedUser?.status == "BANNED" ? "Unblock" : "Block" } 
               </Button>
               <Button
                 sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
@@ -303,19 +323,16 @@ function UserPage() {
                 variant="text"
                 color="secondary"
                 startIcon={<DeleteIcon />}
-                onClick={() => {
-                  handleUserStatusChange("", "INACTIVE") 
-                  handleActionClose() 
-                }}
+                onClick={() => handleUserDeletionChange(selectedUser?.deleted ? false : true, selectedUser?.phone_number ? selectedUser?.phone_number : "") }
               >
-                Deleted (soft)
+                { selectedUser?.deleted ? "Not deleted" : "Deleted (sotf)" } 
               </Button>
             </Box>
-          </ClickAwayListener>
-        </Popper>
-        {/* </Box> */}
-      </Box>
-    </Grid>
+          </Popper>
+        </Box>
+      </Grid>
+      { ConfirmDialog } 
+    </>
   ) 
 }
 export default UserPage 

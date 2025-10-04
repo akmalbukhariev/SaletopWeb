@@ -1,0 +1,7 @@
+/* To remove the outline on focus in MUI DataGrid */
+.MuiDataGrid-cell:focus,
+.MuiDataGrid-cell:focus-within,
+.MuiDataGrid-columnHeader:focus,
+.MuiDataGrid-columnHeader:focus-within {
+  outline: none !important;
+}
