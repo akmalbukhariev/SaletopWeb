@@ -10,7 +10,11 @@ export const ROUTES = {
     USERS: "/admin/users",
     COMPANIES: "/admin/companies",
     MODERATION: "/admin/moderation",
-    NOTIFICATIONS: "/admin/notifications",
+    NOTIFICATIONS: {
+      HOME: "/admin/notifications",
+      SEND: "/admin/notifications/send",
+    },
+
     SETTINGS: "/admin/settings",
   },
   NOT_FOUND: "*",

@@ -26,11 +26,16 @@ export const ENDPOINTS = {
     PAGINATED_LIST: "company/getPaginatedUsers",
     CHANGE_DELETION_STATUS: "company/changeUserDeletionStatus",
     BY_PHONE_NUM: (phone: string | number) => `company/getUserByPhone/${phone}`,
+    GET_POSTER_LIST: "company/getPosterList",
+    CHANGE_APPROVAL_POSTER_LIST: "company/approvalPosterList",
+    NEW_ADDED_POSTER_LIST: "company/getNewAddedPosterList",
   },
   NOTIFICATIONS: {
     PAGINATED_LIST: "notification/getAllNotifications",
-    SEND: "notification/register",
+    SEND_TO_USER: "notification/sendNotificationToUser",
+    SEND_TO_ALL: "notification/sendNotificationToAll", 
   },
 } as const 
 
 export type Endpoints = typeof ENDPOINTS 
+

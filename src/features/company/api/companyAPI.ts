@@ -15,7 +15,6 @@ const companyAPI = createApi({
       }),
       providesTags: ["CompanyItems"],
     }),
-
     getCompanyByPhoneNum: builder.query({
       query: (phone_number: string | number) => ({
         url: ENDPOINTS.COMPANIES.BY_PHONE_NUM(phone_number),
@@ -41,6 +40,30 @@ const companyAPI = createApi({
       }),
       invalidatesTags: ["CompanyItems"],
     }),
+    getPosterList: builder.query({
+      query: (data: { offset: number, pageSize: number }) => ({
+        url: ENDPOINTS.COMPANIES.GET_POSTER_LIST,
+        method: "POST",
+        body: data,
+      }),
+      providesTags: ["CompanyItems"],
+    }),
+    approvalPosterList: builder.mutation({
+      query: (data: { posterList: {poster_id: number, approved: boolean}[] }) => ({
+        url: ENDPOINTS.COMPANIES.CHANGE_APPROVAL_POSTER_LIST,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["CompanyItems"],
+    }),
+    getNewAddedPosterList: builder.query({
+      query: (data: { offset: number, pageSize: number }) => ({
+        url: ENDPOINTS.COMPANIES.NEW_ADDED_POSTER_LIST,
+        method: "POST",
+        body: data,
+      }),
+      providesTags: ["CompanyItems"],
+    }),
   }),
 }) 
 
@@ -51,4 +74,7 @@ export const {
   useGetCompanyByPhoneNumQuery,
   useChangeCompanyDeletionStatusMutation,
   useChangeCompanyStatusMutation,
+  useGetPosterListQuery,
+  useApprovalPosterListMutation,
+  useGetNewAddedPosterListQuery
 } = companyAPI 

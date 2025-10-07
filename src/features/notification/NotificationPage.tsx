@@ -1,10 +1,12 @@
 import { NotificationRow } from "@/features/notification/type/NotificationType"
 import toastNotify from "@/shared/components/toastNotify"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
-import { Box, Chip, Grid, Stack, Typography } from "@mui/material"
+import { Box, Button, Chip, Grid, IconButton, Link, Stack, Typography } from "@mui/material"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { useEffect, useMemo, useState } from "react"
-import { useGetAllNotificationsQuery } from "./api/NotifyAPI"
+import { useGetAllNotificationsQuery } from "./api/notifyAPI"
+import { useNavigate } from "react-router"
+import { ROUTES } from "@/shared/constants/routes"
 
 function NotificationPage() {
 
@@ -17,6 +19,8 @@ function NotificationPage() {
     pageSize: pageFormat.pageSize
   }) 
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     if(isSuccess && (allNofications?.resultCode == RESULTCODE.SUCCESS)) {
       setNotifications(allNofications.resultData || []) 
@@ -27,7 +31,11 @@ function NotificationPage() {
       toastNotify("Error fetching notifications", "error") 
     }
 
-  }, [isSuccess, isError, allNofications]) 
+  }, [
+    isSuccess, 
+    allNofications,
+    pageFormat.pageSize
+  ]) 
 
   const columns: GridColDef<NotificationRow>[] = useMemo(
     () => [
@@ -84,6 +92,8 @@ function NotificationPage() {
         sx={{ mb: 2, flexShrink: 0 }}
       >
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>Notifications</Typography>
+
+        <Button variant="contained" onClick={() => navigate(ROUTES.ADMIN.NOTIFICATIONS.SEND) }>Create Notification</Button>
       </Stack>
       <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
         <DataGrid 

@@ -46,7 +46,7 @@ const sideBarList = [
   {
     id: 6,
     name: "Notifications",
-    path: ROUTES.ADMIN.NOTIFICATIONS,
+    path: ROUTES.ADMIN.NOTIFICATIONS.HOME,
     selected: false,
     icon: NotificationsRoundedIcon,
   },

@@ -5,23 +5,32 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material" 
-import React from "react" 
-import { useNavigate } from "react-router" 
+import React, { useEffect } from "react" 
+import { useLocation, useNavigate } from "react-router" 
 import { SideBarProps } from "./SiderBarProps" 
+import { getParentPath } from "@/shared/utils/getParentPath"
 
 function SideBar({ items }: { items: SideBarProps[] }) {
-  const [selectedIndex, setSelectedIndex] = React.useState<number | undefined>(
-    localStorage.getItem(atob("selectedSidebar"))
-      ? Number(localStorage.getItem(atob("selectedSidebar")))
-      : 1
-  ) 
 
   const navigate = useNavigate() 
+  const location = useLocation()
+
+  const [selectedIndex, setSelectedIndex] = React.useState<number | undefined>(1) 
+
+  // Track route change
+  useEffect(() => {
+    
+    const currentPath = getParentPath(location.pathname)
+    const currentItem = items.find((item) => currentPath === (item.path))
+
+    if(currentItem){
+      setSelectedIndex(currentItem.id)
+      localStorage.setItem(atob("selectedSidebar"), currentItem.id.toString())
+    }
+  }, [location.pathname, items])
 
   const handleNavigation = (item: SideBarProps) => {
     navigate(item.path) 
-    setSelectedIndex(item.id) 
-    localStorage.setItem(atob("selectedSidebar"), item.id.toString()) 
   } 
 
   return (

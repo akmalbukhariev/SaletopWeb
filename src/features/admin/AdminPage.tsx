@@ -25,13 +25,15 @@ function AdminPage() {
   //API
   const { data: allAdmins, isSuccess } = useGetAllAdminQuery({}) 
 
-
   useEffect(() => {
     if (isSuccess && allAdmins?.resultData) {
       console.log("allAdmins", allAdmins) 
       setAdmins(allAdmins.resultData || []) 
     }
-  }, [allAdmins?.resultData, isSuccess]) 
+  }, [
+    allAdmins, 
+    isSuccess
+  ]) 
 
 
   const id = openAction ? 'simple-popper' : undefined
@@ -40,7 +42,6 @@ function AdminPage() {
     setAnchorEl(event.currentTarget) 
     setOpenAction((prev) => !prev)
   }
-
 
   //Grid Format
   const columns: GridColDef<AdminRow>[] = useMemo(() => [

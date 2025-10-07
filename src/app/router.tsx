@@ -11,16 +11,23 @@ const AdminPage = React.lazy(() => import("@features/admin/AdminPage"))
 const DashboardPage = React.lazy(() => import("@features/dashboard/MainPage")) 
 const UserPage = React.lazy(() => import("@features/user/UserPage")) 
 const CompanyPage = React.lazy(() => import("@features/company/CompanyPage")) 
+
 const ModerationPage = React.lazy(
   () => import("@features/moderation/ModerationPage")
 ) 
+
 const NotificationPage = React.lazy(
   () => import("@features/notification/NotificationPage")
 ) 
+
 const LoginPage = React.lazy(() => import("@/features/auth/pages/LoginPage")) 
+
 const RegisterPage = React.lazy(
   () => import("@/features/auth/pages/RegisterPage")
 ) 
+
+const NotificationSend = React.lazy(
+  () => import("@features/notification/components/NotificationSend"))
 
 const NotFound = React.lazy(() => import("@/pages/NotFound")) 
 
@@ -74,12 +81,21 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: ROUTES.ADMIN.NOTIFICATIONS,
+        path: ROUTES.ADMIN.NOTIFICATIONS.HOME,
         element: (
           <AuthGuard>
             <NotificationPage />
           </AuthGuard>
         ),
+         
+      },
+      {
+        path: ROUTES.ADMIN.NOTIFICATIONS.SEND,
+        element: (
+          <AuthGuard>
+            <NotificationSend />
+          </AuthGuard>
+        )
       },
       {
         path: ROUTES.ADMIN.SETTINGS,

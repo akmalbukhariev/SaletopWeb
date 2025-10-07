@@ -2,8 +2,20 @@ import { Avatar, Box, Grid, TextField } from "@mui/material"
 import SideBar from "./components/SideBar" 
 import { sideBarList } from "./constants/constant" 
 import { Outlet } from "react-router" 
-
+import { setSearchValue } from "@/store/slices/searchSlice"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import { useState, ChangeEvent } from "react"
 function MainLayout() {
+
+  const dispatch = useAppDispatch()
+  const searchValue = useAppSelector(state => state.search.value)
+  const [search, setSearch] = useState("")
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value)
+    dispatch(setSearchValue(event.target.value))
+  }
+
   return (
     <>
       <Grid container sx={{ minWidth: "100vh", minHeight: "100vh" }}>
@@ -12,14 +24,14 @@ function MainLayout() {
           <Box
             sx={{
               p: 2,
-              height: { lg: "60px", xl: "80px" },
+              height: { sm: "70px", lg: "60px", xl: "80px" },
               borderBottom: "1px solid grey",
               justifyContent: "center",
               alignItems: "center",
               display: "flex",
               color: "green",
               fontWeight: "bold",
-              fontSize: "24px",
+              fontSize: { sm: "16px", lg: "24px", xl: "26px" },
             }}
           >
             {/* Company Icon */}
@@ -39,7 +51,7 @@ function MainLayout() {
           <Box
             sx={{
               borderBottom: "1px solid gray",
-              height: { lg: "60px", xl: "80px" },
+              height: { sm: "70px", lg: "60px", xl: "80px" },
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -50,7 +62,9 @@ function MainLayout() {
               size="small"
               label="Search..."
               variant="outlined"
+              value={search}
               sx={{ width: "50%" }}
+              onChange={handleSearchChange}
             />
             <Box
               sx={{
@@ -69,14 +83,14 @@ function MainLayout() {
           </Box>
           <Box
             sx={{
-              height: { lg: "calc(100vh - 60px)", xl: "calc(100vh - 80px)" },
+              height: { sm: "calc(100vh - 60px)", lg: "calc(100vh - 60px)", xl: "calc(100vh - 80px)" },
             }}
           >
             {/* <Content /> */}
             <Box
               sx={{
                 p: 4,
-                height: { lg: "calc(100vh - 60px)", xl: "calc(100vh - 80px)" },
+                height: { sm: "calc(100vh - 60px)", lg: "calc(100vh - 60px)", xl: "calc(100vh - 80px)", },
                 overflowY: "auto",
               }}
             >

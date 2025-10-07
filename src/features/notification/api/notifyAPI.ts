@@ -15,20 +15,29 @@ const notifyAPI = createApi({
       }),
       providesTags: ["Notifications"],
     }),       
-    registerNotification: builder.mutation({
-      query: (data: { title: string, message: string, user_id: number | string }) => ({
-        url: ENDPOINTS.NOTIFICATIONS.SEND,
+    sendNotificationToUser: builder.mutation({
+      query: (data: { title: string, message: string, phone_number: string, company: boolean }) => ({
+        url: ENDPOINTS.NOTIFICATIONS.SEND_TO_USER,
         method: "POST",
         body: data,
       }),
       invalidatesTags: ["Notifications"],
-    }), 
+    }),
+    sendNotificationToAll: builder.mutation({
+      query: (data: { title: string, message: string }) => ({
+        url: ENDPOINTS.NOTIFICATIONS.SEND_TO_ALL,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Notifications"],
+    })
   })
 }) 
 
 export const {
   useGetAllNotificationsQuery,
-  useRegisterNotificationMutation,
+  useSendNotificationToUserMutation,
+  useSendNotificationToAllMutation
 } = notifyAPI   
 
 export default notifyAPI 

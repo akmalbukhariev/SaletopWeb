@@ -25,8 +25,11 @@ import BlockIcon from '@mui/icons-material/Block'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { PopperPlacementType } from '@mui/material'
 import { useConfirm } from "@/shared/hooks/useConfirm"
+import AddAlertIcon from '@mui/icons-material/AddAlert'
+import { ROUTES } from "@/shared/constants/routes"
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation"
 function CompanyPage() {
-  const [rows, setRows] = useState<CompanyRow[]>() 
+  const [rows, setRows] = useState<CompanyRow[]>([]) 
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
   const [selectedCompany, setSelectedCompany] = useState<CompanyRow | null>(null)
@@ -35,6 +38,7 @@ function CompanyPage() {
 
   const { confirm, ConfirmDialog } = useConfirm()
 
+  const navigate = useAppNavigation()
   //TO use API
   const [changeCompanyStatus] = useChangeCompanyStatusMutation() 
   const [changeCompanyDeletionStatus] = useChangeCompanyDeletionStatusMutation() 
@@ -49,10 +53,11 @@ function CompanyPage() {
     pageSize: pageFormat.pageSize,
   }) 
 
+  console.log("allCompanies", allCompanies)
 
   useEffect(() => {
     if (isSuccess && allCompanies?.resultData) {
-      setRows(allCompanies.resultData.users || []) 
+      setRows(allCompanies.resultData || []) 
       setTotalRows(allCompanies.resultData.total) 
     }
 
@@ -62,7 +67,12 @@ function CompanyPage() {
         "error",
       )
     }
-  }) 
+  }, [
+    isSuccess, 
+    isError, 
+    allCompanies,
+    pageFormat.pageSize
+  ]) 
 
   const id = openAction ? 'simple-popper' : undefined
   const handleActionClick = (user: CompanyRow) => (event: MouseEvent<HTMLButtonElement>) => {
@@ -281,6 +291,17 @@ function CompanyPage() {
     }
   } 
 
+  const handleAddNotification = (phone_number: string): void => {
+  
+    if (phone_number) {
+      navigate.toNotificationsSend({
+        company: 'yes',
+        phone_number
+        
+      })
+    }
+  }
+   
   return (
     <>
       <Grid
@@ -308,14 +329,6 @@ function CompanyPage() {
             rows={rows} 
             columns={columns} 
             getRowId={r => r.company_id} 
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: pageFormat.pageSize,
-                  page: pageFormat.offset,
-                },
-              },
-            }}
             pageSizeOptions={[5, 10, 20, 25]}
             paginationModel={{
               page: pageFormat.offset,
@@ -355,6 +368,15 @@ function CompanyPage() {
                 onClick={() => handleUserDeletionChange(selectedCompany?.deleted ? false : true, selectedCompany?.phone_number ? selectedCompany?.phone_number : "") }
               >
                 { selectedCompany?.deleted ? "Not deleted" : "Deleted (sotf)" } 
+              </Button>
+              <Button 
+                onClick={() => handleAddNotification(selectedCompany?.phone_number ? selectedCompany?.phone_number : "")}
+                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                fullWidth
+                variant="text"
+                color="success"
+                startIcon={<AddAlertIcon />}>
+                  Add Notif..
               </Button>
             </Box>
           </Popper>

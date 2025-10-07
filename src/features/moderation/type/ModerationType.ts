@@ -1,0 +1,25 @@
+export type ModerationRow = {
+  approved: boolean | null;
+  avg_rating: number;
+  branch_id: number | null;
+  category: string;
+  click_to_contact_count: number;
+  company_id: number;
+  company_name: string | null;
+  created_at: string;
+  deleted: boolean;
+  description: string;
+  distance_km: number | null;
+  end_date: string | null;
+  image_url: string;
+  location_latitude: number | null;
+  location_longitude: number | null;
+  new_price: number;
+  old_price: number;
+  poster_id: number;
+  quantity_available: number;
+  title: string;
+  total_reviews: number;
+  updated_at: string;
+  views_count: number;
+};

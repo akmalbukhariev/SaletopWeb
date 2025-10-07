@@ -28,6 +28,10 @@ import {
 } from "./api/UserAPI" 
 import React from "react"
 import { useConfirm } from "@/shared/hooks/useConfirm"
+import AddAlertIcon from '@mui/icons-material/AddAlert'
+import { useNavigate } from "react-router"
+import { ROUTES } from "@/shared/constants/routes"
+import { useAppSelector } from "@/store/hooks"
 
 function UserPage() {
 
@@ -51,12 +55,14 @@ function UserPage() {
   const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
 
   const { confirm, ConfirmDialog } = useConfirm()
+  const navigate = useNavigate()
 
+  const search = useAppSelector(state => state.search.value)
 
   useEffect(() => {
     if (isSuccess && allUsers?.resultData) {
-      console.log(allUsers.resultData.users) 
-      setRows(allUsers.resultData.users || []) 
+      console.log(allUsers.resultData) 
+      setRows(allUsers.resultData || []) 
       if (typeof allUsers.resultData.total === "number") {
         setTotalRows(allUsers.resultData.total) 
       }
@@ -68,7 +74,11 @@ function UserPage() {
         "error",
       ) 
     }
-  }, [isSuccess, allUsers]) 
+  }, [
+    isSuccess, 
+    allUsers,
+    pageFormat.pageSize
+  ]) 
 
   const id = openAction ? 'simple-popper' : undefined
   const handleActionClick = (user: UserRow) => (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -259,6 +269,16 @@ function UserPage() {
     }
   } 
 
+  const handleAddNotification = (phone_number: string): void => {
+
+    if (phone_number) {
+      navigate( {
+        pathname: ROUTES.ADMIN.NOTIFICATIONS.SEND,
+        search: `?company=no&phone_number=${phone_number}`
+      })
+    }
+  }
+
   return (
     <>
       <Grid
@@ -326,6 +346,15 @@ function UserPage() {
                 onClick={() => handleUserDeletionChange(selectedUser?.deleted ? false : true, selectedUser?.phone_number ? selectedUser?.phone_number : "") }
               >
                 { selectedUser?.deleted ? "Not deleted" : "Deleted (sotf)" } 
+              </Button>
+              <Button 
+                onClick={() => handleAddNotification(selectedUser?.phone_number ? selectedUser?.phone_number : "")}
+                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                fullWidth
+                variant="text"
+                color="success"
+                startIcon={<AddAlertIcon />}>
+                  Add Notif..
               </Button>
             </Box>
           </Popper>
