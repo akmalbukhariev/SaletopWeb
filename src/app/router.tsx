@@ -1,6 +1,7 @@
 import AuthGuard from "@/core/auth/authGuard" 
 import { ROUTES } from "@/shared/constants/routes" 
 import { Box } from "@mui/material" 
+import { basename } from "path"
 import React from "react" 
 import { createBrowserRouter, RouterProvider } from "react-router" 
 
@@ -129,7 +130,10 @@ const router = createBrowserRouter([
     path: ROUTES.NOT_FOUND,
     element: <NotFound />,
   },
-]) 
+], 
+{
+  basename: "/admin-page/",
+}) 
 
 function Router() {
   return <RouterProvider router={router} /> 

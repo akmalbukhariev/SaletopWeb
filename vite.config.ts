@@ -33,4 +33,9 @@ export default defineConfig({
       credentials: true,
     }
   },
+  build: {
+    outDir: "dist", // default
+    assetsDir: "assets", // build ichidagi static fayllar
+    emptyOutDir: true,
+  },
 })

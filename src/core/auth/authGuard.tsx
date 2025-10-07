@@ -9,7 +9,7 @@ interface AuthGuardProps {
 function AuthGuard({ children }: AuthGuardProps) {
   const { isAuth } = useAuth() 
   if (!isAuth) {
-    window.location.href = ROUTES.AUTH.LOGIN 
+    window.location.href = '/admin-page' + ROUTES.AUTH.LOGIN 
   }
 
   return <>{children}</> 
