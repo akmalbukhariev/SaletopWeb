@@ -1,11 +1,19 @@
 import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query"
-import { ROUTES } from "../constants/routes"
 import { RESULTCODE } from "../utils/ResultCode"
+import { logout } from "@/store/slices/userSlice"
+import { ROUTES } from "../constants/routes"
+
+const baseUrl =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_BACKEND_API_URL_DEV
+    : import.meta.env.VITE_BACKEND_API_URL_PROD
 
 export const rowBaseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_BACKEND_API_URL,
+  baseUrl,
   prepareHeaders: (headers: Headers) => {   
-    const token = localStorage.getItem("token") 
+    const APP_PREFIX = import.meta.env.VITE_APP_NAME || "default"
+    const TOKEN_KEY = `${APP_PREFIX}_token`
+    const token = localStorage.getItem(TOKEN_KEY) 
     if (token) {    
       headers.set("Authorization", "Bearer " + token) 
     }
@@ -18,15 +26,18 @@ export const usefetchBaseQueryWithAuth: BaseQueryFn<
 string | FetchArgs,
 unknown,
 FetchBaseQueryError> = async (args, api, extraOptions) => {
+
   const result = await rowBaseQuery(args, api, extraOptions) 
   console.log("API Response:", result)
+
   if (result.data && typeof result.data === "object") {
+
     const code = (result.data as {resultCode: number, code: number}).resultCode 
     switch(Number(code)) {
       case RESULTCODE.TOKEN_INVALID:
-        localStorage.removeItem("token") 
-        localStorage.removeItem("user") 
-        window.location.href = ROUTES.AUTH.LOGIN 
+        api.dispatch(logout())
+        window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
+        console.error("Token invalid. Redirecting to login...", result.data)
         break 
       case RESULTCODE.LOGIN_DUPLICATE:
         // Handle LOGIN_DUPLICATE case
@@ -44,9 +55,8 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
         // Handle VERIFY_PHONE_NUMBER_FAILED case
         break 
       case RESULTCODE.AUTHENTICATION_ERROR:
-        localStorage.removeItem("token") 
-        localStorage.removeItem("user") 
-        window.location.href = ROUTES.AUTH.LOGIN 
+        api.dispatch(logout())
+        window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
         console.error("Authentication error. Redirecting to login...", result.data)
         // Handle AUTHENTICATION_ERROR case
         break 
@@ -54,9 +64,8 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
         // Handle INTERNAL_ERROR case
         break 
       case RESULTCODE.SERVER_ERROR:
-        // localStorage.removeItem("token") 
-        // localStorage.removeItem("user") 
-        // window.location.href = ROUTES.AUTH.LOGIN 
+        // signOut()
+        console.error("Server error. Redirecting to login...", result.data)
         // Handle SERVER_ERROR case
         break 
       case RESULTCODE.TOKEN_EMPTY:
@@ -77,15 +86,8 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
     if (status === 401 || status === 403) {
       // Token invalid
       console.error("Token expired or invalid. Redirecting to login...") 
-
-      localStorage.removeItem("token") 
-      localStorage.removeItem("user") 
-
-      // Agar Redux’da authSlice bo‘lsa:
-      // api.dispatch(logout()) 
-
-      // Sahifani login page’ga yuborish
-      window.location.href = ROUTES.AUTH.LOGIN 
+      api.dispatch(logout())
+      window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
     }
   }
 

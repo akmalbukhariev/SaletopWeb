@@ -88,7 +88,6 @@ const router = createBrowserRouter([
             <NotificationPage />
           </AuthGuard>
         ),
-         
       },
       {
         path: ROUTES.ADMIN.NOTIFICATIONS.SEND,

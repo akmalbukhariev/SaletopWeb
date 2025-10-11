@@ -1,3 +1,4 @@
+import { ROUTES } from "@/shared/constants/routes"
 import { useAppDispatch } from "@/store/hooks" 
 import { login, logout } from "@/store/slices/userSlice" 
 import React, { useEffect, useState } from "react" 
@@ -9,8 +10,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const user = localStorage.getItem("user") 
-        const token = localStorage.getItem("token") 
+        const APP_PREFIX = import.meta.env.VITE_APP_NAME || "default"
+        const TOKEN_KEY = `${APP_PREFIX}_token`
+        const USER_KEY = `${APP_PREFIX}_user`
+  
+        const user = localStorage.getItem(USER_KEY) 
+        const token = localStorage.getItem(TOKEN_KEY) 
+
         if (user && token) {
           const userData = JSON.parse(user) 
           // Token yo'q bo'lsa ham, user ma'lumotlarini ko'rsatish (lekin authenticated emas)
@@ -26,7 +32,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     } 
 
     initializeAuth() 
-  }, [dispatch]) 
+  }, []) 
 
   // Loading holatida spinner ko'rsatish
   if (isLoading) {

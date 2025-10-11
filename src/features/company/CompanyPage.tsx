@@ -3,12 +3,9 @@ import {
   Box,
   Button,
   Chip,
-  FormControl,
   Grid,
   IconButton,
-  MenuItem,
   Popper,
-  Select,
   Stack,
   Switch,
   Typography,
@@ -26,8 +23,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { PopperPlacementType } from '@mui/material'
 import { useConfirm } from "@/shared/hooks/useConfirm"
 import AddAlertIcon from '@mui/icons-material/AddAlert'
-import { ROUTES } from "@/shared/constants/routes"
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation"
+import { useTranslation } from "react-i18next"
 function CompanyPage() {
   const [rows, setRows] = useState<CompanyRow[]>([]) 
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
@@ -37,6 +34,9 @@ function CompanyPage() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const { confirm, ConfirmDialog } = useConfirm()
+
+  // Translation
+  const { t, i18n } = useTranslation(["headers", "buttons", "sidebar", "titles", "placeholders", "texts"])
 
   const navigate = useAppNavigation()
   //TO use API
@@ -53,11 +53,9 @@ function CompanyPage() {
     pageSize: pageFormat.pageSize,
   }) 
 
-  console.log("allCompanies", allCompanies)
-
   useEffect(() => {
     if (isSuccess && allCompanies?.resultData) {
-      setRows(allCompanies.resultData || []) 
+      setRows(allCompanies.resultData.data || []) 
       setTotalRows(allCompanies.resultData.total) 
     }
 
@@ -69,12 +67,12 @@ function CompanyPage() {
     }
   }, [
     isSuccess, 
-    isError, 
     allCompanies,
     pageFormat.pageSize
   ]) 
 
   const id = openAction ? 'simple-popper' : undefined
+  
   const handleActionClick = (user: CompanyRow) => (event: MouseEvent<HTMLButtonElement>) => {
     console.log("handleActionClick", user)
     setSelectedCompany(user)
@@ -91,7 +89,7 @@ function CompanyPage() {
     () => [
       {
         field: "logo_url",
-        headerName: "Logo",
+        headerName: t("Logo"),
         width: 70,
         sortable: false,
         filterable: false,
@@ -105,36 +103,36 @@ function CompanyPage() {
       },
       {
         field: "company_name",
-        headerName: "Company",
+        headerName: t("Company"),
         width: 200,
         flex: 1,
         minWidth: 150,
       },
-      { field: "business_type", headerName: "Type", width: 130 },
-      { field: "phone_number", headerName: "Phone", width: 150 },
+      { field: "business_type", headerName: t("Type"), width: 130 },
+      { field: "phone_number", headerName: t("Phone"), width: 150 },
       {
         field: "email",
-        headerName: "Email",
+        headerName: t("Email"),
         width: 220,
         flex: 1,
         minWidth: 100,
       },
       {
         field: "active_products",
-        headerName: "Active (Prd) ",
+        headerName: t("ActiveProducts"),
         width: 120,
         type: "number",
       },
       {
         field: "non_active_products",
-        headerName: "Non-Active (Prd) ",
+        headerName: t("NonActiveProducts"),
         width: 120,
         type: "number",
       },
-      { field: "rating", headerName: "Rating", width: 100, type: "number" },
+      { field: "rating", headerName: t("Rating"), width: 100, type: "number" },
       {
         field: "status",
-        headerName: "Status",
+        headerName: t("Status"),
         width: 120,
         renderCell: params => {
           let color = "green" 
@@ -152,7 +150,7 @@ function CompanyPage() {
       },
       {
         field: "notification_enabled",
-        headerName: "Notify",
+        headerName: t("Notify"),
         width: 70,
         sortable: false,
         filterable: false,
@@ -162,7 +160,7 @@ function CompanyPage() {
       },
       {
         field: "deleted",
-        headerName: "Deleted",
+        headerName: t("Deleted", { ns:"headers" }),
         width: 70,
         sortable: false,
         filterable: false,
@@ -174,41 +172,41 @@ function CompanyPage() {
           />
         ),
       },
-      { field: "working_hours", headerName: "Working Hours", width: 170 },
-      { field: "telegram_link", headerName: "Telegram", width: 170, flex: 1, maxWidth: 170 },
-      { field: "social_profile_link", headerName: "Social", width: 170, flex: 1, maxWidth: 170 },
+      { field: "working_hours", headerName: t("WorkingHours"), width: 170 },
+      { field: "telegram_link", headerName: t("Telegram"), width: 170, flex: 1, maxWidth: 170 },
+      { field: "social_profile_link", headerName: t("SocialMedia"), width: 170, flex: 1, maxWidth: 170 },
       {
         field: "user_need_to_know",
-        headerName: "Need to know",
+        headerName: t("NeedToKnow"),
         width: 180,
         flex: 1,
         minWidth: 100,
       },
       {
         field: "about",
-        headerName: "About",
+        headerName: t("About"),
         width: 180,
         flex: 1,
         minWidth: 100,
       },
       {
         field: "violation_count",
-        headerName: "Count (Violations)",
+        headerName: t("ViolationCount"),
         width: 80  
       },
       {
         field: "created_at",
-        headerName: "Created",
+        headerName: t("CreatedAt"),
         width: 170,
       },
       {
         field: "updated_at",
-        headerName: "Updated",
+        headerName: t("UpdatedAt"),
         width: 170,
       },
       {
         field: "actions",
-        headerName: "Actions",
+        headerName: t("Actions"),
         width: 80,
         renderCell: params => {
           return (
@@ -219,7 +217,7 @@ function CompanyPage() {
         },
       }
     ],
-    []
+    [t]
   ) 
 
   const handleUserStatusChange = async (
@@ -322,10 +320,11 @@ function CompanyPage() {
           justifyContent="space-between"
           sx={{ mb: 2, flexShrink: 0 }}
         >
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>Companies</Typography>
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Companies", { ns: 'sidebar' })}</Typography>
         </Stack>
         <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
           <DataGrid 
+            key={i18n.language}
             rows={rows} 
             columns={columns} 
             getRowId={r => r.company_id} 
@@ -345,7 +344,7 @@ function CompanyPage() {
               })) 
             }}
           />
-          <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ width: 160, zIndex: 9999 }}> 
+          <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ minWidth: 160, zIndex: 9999 }}> 
             <Box sx={{ border: '1px solid #d9d9d9', p: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
               <Button
                 sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
@@ -357,7 +356,7 @@ function CompanyPage() {
                 }}
                 startIcon={<BlockIcon />}
               >
-                { selectedCompany?.status == "BANNED" ? "Unblock" : "Block" } 
+                { selectedCompany?.status == "BANNED" ? t("Unblock", { ns: 'texts' }) : t("Block", { ns: 'texts' }) } 
               </Button>
               <Button
                 sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
@@ -367,7 +366,7 @@ function CompanyPage() {
                 startIcon={<DeleteIcon />}
                 onClick={() => handleUserDeletionChange(selectedCompany?.deleted ? false : true, selectedCompany?.phone_number ? selectedCompany?.phone_number : "") }
               >
-                { selectedCompany?.deleted ? "Not deleted" : "Deleted (sotf)" } 
+                { selectedCompany?.deleted ? t("Undelete", { ns: 'texts' }) : t("DeleteSoft", { ns: 'texts' }) } 
               </Button>
               <Button 
                 onClick={() => handleAddNotification(selectedCompany?.phone_number ? selectedCompany?.phone_number : "")}
@@ -376,7 +375,7 @@ function CompanyPage() {
                 variant="text"
                 color="success"
                 startIcon={<AddAlertIcon />}>
-                  Add Notif..
+                {t("AddNotification", { ns: 'texts' })}
               </Button>
             </Box>
           </Popper>

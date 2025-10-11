@@ -1,0 +1,18 @@
+{
+    "Search": "Qidirish",
+    "SearchPlaceholder": "Telefon raqam bilan qidirish",
+    "AdminDesc": "Admin va super adminlarni boshqarish",
+    "Undelete": "Tiklash", 
+    "Delete": "O`chirish",
+    "DeleteSoft": "O`chirish (soft)",
+    "SendNotification": "Bildirish yuborish",
+    "Unblock": "Blokdan chiqarish",
+    "Block": "Bloklash",
+    "AddNotification": "Bildirish qo`shish",
+    "Approved": "Tasdiqlangan",
+    "NotApproved": "Tasdiqlanmagan",
+    "NotificationDesc": "Maxsus yoki umumiy bildirishlar yarating",
+    "Language": "Til",
+    "Pending": "Kutilmoqda",
+    "Failed": "Xatolik"
+}

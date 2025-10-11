@@ -10,6 +10,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { AdminRow } from "./type/AdminRow"
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useConfirm } from "@/shared/hooks/useConfirm"
+import { useTranslation } from "react-i18next"
 
 function AdminPage() {
   const [admins, setAdmins] = useState([]) 
@@ -19,6 +20,9 @@ function AdminPage() {
   const [openAction, setOpenAction] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
+  //Translation
+  const { t, i18n } = useTranslation(["buttons", "headers", "texts"])
+
   // TO use confirm Model
   const { confirm, ConfirmDialog } = useConfirm()
 
@@ -27,7 +31,6 @@ function AdminPage() {
 
   useEffect(() => {
     if (isSuccess && allAdmins?.resultData) {
-      console.log("allAdmins", allAdmins) 
       setAdmins(allAdmins.resultData || []) 
     }
   }, [
@@ -47,7 +50,7 @@ function AdminPage() {
   const columns: GridColDef<AdminRow>[] = useMemo(() => [
     {
       field: "avatar",
-      headerName: "User",
+      headerName: t("User", { ns: "headers" }),
       width: 90,
       sortable: false,
       filterable: false,
@@ -59,13 +62,13 @@ function AdminPage() {
         />
       ),
     },
-    { field: "admin_id", headerName: "Name", width: 300, flex: 1 },
-    { field: "admin_role", headerName: "Role", width: 300 },
-    { field: "created_at", headerName: "Created At", width: 250 },
-    { field: "updated_at", headerName: "Updated At", width: 250 },
+    { field: "admin_id", headerName: t("Name", { ns: "headers" }), width: 300, flex: 1 },
+    { field: "admin_role", headerName: t("Role", { ns: "headers" }), width: 300 },
+    { field: "created_at", headerName: t("CreatedAt", { ns: "headers" }), width: 250 },
+    { field: "updated_at", headerName: t("UpdatedAt", { ns: "headers" }), width: 250 },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: t("Actions", { ns: "headers" }),
       width: 80,
       renderCell: params => {
         return (
@@ -75,7 +78,7 @@ function AdminPage() {
         ) 
       },
     },
-  ], [])
+  ], [t])
 
   const handleAdminDelete = async (admin_id: number | string) => {
     if (admin_id) {
@@ -126,8 +129,8 @@ function AdminPage() {
           overflow: "hidden",
         }}
       >
-        <Box sx={{ fontSize: 20, fontWeight: "bold" }}>Admin Panel</Box>
-        <Box sx={{ fontSize: 14, mb: 2 }}>Manage admins and master admin</Box>
+        <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{t("AdminPanel", { ns:"titles" })}</Box>
+        <Box sx={{ fontSize: 14, mb: 2 }}>{t("AdminDesc", { ns:"texts" })}</Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
@@ -135,11 +138,12 @@ function AdminPage() {
             sx={{ mb: 2 }}
             onClick={() => navigate(ROUTES.AUTH.REGISTER)}
           >
-          Create Admin
+            {t("CreateAdmin")}
           </Button>
         </Box>
         <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
           <DataGrid
+            key={i18n.language}
             rows={admins}
             columns={columns}
             initialState={{
@@ -157,7 +161,7 @@ function AdminPage() {
                 startIcon={<DeleteIcon />}
                 onClick={() => handleAdminDelete(selectedAdmin?.admin_id ? selectedAdmin?.admin_id : "") }
               >
-                { selectedAdmin?.deleted ? "Not deleted" : "Deleted" } 
+                { selectedAdmin?.deleted ? t("Undelete", { ns: "texts" }) : t("Delete", { ns: "texts" }) } 
               </Button>
             </Box>
           </Popper>

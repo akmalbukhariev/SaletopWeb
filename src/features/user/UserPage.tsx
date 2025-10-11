@@ -10,10 +10,7 @@ import {
   IconButton,
   Popper,
   PopperPlacementType,
-  Popover,
   Button,
-  Typography,
-  ClickAwayListener,
   // IconButton
 } from "@mui/material" 
 import BlockIcon from "@mui/icons-material/Block"
@@ -31,7 +28,7 @@ import { useConfirm } from "@/shared/hooks/useConfirm"
 import AddAlertIcon from '@mui/icons-material/AddAlert'
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/shared/constants/routes"
-import { useAppSelector } from "@/store/hooks"
+import { useTranslation } from "react-i18next"
 
 function UserPage() {
 
@@ -49,7 +46,14 @@ function UserPage() {
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
   }) 
+
+  console.log("allUsers", allUsers)
+
+
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null)
+
+  //Translation
+  const { t, i18n } = useTranslation(["headers", "texts"])
 
   const [changeUserStatus] = useChangeUserStatusMutation() 
   const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
@@ -57,12 +61,10 @@ function UserPage() {
   const { confirm, ConfirmDialog } = useConfirm()
   const navigate = useNavigate()
 
-  const search = useAppSelector(state => state.search.value)
 
   useEffect(() => {
     if (isSuccess && allUsers?.resultData) {
-      console.log(allUsers.resultData) 
-      setRows(allUsers.resultData || []) 
+      setRows(allUsers.resultData.data || []) 
       if (typeof allUsers.resultData.total === "number") {
         setTotalRows(allUsers.resultData.total) 
       }
@@ -98,7 +100,7 @@ function UserPage() {
     () => [
       {
         field: "profile_picture_url",
-        headerName: "Profile",
+        headerName: t("Profile", { ns: "headers" }),
         width: 60,
         sortable: false,
         filterable: false,
@@ -110,14 +112,14 @@ function UserPage() {
           />
         ),
       },
-      { field: "first_name", headerName: "First name", width: 100 },
-      { field: "last_name", headerName: "Last name", width: 100 },
-      { field: "full_name", headerName: "Full name", width: 180, flex: 1 },
-      { field: "phone_number", headerName: "Phone", width: 140 },
-      { field: "email", headerName: "Email", width: 220, flex: 1 },
+      { field: "first_name", headerName: t("FirstName", { ns: "headers" }), width: 100 },
+      { field: "last_name", headerName: t("LastName", { ns: "headers" }), width: 100 },
+      { field: "full_name", headerName: t("FullName", { ns: "headers" }), width: 180, flex: 1 },
+      { field: "phone_number", headerName: t("Phone", { ns: "headers" }), width: 140 },
+      { field: "email", headerName: t("Email", { ns: "headers" }), width: 220, flex: 1 },
       { 
         field: "status",
-        headerName: "Status",
+        headerName: t("Status", { ns: "headers" }),
         width: 120,
         renderCell: params => {
           let color = "green" 
@@ -135,7 +137,7 @@ function UserPage() {
       },
       {
         field: "notification_enabled",
-        headerName: "Notify",
+        headerName: t("Notify", { ns: "headers" }),
         width: 70,
         sortable: false,
         filterable: false,
@@ -145,12 +147,12 @@ function UserPage() {
       },
       {
         field: "radius_km",
-        headerName: "Radius (km)",
+        headerName: t("Radius", { ns: "headers" }) + ' (km)',
         width: 100,
       },
       {
         field: "deleted",
-        headerName: "Deleted",
+        headerName: t("Deleted", { ns: "headers" }),
         width: 90,
         sortable: false,
         filterable: false,
@@ -164,27 +166,27 @@ function UserPage() {
       },
       {
         field: "violation_count",
-        headerName: "Violations",
+        headerName: t("Violations", { ns: "headers" }),
         width: 80,
       },
       {
         field: "blocked_until",
-        headerName: "Blocked Until",
+        headerName: t("BlockedUntil", { ns: "headers" }),
         width: 160,
       },
       {
         field: "created_at",
-        headerName: "Created",
+        headerName: t("CreatedAt", { ns: "headers" }),
         width: 160,
       },
       {
         field: "updated_at",
-        headerName: "Updated",
+        headerName: t("UpdatedAt", { ns: "headers" }),
         width: 160,
       },
       {
         field: "actions",
-        headerName: "Actions",
+        headerName: t("Actions", { ns: "headers" }),
         width: 80,
         renderCell: params => {
           return (
@@ -195,7 +197,7 @@ function UserPage() {
         },
       },
     ],
-    []
+    [t]
   ) 
 
   const handleUserStatusChange = async (
@@ -295,6 +297,7 @@ function UserPage() {
       >
         <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
           <DataGrid
+            key={i18n.language}
             getRowId={row => row.user_id}
             editMode="row"
             rows={rows || []}
@@ -323,7 +326,7 @@ function UserPage() {
               })) 
             }}
           />
-          <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ width: 160, zIndex: 9999 }}> 
+          <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ minWidth: 160, zIndex: 9999, }}> 
             <Box sx={{ border: '1px solid #d9d9d9', p: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
               <Button
                 sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
@@ -335,7 +338,7 @@ function UserPage() {
                 }}
                 startIcon={<BlockIcon />}
               >
-                { selectedUser?.status == "BANNED" ? "Unblock" : "Block" } 
+                { selectedUser?.status == "BANNED" ? t("Unblock", { ns: "texts" }) : t("Block", { ns: "texts" }) } 
               </Button>
               <Button
                 sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
@@ -345,7 +348,7 @@ function UserPage() {
                 startIcon={<DeleteIcon />}
                 onClick={() => handleUserDeletionChange(selectedUser?.deleted ? false : true, selectedUser?.phone_number ? selectedUser?.phone_number : "") }
               >
-                { selectedUser?.deleted ? "Not deleted" : "Deleted (sotf)" } 
+                { selectedUser?.deleted ? t("Undelete", { ns: "texts" }) : t("DeleteSoft", { ns: "texts" }) } 
               </Button>
               <Button 
                 onClick={() => handleAddNotification(selectedUser?.phone_number ? selectedUser?.phone_number : "")}
@@ -354,7 +357,7 @@ function UserPage() {
                 variant="text"
                 color="success"
                 startIcon={<AddAlertIcon />}>
-                  Add Notif..
+                { t("AddNotification", { ns: "texts" }) }
               </Button>
             </Box>
           </Popper>

@@ -15,7 +15,7 @@ export function useAppNavigation() {
     toHome: () => navigate(ROUTES.HOME),
 
     // --- Auth Routes ---
-    toLogin: () => navigate(ROUTES.AUTH.LOGIN),
+    toLogin: () => navigate("/admin-page" + ROUTES.AUTH.LOGIN),
     toRegister: () => navigate(ROUTES.AUTH.REGISTER),
 
     // --- Admin Routes ---

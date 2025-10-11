@@ -122,12 +122,12 @@ function LoginForm() {
             gap: 1,
           }}
         >
-          <Typography variant="body2" color="textSecondary">
+          {/* <Typography variant="body2" color="textSecondary">
             Don't have an account?{" "}
-            <Link href="/auth/register" underline="hover">
+            <Link href="admin-page/auth/register" underline="hover">
               Sign Up
             </Link>
-          </Typography>
+          </Typography> */}
         </Box>
       </Stack>
     </Box>

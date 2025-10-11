@@ -1,0 +1,18 @@
+{
+    "Search": "Search",
+    "SearchPlaceholder": "Search by phone number",
+    "AdminDesc": "Manage admins and super admins",
+    "Undelete": "Undelete",
+    "Delete": "Delete",
+    "DeleteSoft": "Delete (Soft)",
+    "SendNotification": "Send Notification",
+    "Unblock": "Unblock",
+    "Block": "Block",
+    "AddNotification": "Add Notification",
+    "Approved": "Approved",
+    "NotApproved": "Not Approved"       ,
+    "NotificationDesc": "Create special and general notifications.",
+    "Language": "Language",
+    "Pending": "Pending",
+    "Failed": "Failed"
+}

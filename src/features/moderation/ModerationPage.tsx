@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography } from "@mui/material" 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react" 
-import { DataGrid, DataGridProps, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
+import { useEffect, useMemo, useState } from "react" 
+import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
 import { 
   useApprovalPosterListMutation,
   useGetNewAddedPosterListQuery,
@@ -10,8 +10,7 @@ import { ModerationRow } from './type/ModerationType'
 import { useConfirm } from "@/shared/hooks/useConfirm"
 import toastNotify from "@/shared/components/toastNotify"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
-import { GridRowSelectionModel } from "@mui/x-data-grid"
-import { data } from "react-router"
+import { useTranslation } from "react-i18next"
 
 function ModerationPage() {
 
@@ -25,6 +24,9 @@ function ModerationPage() {
 
   const { confirm, ConfirmDialog } = useConfirm()
 
+  //Translation
+  const { t, i18n } = useTranslation(["headers", "texts", "buttons", "sidebar"])
+  
   const [approvalPosterList] = useApprovalPosterListMutation()
 
   //APi call
@@ -57,18 +59,18 @@ function ModerationPage() {
   )
   useEffect(() => {
     if(filterType === "all" && isPosterSuccess && allPosterList?.resultData) {
-      setRows(allPosterList.resultData || [])
+      setRows(allPosterList.resultData.data || [])
       setTotalRows(allPosterList.resultData?.total || pageFormat.pageSize)
     } else if(filterType === "newAdded" && isNewAddedPosterSuccess && newAddedPosterList?.resultData) {
-      setRows(newAddedPosterList.resultData || [])
+      setRows(newAddedPosterList.resultData.data || [])
       setTotalRows(newAddedPosterList.resultData?.total || pageFormat.pageSize)
     }
 
-    if(filterType === "all" && allPosterList?.resultCode != RESULTCODE.SUCCESS) {
-      toastNotify("Error fetching data", "error")
+    if(filterType === "all" && isPosterSuccess && allPosterList?.resultCode != RESULTCODE.SUCCESS) {
+      toastNotify("Error fetching data all", "error")
       setRows([])
-    } else if(filterType === "newAdded" && newAddedPosterList?.resultCode != RESULTCODE.SUCCESS) {
-      toastNotify("Error fetching data", "error")
+    } else if(filterType === "newAdded" && isNewAddedPosterSuccess && newAddedPosterList?.resultCode != RESULTCODE.SUCCESS) {
+      toastNotify("Error fetching data newAdded", "error")
       setRows([])
     }
 
@@ -85,7 +87,7 @@ function ModerationPage() {
     () => [
       {
         field: "image_url",
-        headerName: "Profile",
+        headerName: t("Profile", { ns: "headers" }),
         width: 70,
         sortable: false,
         filterable: false,
@@ -98,38 +100,38 @@ function ModerationPage() {
       },
       {
         field: "company_name",
-        headerName: "Company",
+        headerName: t("Company", { ns: "headers" }),
         width: 200,
         flex: 1,
         minWidth: 150,
       },
       {
         field: "category",
-        headerName: "Category",
+        headerName: t("Category", { ns: "headers" }),
         width: 200,
         flex: 1,
         minWidth: 100,
       },
-      { field: "title", headerName: "Title", width: 130 },
-      { field: "description", headerName: "Description", width: 350 },
+      { field: "title", headerName: t("Title", { ns: "headers" }), width: 130 },
+      { field: "description", headerName: t("Description", { ns: "headers" }), width: 350 },
       {
         field: "new_price",
-        headerName: "New Price",
+        headerName: t("NewPrice", { ns: "headers" }),
         width: 100,
         flex: 1,
         type: "number",
       },
       {
         field: "old_price",
-        headerName: "Old Price",
+        headerName: t("OldPrice", { ns: "headers" }),
         width: 100,
         flex: 1,
         type: "number",
       },
-      { field: "click_to_contact_count", headerName: "Contact_count", width: 100, type: "number" },
+      { field: "click_to_contact_count", headerName: t("ContactCount", { ns: "headers" }), width: 100, type: "number" },
       {
         field: "deleted",
-        headerName: "Deleted",
+        headerName: t("Deleted", { ns: "headers" }),
         width: 70,
         sortable: false,
         filterable: false,
@@ -143,24 +145,24 @@ function ModerationPage() {
       },
       {
         field: "created_at",
-        headerName: "Created",
+        headerName: t("CreatedAt", { ns: "headers" }),
         width: 170,
       },
       {
         field: "updated_at",
-        headerName: "Updated",
+        headerName: t("UpdatedAt", { ns: "headers" }),
         width: 170,
       },
       {
         field: "actions",
-        headerName: "Actions",
+        headerName: t("Actions", { ns: "headers" }),
         width: 120,
         renderCell: params => {
           return (
             <Chip 
               clickable 
-              label={ params.row.approved ? "Approved" : "Pending"} 
-              color={params.row.approved ? "success" : "warning"}
+              label={ params.row.approved === null ? t("Pending", { ns:"texts" }) : params.row.approved ? t("Approved", { ns: "texts" }) : t("NotApproved", { ns: "texts" }) } 
+              color={params.row.approved === null ? "warning" : params.row.approved ? "success" : "error"}
               onClick={() => {
                 handlePosterApproving([params.row])
               }}  
@@ -169,7 +171,7 @@ function ModerationPage() {
         },
       }
     ],
-    []
+    [t]
   ) 
           
   const handleFilterAction = (value: any) => {
@@ -192,7 +194,9 @@ function ModerationPage() {
       try {
         const posterList = notApprovedRows.map((row) => {
           return {
+            company_id: row.company_id,
             poster_id: row.poster_id,
+            title: row.title,
             approved: true
           }
         })
@@ -256,44 +260,50 @@ function ModerationPage() {
         justifyContent="space-between"
         sx={{ mb: 2, flexShrink: 0 }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>Moderation</Typography>
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Moderation", { ns: "sidebar" })}</Typography>
         <Box sx={{ display: "flex", gap: 4 }}>
           <Button variant='contained' color={filterType === "all" ? "success" : 'inherit'} onClick={() => handleFilterAction("all")}>
-            Hammasini 
+            {t("All", { ns: "buttons" })} 
           </Button>
           <Button variant="contained" color={filterType === "newAdded" ? "success" : 'inherit'} onClick={() => handleFilterAction("newAdded")}>
-            Yangi posterlar
+            {t("NewPosters", { ns: "buttons" })}
           </Button>
-          <Button sx={{ textDecoration: 'none', textTransform: 'none' }} variant="contained" color='primary' onClick={() => handleAllPosterApproving()}>
-            Hammasini tasdiqlash
+          <Button disabled={isPosterLoading || isNewAddedPosterLoading} variant="contained" color='primary' onClick={() => handleAllPosterApproving()}>
+            {t("ApproveAll", { ns: "buttons" })}
           </Button>
         </Box>
       </Stack>
-      <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
-        <DataGrid 
-          apiRef={dataGridApiRef}
-          checkboxSelection
-          rows={rows} 
-          columns={columns} 
-          getRowId={row => row.poster_id}
-          loading={isPosterLoading || isNewAddedPosterLoading}
-          pageSizeOptions={[5, 10, 20, 25]}
-          paginationModel={{
-            page: pageFormat.offset,
-            pageSize: pageFormat.pageSize,
-          }}
-          rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
-          paginationMode="server" // <-- Enable server-side pagination
-          onPaginationModelChange={({ page, pageSize }) => {
-            setPageFormat(prev => ({
-              ...prev,
-              offset: page,
-              pageSize: pageSize,
-            })) 
-          }}
-        /> 
-      </Box>
-      {ConfirmDialog}
+      <Grid container spacing={2} columns={{ md: 12 }} sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
+        <Grid size={{ md: 9 }} >
+          <DataGrid 
+            key={i18n.language}
+            apiRef={dataGridApiRef}
+            checkboxSelection
+            disableRowSelectionOnClick
+            rows={rows} 
+            columns={columns} 
+            getRowId={row => row.poster_id}
+            loading={isPosterLoading || isNewAddedPosterLoading}
+            pageSizeOptions={[5, 10, 20, 25]}
+            paginationModel={{
+              page: pageFormat.offset,
+              pageSize: pageFormat.pageSize,
+            }}
+            rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
+            paginationMode="server" // <-- Enable server-side pagination
+            onPaginationModelChange={({ page, pageSize }) => {
+              setPageFormat(prev => ({
+                ...prev,
+                offset: page,
+                pageSize: pageSize,
+              })) 
+            }}
+          /> 
+        </Grid>
+        <Grid size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1 }}>
+          
+        </Grid>
+      </Grid>
     </Grid>
   ) 
 }

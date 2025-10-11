@@ -1,31 +1,86 @@
-import { Avatar, Box, Grid, TextField } from "@mui/material" 
+import { Avatar, Box, Button, FormControl, Grid, IconButton, InputLabel, MenuItem, Popover, Select, TextField, Typography } from "@mui/material" 
 import SideBar from "./components/SideBar" 
-import { sideBarList } from "./constants/constant" 
 import { Outlet } from "react-router" 
 import { setSearchValue } from "@/store/slices/searchSlice"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { useState, ChangeEvent } from "react"
+import { useState, ChangeEvent, useEffect, MouseEvent } from "react"
+import { useSideBarList } from "@/shared/constants/sideBarList"
+import { useTranslation } from "react-i18next"
+import { IUserState } from "@/shared/types/IUserState"
+import PersonIcon from "@mui/icons-material/Person"
+import { useAuth } from "@/features/auth"
+import { useConfirm } from '../../shared/hooks/useConfirm'
+
+
 function MainLayout() {
 
   const dispatch = useAppDispatch()
   const searchValue = useAppSelector(state => state.search.value)
   const [search, setSearch] = useState("")
+  const sideBarList = useSideBarList()
+  const [openPopover, setOpenPopover] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+
+  const [language, setLanguage] = useState(localStorage.getItem("i18nextLng") || "uz")
+
+  //Translation
+  const { t, i18n } = useTranslation(["texts", "placeholders"])
+
+  const { signOut } = useAuth()
+
+  const { confirm, ConfirmDialog } = useConfirm()
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
     dispatch(setSearchValue(event.target.value))
   }
 
+  const userInfo: IUserState = useAppSelector(state => state.user) 
+
+  useEffect(() => {
+    setLanguage(localStorage.getItem("i18nextLng") || "uz")
+  }, [language, userInfo])
+
+  const handleLanguageChange = (language: string) => {
+    setLanguage(language)
+    i18n.changeLanguage(language)
+  }
+
+  const id = openPopover ? 'simple-popper' : undefined
+  const handleOpenPopover = () => (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget) 
+    setOpenPopover((prev) => !prev)
+  
+  }
+  const handleActionClose = () => {
+    setAnchorEl(null)
+    setOpenPopover(false)
+  }
+
+  const handleLogout = async () => {
+    if(await confirm(
+      "Logout",
+      "Are you sure you want to logout?",
+      'confirm'
+    ))
+    {
+      handleActionClose()
+      signOut()
+    }else{
+      handleActionClose()
+    }
+  }
+  
   return (
     <>
       <Grid container sx={{ minWidth: "100vh", minHeight: "100vh" }}>
         {/* Left Area  */}
-        <Grid size={2} sx={{ height: "100vh", borderRight: "1px solid grey" }}>
+        <Grid size={2} sx={{ height: "100vh", borderRight: "1px solid #d9d9d9" }}>
           <Box
             sx={{
               p: 2,
               height: { sm: "70px", lg: "60px", xl: "80px" },
-              borderBottom: "1px solid grey",
+              borderBottom: "1px solid #d9d9d9",
               justifyContent: "center",
               alignItems: "center",
               display: "flex",
@@ -35,7 +90,7 @@ function MainLayout() {
             }}
           >
             {/* Company Icon */}
-            Ecoplates Admin
+            SaleTop Admin
           </Box>
           <Box sx={{ p: 2 }}>
             {/* <Sidebar /> */}
@@ -50,17 +105,17 @@ function MainLayout() {
         >
           <Box
             sx={{
-              borderBottom: "1px solid gray",
+              borderBottom: "1px solid #d9d9d9",
               height: { sm: "70px", lg: "60px", xl: "80px" },
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              p: 2,
+              p: 4,
             }}
           >
             <TextField
               size="small"
-              label="Search..."
+              label={t("Search") + "..."}
               variant="outlined"
               value={search}
               sx={{ width: "50%" }}
@@ -72,13 +127,41 @@ function MainLayout() {
                 fontWeight: "bold",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "space-between",
+                gap: 10
               }}
             >
-              <Avatar
-                src="/broken-image.jpg"
-                sx={{ width: 30, height: 30, mr: 1 }}
-              />
-              Admin User
+              <FormControl sx={{ width: 100 }} size="small">
+                <InputLabel id="demo-simple-select-label" htmlFor="demo-simple-select-label" >{t("Language", { ns: "texts" })}</InputLabel>
+                <Select value={language} defaultValue={"uz"} id="demo-simple-select-label" label={t("Language", { ns: "texts" })} onChange={(e) => handleLanguageChange(e.target.value)}>
+                  <MenuItem value="en">EN</MenuItem>
+                  <MenuItem value="uz">UZ</MenuItem>
+                </Select>
+              </FormControl>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                
+                <IconButton onClick={handleOpenPopover()}>
+                  <PersonIcon/>
+                </IconButton>
+                <Popover id={id} open={openPopover} anchorEl={anchorEl} sx={{ minWidth: 200, p:0, zIndex: 9999 }} anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }} onClose={handleActionClose}> 
+                  <Box sx={{ width: 160, p:1, bgcolor: 'background.paper' }}>
+                    <Button
+                      sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                      fullWidth
+                      variant="text"
+                      color="error"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Button>
+                  </Box>
+                </Popover>
+                <Typography variant="body1">{userInfo.admin_id}</Typography>
+              </Box>
+             
             </Box>
           </Box>
           <Box
@@ -100,6 +183,8 @@ function MainLayout() {
           </Box>
         </Grid>
       </Grid>
+
+      {ConfirmDialog}
     </>
   ) 
 }

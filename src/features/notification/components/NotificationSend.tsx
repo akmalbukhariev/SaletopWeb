@@ -6,6 +6,7 @@ import toastNotify from "@/shared/components/toastNotify"
 import { useSendNotificationToAllMutation, useSendNotificationToUserMutation } from "../api/notifyAPI"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation"
+import { useTranslation } from "react-i18next"
 
 function NotificationSend() {
 
@@ -16,6 +17,9 @@ function NotificationSend() {
   const searchCompany = searchParams.get('company') ?? false
   const sendUserOrCompany = searchCompany === 'yes' ? true : false
   const phone_number = searchParams.get('phone_number') ?? null
+
+  //Translation
+  const { t } = useTranslation(["headers", "buttons", "texts", "placeholders"])
 
   const [sendNotificationToUser] = useSendNotificationToUserMutation()
   const [sendNotificationToAll] = useSendNotificationToAllMutation()
@@ -90,8 +94,8 @@ function NotificationSend() {
       justifyContent='flex-start'
       sx={{ mb: 2, flexShrink: 0 }}
     >
-      <Typography variant="h5" sx={{ fontWeight: "bold" }}>Bildirishnomalar</Typography>
-      <Typography sx={{ fontSize: 16, color: "text.secondary" }}>Maxsus, barcha foydalanuvchilarga yuborish mumkin</Typography>
+      <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Notifications", { ns: "sidebar" })}</Typography>
+      <Typography sx={{ fontSize: 16, color: "text.secondary" }}>{t("NotificationDesc", { ns: "texts" })}</Typography>
     </Stack>
     <FormControl sx={{ flexGrow: 1, overflow: "auto", p: 2, display: "flex", flexDirection: "column", gap: 4 }}>
       {/* Title field */}
@@ -104,7 +108,7 @@ function NotificationSend() {
         id="message" 
         minRows={6}
         maxRows={8}
-        placeholder="Jo'natmoqchi bo'lgan bildirishnomani kiriting..." 
+        placeholder= {t("NotificationsTextArea", { ns: "placeholders" })}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
@@ -112,12 +116,12 @@ function NotificationSend() {
       {/* Sending type field */}
       {
         phone_number && <>
-          <TextField id="phone_number" disabled type="number" label="Telefon raqam" sx={{ width: { xs: "100%", sm: "100%", lg: "50%" } }} value={phone_number}/>
+          <TextField id="phone_number" disabled type="number" label={t("Phone", { ns: "headers" })} sx={{ width: { xs: "100%", sm: "100%", lg: "50%" } }} value={phone_number}/>
         </>
       }
       <Box sx={{ display: "flex", width: { xs: "100%", sm: "100%", lg: "50%" }, justifyContent: "flex-end", gap: 2 }}>
         <Button variant="contained" fullWidth onClick={() => handleSendNotification()}>
-        Jo'natish
+          {t("Send", { ns: "buttons" })}
         </Button>
       </Box>
     </FormControl>

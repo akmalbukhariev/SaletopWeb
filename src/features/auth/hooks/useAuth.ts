@@ -2,13 +2,17 @@ import { IUserState } from "@/shared/types/IUserState"
 import { useAppDispatch, useAppSelector } from "@/store/hooks" 
 import { login, logout } from "@/store/slices/userSlice" 
 import { useLoginUserMutation } from "@/features/auth/api/authAPI" 
+import { ROUTES } from "@/shared/constants/routes"
+import { useEffect } from "react"
+
 
 
 export const useAuth = () => {
   const dispatch = useAppDispatch() 
   const user = useAppSelector(state => state.user) 
   const [loginUser] = useLoginUserMutation() 
-
+  const APP_PREFIX = import.meta.env.VITE_APP_NAME || "default"
+  const TOKEN_KEY = `${APP_PREFIX}_token`
 
   const signIn = async (
     data: { admin_id: string, password: string },
@@ -16,10 +20,8 @@ export const useAuth = () => {
   ) => {
     try {
       // Call API to login, expect response to include user and token
-       
       const response = (await loginUser(data)) 
 
-      console.log("Login response:", response) 
       if (response?.data?.resultData) {
         const payload: IUserState = {
           id: String(response?.data?.resultData?.id ?? "") || null,
@@ -30,18 +32,12 @@ export const useAuth = () => {
         } 
 
         dispatch(login(payload)) 
-
-        // Save user data if remember me is checked
-        if (isRememberMe) {
-          // Save token if present
-          localStorage.setItem("user", JSON.stringify(payload)) 
-
-          const token = response?.data.accessToken 
-          if (token) {
-            localStorage.setItem("token", token) 
-            sessionStorage.setItem("token", token) 
-          }
+        
+        const token = response?.data.accessToken 
+        if (token) {
+          localStorage.setItem(TOKEN_KEY, token) 
         }
+        // }
       }
 
       return response 
@@ -53,10 +49,8 @@ export const useAuth = () => {
 
   const signOut = () => {
     // Storage'dan token va user ma'lumotlarini o'chirish
-    localStorage.removeItem("token") 
-    localStorage.removeItem("user") 
-    sessionStorage.removeItem("token") 
     dispatch(logout()) 
+    window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
   } 
 
   return {

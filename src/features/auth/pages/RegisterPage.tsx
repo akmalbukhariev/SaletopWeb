@@ -23,14 +23,14 @@ import { useRegisterUserMutation } from "../api/authAPI"
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import { useNavigate } from "react-router" 
 import toastNotify from "@/shared/components/toastNotify"
-
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation"
 function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false) 
   const [showPasswordConfirm, setShowPassworConfirm] = useState(false) 
   const [registerUser] = useRegisterUserMutation() 
 
-  const navigate = useNavigate() 
-
+  const navigate = useAppNavigation()
+  
   const [adminInfo, setAdminInfo] = useState<IRegistretInfo>({
     admin_id: "",
     admin_role: AdminRole[0].name,
@@ -65,7 +65,7 @@ function RegisterPage() {
         "User successfully registered.",
         "success") 
 
-      navigate(ROUTES.AUTH.LOGIN) 
+      navigate.toLogin() 
     } else {
       toastNotify(
         "Registration failed. Please try again.",
@@ -224,7 +224,7 @@ function RegisterPage() {
           >
             <Typography variant="body2" color="textSecondary">
               Already you have an account?{" "}
-              <Link href={ROUTES.AUTH.LOGIN} underline="hover">
+              <Link href={"/admin-page" + ROUTES.AUTH.LOGIN} underline="hover">
                 Sign In
               </Link>
             </Typography>

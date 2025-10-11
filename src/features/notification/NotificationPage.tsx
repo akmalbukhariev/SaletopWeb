@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useGetAllNotificationsQuery } from "./api/notifyAPI"
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/shared/constants/routes"
+import { useTranslation } from "react-i18next"
 
 function NotificationPage() {
 
@@ -14,6 +15,12 @@ function NotificationPage() {
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
   
+
+  //Translation
+  const { t, i18n } = useTranslation(["headers", "buttons"])
+
+
+  // Api call
   const { isSuccess, isError, data: allNofications, isLoading } = useGetAllNotificationsQuery({
     offset: pageFormat.offset,
     pageSize: pageFormat.pageSize
@@ -23,7 +30,7 @@ function NotificationPage() {
 
   useEffect(() => {
     if(isSuccess && (allNofications?.resultCode == RESULTCODE.SUCCESS)) {
-      setNotifications(allNofications.resultData || []) 
+      setNotifications(allNofications.resultData.data || []) 
       setTotalRows(allNofications?.resultData.total || 0) 
     }
     
@@ -42,34 +49,34 @@ function NotificationPage() {
       { field: "id", headerName: "Id", width: 50 },
       {
         field:"phone_number",
-        headerName: "Phone Number",
+        headerName: t("Phone", { ns: "headers" }),
         width: 140
       },
-      { field: "delivery_date", headerName: "Delivery Date", width: 200 },
-      { field: "message", headerName: "Message", width: 200, flex: 1 },
-      { field: "sends", headerName: "Sends", width: 160 },
+      { field: "delivery_date", headerName: t("DeliveryDate", { ns: "headers" }), width: 200 },
+      { field: "message", headerName: t("Message", { ns: "headers" }), width: 200, flex: 1 },
+      { field: "sends", headerName: t("Sends", { ns: "headers" }), width: 160 },
       {
         field: "company",
-        headerName: "Xabar Turi",
+        headerName: t("Type", { ns: "headers" }),
         width: 180,
         renderCell: params => {
           return (
-            <Chip label={params.row.company ? "Kompanya" : "Foydalanuvchi"} />
+            <Chip label={params.row.company ? t("Company", { ns: "headers" }) : t("User", { ns: "headers" })} />
           )
         }
       },
       {
         field: "status",
-        headerName: "Status",
+        headerName: t("Status", { ns: "headers" }),
         width: 180,
         renderCell: params => {
           return (
-            <Chip label={params.row.status} color={params.row.status === "Failed" ? "error" : "success"} size="small"></Chip>
+            <Chip label={params.row.status ?? t("Failed", { ns: "texts" }) } color={params.row.status ? "success" : "error"} size="small"></Chip>
           ) 
         },
       }
     ],
-    []
+    [t]
   ) 
 
   return (
@@ -91,12 +98,13 @@ function NotificationPage() {
         justifyContent="space-between"
         sx={{ mb: 2, flexShrink: 0 }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>Notifications</Typography>
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Notifications", { ns: "sidebar" })}</Typography>
 
-        <Button variant="contained" onClick={() => navigate(ROUTES.ADMIN.NOTIFICATIONS.SEND) }>Create Notification</Button>
+        <Button variant="contained" onClick={() => navigate(ROUTES.ADMIN.NOTIFICATIONS.SEND) }>{t("CreateNotification", { ns: "buttons" })}</Button>
       </Stack>
       <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
         <DataGrid 
+          key={i18n.language}
           rows={notifications || []} 
           columns={columns} 
           getRowId={r => r.id} 
