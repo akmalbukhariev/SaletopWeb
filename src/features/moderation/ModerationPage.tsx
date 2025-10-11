@@ -1,16 +1,16 @@
-import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography } from "@mui/material" 
-import { useEffect, useMemo, useState } from "react" 
+import toastNotify from "@/shared/components/toastNotify"
+import { useConfirm } from "@/shared/hooks/useConfirm"
+import { RESULTCODE } from "@/shared/utils/ResultCode"
+import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
-import { 
+import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import {
   useApprovalPosterListMutation,
   useGetNewAddedPosterListQuery,
   useGetPosterListQuery
 } from "../company/api/companyAPI"
 import { ModerationRow } from './type/ModerationType'
-import { useConfirm } from "@/shared/hooks/useConfirm"
-import toastNotify from "@/shared/components/toastNotify"
-import { RESULTCODE } from "@/shared/utils/ResultCode"
-import { useTranslation } from "react-i18next"
 
 function ModerationPage() {
 
@@ -28,6 +28,9 @@ function ModerationPage() {
   const { t, i18n } = useTranslation(["headers", "texts", "buttons", "sidebar"])
   
   const [approvalPosterList] = useApprovalPosterListMutation()
+
+  // to see selected item photos
+  const [selectedItem, setSelectedItem] = useState<ModerationRow>()
 
   //APi call
   const { 
@@ -113,19 +116,17 @@ function ModerationPage() {
         minWidth: 100,
       },
       { field: "title", headerName: t("Title", { ns: "headers" }), width: 130 },
-      { field: "description", headerName: t("Description", { ns: "headers" }), width: 350 },
+      { field: "description", headerName: t("Description", { ns: "headers" }), width: 350, minWidth: 200, flex:1 },
       {
         field: "new_price",
         headerName: t("NewPrice", { ns: "headers" }),
-        width: 100,
-        flex: 1,
+        width: 120,
         type: "number",
       },
       {
         field: "old_price",
         headerName: t("OldPrice", { ns: "headers" }),
-        width: 100,
-        flex: 1,
+        width: 120,
         type: "number",
       },
       { field: "click_to_contact_count", headerName: t("ContactCount", { ns: "headers" }), width: 100, type: "number" },
@@ -240,7 +241,12 @@ function ModerationPage() {
       }
     }
   }
-
+  const handleRowClicked = (row: ModerationRow) => {
+    if(row)
+    {
+      setSelectedItem(row)
+    }
+  }
   return (
     <Grid
       sx={{
@@ -298,10 +304,25 @@ function ModerationPage() {
                 pageSize: pageSize,
               })) 
             }}
+            onRowClick={(params) => handleRowClicked(params.row as ModerationRow)}
           /> 
         </Grid>
-        <Grid size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1 }}>
-          
+        <Grid container flexDirection='column' size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1, p:2 }}>
+          <Grid sx={{ mb: 4 }}>
+            <Typography variant='h4' sx={{ mb: 1 }}>
+              {selectedItem?.title}
+            </Typography>
+            <Typography>
+              {selectedItem?.description}
+            </Typography>
+          </Grid>
+          <Grid sx={{ width: "100%", height:"50%", objectFit: 'cover', borderRadius: 4 }}>
+            <img src={selectedItem?.image_url} style={{ height: "100%", width: "100%", borderRadius: 4 }}/>
+          </Grid>
+          <Grid>
+            <Button variant='contained'>Approve</Button>
+            <Button variant='contained' color='error'>Reject</Button>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
