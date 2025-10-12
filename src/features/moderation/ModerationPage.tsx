@@ -1,7 +1,7 @@
 import toastNotify from "@/shared/components/toastNotify"
 import { useConfirm } from "@/shared/hooks/useConfirm"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
-import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography } from "@mui/material"
+import { Avatar, Box, Button, Chip, Collapse, Fade, Grid, Stack, Switch, Typography, Zoom } from "@mui/material"
 import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -129,7 +129,6 @@ function ModerationPage() {
         width: 120,
         type: "number",
       },
-      { field: "click_to_contact_count", headerName: t("ContactCount", { ns: "headers" }), width: 100, type: "number" },
       {
         field: "deleted",
         headerName: t("Deleted", { ns: "headers" }),
@@ -157,7 +156,7 @@ function ModerationPage() {
       {
         field: "actions",
         headerName: t("Actions", { ns: "headers" }),
-        width: 120,
+        width: 160,
         renderCell: params => {
           return (
             <Chip 
@@ -179,7 +178,7 @@ function ModerationPage() {
     setFilterType(value)
   }
 
-  const handlePosterApproving = async (rows: ModerationRow[] | GridValidRowModel[]) => {
+  const handlePosterApproving = async (rows: ModerationRow[] | GridValidRowModel[], isApproved: boolean = true) => {
 
     rows.forEach(row => {
       if(row.approved) {
@@ -190,7 +189,9 @@ function ModerationPage() {
 
     const notApprovedRows = rows.filter(row => !row.approved)
     
-    if(notApprovedRows.length && await confirm("Approve poster", `Are you sure you want to approve this poster?`, 'confirm'))
+    const description = isApproved ? "Are you sure you want to approve this poster?" : "Are you sure you want to reject this poster?"
+
+    if(notApprovedRows.length && await confirm("Approve poster", description, isApproved ? 'confirm' : 'delete'))
     {
       try {
         const posterList = notApprovedRows.map((row) => {
@@ -198,7 +199,7 @@ function ModerationPage() {
             company_id: row.company_id,
             poster_id: row.poster_id,
             title: row.title,
-            approved: true
+            approved: isApproved
           }
         })
 
@@ -206,7 +207,6 @@ function ModerationPage() {
           posterList: posterList
         })
         
-        console.log(res) 
         if (res.data?.resultCode == RESULTCODE.SUCCESS) {
           toastNotify(
             res.data?.resultMsg,
@@ -237,7 +237,7 @@ function ModerationPage() {
 
       if(values)
       {
-        handlePosterApproving(values)
+        await handlePosterApproving(values)
       }
     }
   }
@@ -245,6 +245,13 @@ function ModerationPage() {
     if(row)
     {
       setSelectedItem(row)
+    }
+  }
+
+  const handleItenApproveReject = async (isApproved: boolean) => {
+    if(selectedItem) 
+    {
+      await handlePosterApproving([selectedItem], isApproved)
     }
   }
   return (
@@ -279,8 +286,8 @@ function ModerationPage() {
           </Button>
         </Box>
       </Stack>
-      <Grid container spacing={2} columns={{ md: 12 }} sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
-        <Grid size={{ md: 9 }} >
+      <Grid container spacing={2} columns={{ md: 12 }} sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "auto" }}>
+        <Grid size={{ md: selectedItem ? 9 : 12 }} >
           <DataGrid 
             key={i18n.language}
             apiRef={dataGridApiRef}
@@ -307,24 +314,32 @@ function ModerationPage() {
             onRowClick={(params) => handleRowClicked(params.row as ModerationRow)}
           /> 
         </Grid>
-        <Grid container flexDirection='column' size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1, p:2 }}>
-          <Grid sx={{ mb: 4 }}>
-            <Typography variant='h4' sx={{ mb: 1 }}>
-              {selectedItem?.title}
-            </Typography>
-            <Typography>
-              {selectedItem?.description}
-            </Typography>
+        <Zoom in={selectedItem ? true : false}>
+          <Grid display={selectedItem ? "flex" : "none"} container flexDirection='column' size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1, p:2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", height: "100%", gap: 2 }}>
+              <Box sx={{ mb: 2, overflow: "hidden" }}>
+                <Typography variant='h4' sx={{ mb: 1 }}>
+                  {selectedItem?.title}
+                </Typography>
+                <Typography>
+                  {selectedItem?.description}
+                </Typography>
+              </Box>
+              <Box sx={{ width: "100%", height:"50%", maxWidth: 400, maxHeight: { sm:200, md: 400 }, objectFit: 'cover', borderRadius: 4 }}>
+                <img src={selectedItem?.image_url} style={{ height: "100%", width: "100%", borderRadius: 4 }}/>
+              </Box>
+              <Box sx={{ display: "flex", gap: 4 }}>
+                <Button sx={{ fontSize: { sm: 10, md: 12, lg:14 } }} variant='contained' onClick={() => handleItenApproveReject(true)}>{t("Approve", { ns: "buttons" })}</Button>
+                <Button sx={{ fontSize: { sm: 10, md: 12, lg:14 } }} variant='contained' color='error' onClick={() => handleItenApproveReject(false)}>{t("Reject", { ns: "buttons" })}</Button>
+              </Box>
+              <Box sx={{ mt:'auto', display: "flex", justifyContent  : "flex-end" }}>
+                <Button variant='outlined' color='error' onClick={() => setSelectedItem(undefined)} sx={{ mt: 2 }}>{t("Close", { ns: "buttons" })}</Button>
+              </Box>
+            </Box>
           </Grid>
-          <Grid sx={{ width: "100%", height:"50%", objectFit: 'cover', borderRadius: 4 }}>
-            <img src={selectedItem?.image_url} style={{ height: "100%", width: "100%", borderRadius: 4 }}/>
-          </Grid>
-          <Grid>
-            <Button variant='contained'>Approve</Button>
-            <Button variant='contained' color='error'>Reject</Button>
-          </Grid>
-        </Grid>
+        </Zoom>
       </Grid>
+      {ConfirmDialog}
     </Grid>
   ) 
 }

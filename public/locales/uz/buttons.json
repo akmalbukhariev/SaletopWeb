@@ -4,5 +4,8 @@
     "ApproveAll": "Hammasini tasdiqlash",
     "CreateAdmin": "Admin qo`shish",
     "CreateNotification": "Bildirish yaratish",
-    "Send": "Jo`natish"
+    "Send": "Jo`natish",
+    "Approve": "Tasdiqlash",
+    "Reject": "Rad etish",
+    "Close": "Yopish"
 }

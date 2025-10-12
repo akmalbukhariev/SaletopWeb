@@ -4,5 +4,8 @@
     "ApproveAll": "Approve All",
     "CreateAdmin": "Create Admin",
     "CreateNotification": "Create Notification",
-    "Send": "Send"
+    "Send": "Send",
+    "Approve": "Approve",
+    "Reject": "Reject",
+    "Close": "Close"
 }

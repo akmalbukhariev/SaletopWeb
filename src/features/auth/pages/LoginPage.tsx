@@ -2,14 +2,14 @@ import { Box, Typography } from "@mui/material"
 import LoginForm from "../components/LoginForm" 
 
 function LoginPage() {
-  const APP_PREFIX = import.meta.env.VITE_APP_NAME || "default"
-  const TOKEN_KEY = `${APP_PREFIX}_token`
-  const USER_KEY = `${APP_PREFIX}_user`
+  // const APP_PREFIX = import.meta.env.VITE_APP_NAME || "default"
+  // const TOKEN_KEY = `${APP_PREFIX}_token`
+  // const USER_KEY = `${APP_PREFIX}_user`
   
-  if(localStorage.getItem(TOKEN_KEY) || localStorage.getItem(USER_KEY)){
-    localStorage.removeItem(TOKEN_KEY)
-    localStorage.removeItem(USER_KEY)
-  }
+  // if(localStorage.getItem(TOKEN_KEY) || localStorage.getItem(USER_KEY)){
+  //   localStorage.removeItem(TOKEN_KEY)
+  //   localStorage.removeItem(USER_KEY)
+  // }
 
   return (
     <Box
