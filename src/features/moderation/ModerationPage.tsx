@@ -1,7 +1,7 @@
 import toastNotify from "@/shared/components/toastNotify"
 import { useConfirm } from "@/shared/hooks/useConfirm"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
-import { Avatar, Box, Button, Chip, Collapse, Fade, Grid, Stack, Switch, Typography, Zoom } from "@mui/material"
+import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography, Zoom } from "@mui/material"
 import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -264,7 +264,7 @@ function ModerationPage() {
         p: 2,
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
+        overflow: "auto",
       }}
     >
       <Stack
@@ -315,7 +315,7 @@ function ModerationPage() {
           /> 
         </Grid>
         <Zoom in={selectedItem ? true : false}>
-          <Grid display={selectedItem ? "flex" : "none"} container flexDirection='column' size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1, p:2 }}>
+          <Grid display={selectedItem ? "flex" : "none"} container flexDirection='column' size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1, p:2, overflow: 'hidden' }}>
             <Box sx={{ display: "flex", flexDirection: "column", height: "100%", gap: 2 }}>
               <Box sx={{ mb: 2, overflow: "hidden" }}>
                 <Typography variant='h4' sx={{ mb: 1 }}>
@@ -325,15 +325,42 @@ function ModerationPage() {
                   {selectedItem?.description}
                 </Typography>
               </Box>
-              <Box sx={{ width: "100%", height:"50%", maxWidth: 400, maxHeight: { sm:200, md: 400 }, objectFit: 'cover', borderRadius: 4 }}>
-                <img src={selectedItem?.image_url} style={{ height: "100%", width: "100%", borderRadius: 4 }}/>
+              <Box 
+                sx={{ 
+                  width: "100%", 
+                  maxWidth: {
+                    xs: 80,
+                    sm: 100,
+                    md: 180,
+                    lg: 400  
+                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: 'center',
+                  height: {
+                    xs: 80,
+                    sm: 100,
+                    md: 180,
+                    lg: 400  
+                  }, 
+                  borderRadius: 4,
+                  overflow: 'hidden'
+                }}>
+                <img 
+                  src={selectedItem?.image_url} 
+                  style={{ 
+                    height: "100%", 
+                    width: "100%",
+                    objectFit: 'cover', 
+                    borderRadius: 4 
+                  }}/>
               </Box>
               <Box sx={{ display: "flex", gap: 4 }}>
-                <Button sx={{ fontSize: { sm: 10, md: 12, lg:14 } }} variant='contained' onClick={() => handleItenApproveReject(true)}>{t("Approve", { ns: "buttons" })}</Button>
-                <Button sx={{ fontSize: { sm: 10, md: 12, lg:14 } }} variant='contained' color='error' onClick={() => handleItenApproveReject(false)}>{t("Reject", { ns: "buttons" })}</Button>
+                <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' onClick={() => handleItenApproveReject(true)}>{t("Approve", { ns: "buttons" })}</Button>
+                <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' color='error' onClick={() => handleItenApproveReject(false)}>{t("Reject", { ns: "buttons" })}</Button>
               </Box>
               <Box sx={{ mt:'auto', display: "flex", justifyContent  : "flex-end" }}>
-                <Button variant='outlined' color='error' onClick={() => setSelectedItem(undefined)} sx={{ mt: 2 }}>{t("Close", { ns: "buttons" })}</Button>
+                <Button variant='outlined' sx={{ mt: 2, fontSize: { sm: 10, md: 9, lg:14 } }} color='error' onClick={() => setSelectedItem(undefined)} >{t("Close", { ns: "buttons" })}</Button>
               </Box>
             </Box>
           </Grid>
