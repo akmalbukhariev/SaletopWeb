@@ -1,6 +1,6 @@
-import { ENDPOINTS } from "@/core/auth/api/endpoints" 
-import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth" 
-import { createApi } from "@reduxjs/toolkit/query/react" 
+import { ENDPOINTS } from "@/core/auth/api/endpoints"
+import usefetchBaseQueryWithAuth from "@/shared/hooks/usefetchBaseQueryWithAuth"
+import { createApi } from "@reduxjs/toolkit/query/react"
 
 const companyAPI = createApi({
   reducerPath: "companyAPI",
@@ -64,6 +64,12 @@ const companyAPI = createApi({
       }),
       providesTags: ["CompanyItems"],
     }),
+    deletePosterById: builder.query({
+      query: (poster_id: string | number ) => ({
+        url: ENDPOINTS.COMPANIES.DELETE_POSTER_BY_ID(poster_id),
+        method: "DELETE"
+      })
+    })
   }),
 }) 
 
@@ -76,5 +82,6 @@ export const {
   useChangeCompanyStatusMutation,
   useGetPosterListQuery,
   useApprovalPosterListMutation,
-  useGetNewAddedPosterListQuery
+  useGetNewAddedPosterListQuery,
+  useDeletePosterByIdQuery
 } = companyAPI 

@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   useApprovalPosterListMutation,
+  useDeletePosterByIdQuery,
   useGetNewAddedPosterListQuery,
   useGetPosterListQuery
 } from "../company/api/companyAPI"
@@ -154,8 +155,8 @@ function ModerationPage() {
         width: 170,
       },
       {
-        field: "actions",
-        headerName: t("Actions", { ns: "headers" }),
+        field: "approved",
+        headerName: t("Status", { ns: "headers" }),
         width: 160,
         renderCell: params => {
           return (
@@ -163,13 +164,13 @@ function ModerationPage() {
               clickable 
               label={ params.row.approved === null ? t("Pending", { ns:"texts" }) : params.row.approved ? t("Approved", { ns: "texts" }) : t("NotApproved", { ns: "texts" }) } 
               color={params.row.approved === null ? "warning" : params.row.approved ? "success" : "error"}
-              onClick={() => {
-                handlePosterApproving([params.row])
-              }}  
+              // onClick={() => {
+              //   handlePosterApproving([params.row])
+              // }}  
             />
           ) 
         },
-      }
+      },
     ],
     [t]
   ) 
@@ -248,12 +249,27 @@ function ModerationPage() {
     }
   }
 
-  const handleItenApproveReject = async (isApproved: boolean) => {
+  const handleItemApproveReject = async (isApproved: boolean) => {
     if(selectedItem) 
     {
       await handlePosterApproving([selectedItem], isApproved)
     }
   }
+
+  const handleItemDelete = async () => {
+    if(selectedItem)
+    {
+      if(await confirm("Delete poster", "Are you sure you want to delete the poster?", 'delete')){
+        //        setSelectedItem(undefined)
+        const { data, isSuccess } = await useDeletePosterByIdQuery(selectedItem.poster_id)
+        console.log(data)
+      }
+      else{
+      }
+    }
+  }
+
+
   return (
     <Grid
       sx={{
@@ -343,7 +359,7 @@ function ModerationPage() {
                     md: 180,
                     lg: 400  
                   }, 
-                  borderRadius: 4,
+                  borderRadius: 2,
                   overflow: 'hidden'
                 }}>
                 <img 
@@ -352,14 +368,15 @@ function ModerationPage() {
                     height: "100%", 
                     width: "100%",
                     objectFit: 'cover', 
-                    borderRadius: 4 
+                    borderRadius: 2 
                   }}/>
               </Box>
-              <Box sx={{ display: "flex", gap: 4 }}>
-                <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' onClick={() => handleItenApproveReject(true)}>{t("Approve", { ns: "buttons" })}</Button>
-                <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' color='error' onClick={() => handleItenApproveReject(false)}>{t("Reject", { ns: "buttons" })}</Button>
+              <Box sx={{ display: "flex", justifyContent: 'space-between' }}>
+                <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' onClick={() => handleItemApproveReject(true)}>{t("Approve", { ns: "buttons" })}</Button>
+                <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' color='error' onClick={() => handleItemApproveReject(false)}>{t("Reject", { ns: "buttons" })}</Button>
               </Box>
-              <Box sx={{ mt:'auto', display: "flex", justifyContent  : "flex-end" }}>
+              <Box sx={{ mt:'auto', display: "flex", justifyContent  : 'space-between' }}>
+                <Button variant='contained' sx={{ mt: 2, fontSize: { sm: 10, md: 9, lg:14 } }} color='error' onClick={() => handleItemDelete()} >{t("Delete", { ns: "texts" })}</Button>
                 <Button variant='outlined' sx={{ mt: 2, fontSize: { sm: 10, md: 9, lg:14 } }} color='error' onClick={() => setSelectedItem(undefined)} >{t("Close", { ns: "buttons" })}</Button>
               </Box>
             </Box>
