@@ -1,0 +1,13 @@
+{
+    "logOut": "Haqiqatan tizimdan chiqmoqchimisiz?",
+    "deleteAdmin": "Bu adminni o'chirmoqchimisiz?",
+    "changeCompanyStatusBlock": "Kompaniyani bloklamoqchimisiz?",
+    "changeCompanyStatusUnblock": "Kompaniyani blokdan chiqarmoqchimisiz?",
+    "changeCompanyDelete": "Kompaniyani o'chirilgan deb belgilamoqchimisiz?",
+    "changeCompanyUnDelete": "Kompaniyani o'chirilmagan deb belgilamoqchimisiz?",
+    "deletePoster": "Ushbu posterni o'chirmoqchimisiz?",
+    "changeUserStatusBlock": "Foydalanuvchini bloklamoqchimisiz?",
+    "changeUserStatusUnblock": "Foydalanuvchini blokdan chiqarmoqchimisiz?",
+    "changeUserDelete": "Foydalanuvchini o'chirilgan deb belgilamoqchimisiz?",
+    "changeUserUnDelete": "Foydalanuvchini o'chirilmagan deb belgilamoqchimisiz?"
+}

@@ -3,11 +3,11 @@ import { useConfirm } from "@/shared/hooks/useConfirm"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
 import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography, Zoom } from "@mui/material"
 import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
-import { useEffect, useMemo, useState } from "react"
+import { use, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   useApprovalPosterListMutation,
-  useDeletePosterByIdQuery,
+  useDeletePosterByIdMutation,
   useGetNewAddedPosterListQuery,
   useGetPosterListQuery
 } from "../company/api/companyAPI"
@@ -33,6 +33,8 @@ function ModerationPage() {
   // to see selected item photos
   const [selectedItem, setSelectedItem] = useState<ModerationRow>()
 
+  const [ deletePosterById ] = useDeletePosterByIdMutation()
+  
   //APi call
   const { 
     data: allPosterList, 
@@ -259,10 +261,24 @@ function ModerationPage() {
   const handleItemDelete = async () => {
     if(selectedItem)
     {
-      if(await confirm("Delete poster", "Are you sure you want to delete the poster?", 'delete')){
-        //        setSelectedItem(undefined)
-        const { data, isSuccess } = await useDeletePosterByIdQuery(selectedItem.poster_id)
-        console.log(data)
+      if(await confirm(
+        "Delete poster", 
+        t("deletePoster", { ns: "messages" }), 
+        'delete')){
+        deletePosterById(selectedItem.poster_id).then(res => {
+          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+            setSelectedItem(undefined)
+            toastNotify(
+              res.data?.resultMsg,
+              "success"
+            ) 
+          } else {
+            toastNotify(
+              res.data?.resultMsg,
+              "error",
+            ) 
+          }
+        })
       }
       else{
       }

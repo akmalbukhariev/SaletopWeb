@@ -1,0 +1,20 @@
+{
+    "Search": "Қидириш",
+    "SearchPlaceholder": "Телефон рақам билан қидириш",
+    "AdminDesc": "Админ ва супер админларни бошқариш",
+    "Undelete": "Тиклаш",
+    "Delete": "Ўчириш",
+    "DeleteSoft": "Ўчириш (soft)",
+    "SendNotification": "Билдириш юбориш",
+    "Unblock": "Блокдан чиқариш",
+    "Block": "Блоклаш",
+    "AddNotification": "Билдириш қўшиш",
+    "Approved": "Тасдиқланган",
+    "NotApproved": "Тасдиқланмаган",
+    "NotificationDesc": "Махсус ёки умумий билдиришлар яратинг",
+    "Language": "Тил",
+    "Pending": "Кутилмоқда",
+    "Failed": "Хатолик",
+    "Cancel": "Бекор қилиш",
+    "Confirm": "Тасдиқлаш"
+}

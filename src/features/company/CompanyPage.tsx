@@ -36,7 +36,7 @@ function CompanyPage() {
   const { confirm, ConfirmDialog } = useConfirm()
 
   // Translation
-  const { t, i18n } = useTranslation(["headers", "buttons", "sidebar", "titles", "placeholders", "texts"])
+  const { t, i18n } = useTranslation(["headers", "buttons", "sidebar", "titles", "placeholders", "texts", "messages"])
 
   const navigate = useAppNavigation()
   //TO use API
@@ -225,7 +225,13 @@ function CompanyPage() {
     status?: string
   ) => {
     if (phone_number && status) {
-      if(await confirm("Change company status", `Are you sure you want to change this company status to ${status == 'BANNED' ? "BANNED" : "UNBLOCK"}?`, 'confirm'))
+
+      const message = status == 'BANNED' ? t("changeCompanyStatusBlock", { ns: "messages" }) : t("changeCompanyStatusUnblock", { ns: "messages" })
+
+      if(await confirm(
+        "Change company status", 
+        message, 
+        'confirm'))
       {
         try {
           const res = await changeCompanyStatus({ phone_number, status }) 
@@ -259,7 +265,11 @@ function CompanyPage() {
     phone_number: string
   ) => {
     if (phone_number) {
-      if(await confirm("Delete soft?", `Are you sure you want to mark this company as ${deleted ? "deleted" : "not deleted"}?`, 'delete'))
+      const message = deleted ? t("changeCompanyDelete", { ns: "messages" }) : t("changeCompanyUnDelete", { ns: "messages" })
+      if(await confirm(
+        "Delete soft?", 
+        message, 
+        'delete'))
       {
         try {
           const res = await changeCompanyDeletionStatus({ deleted, phone_number }) 

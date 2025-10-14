@@ -1,6 +1,7 @@
 import { Close } from "@mui/icons-material"
 import { Box, Button, IconButton, Modal, Typography } from "@mui/material"
 import React from "react"
+import { useTranslation } from "react-i18next"
 
 let confirmResolve: ((value: boolean) => void ) | null = null
 
@@ -9,6 +10,8 @@ export function useConfirm() {
   const [message, setMessage] = React.useState("")
   const [title, setTitle] = React.useState("")
   const [type, setType] = React.useState < "delete" | 'confirm' > ("delete")
+
+  const { t } = useTranslation(["texts"])
 
   const confirm = (title: string, msg: string, type: "delete" | 'confirm') => {
     setMessage(msg)
@@ -39,9 +42,9 @@ export function useConfirm() {
         </Box>
         <Typography sx={{ my: 2, }}>{message}</Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-          <Button onClick={() => handleClose(false)}>Cancel</Button>
+          <Button onClick={() => handleClose(false)}>{t("Cancel", { ns: "texts" })}</Button>
           <Button onClick={() => handleClose(true)} color= {type === "delete" ? "error" : "primary"} variant="contained" sx={{ ml: 1 }}>
-            Confirm
+            {t("Confirm", { ns: "texts" })}
           </Button>
         </Box>
       </Box>

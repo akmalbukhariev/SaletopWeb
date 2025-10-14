@@ -14,5 +14,7 @@
     "NotificationDesc": "Create special and general notifications.",
     "Language": "Language",
     "Pending": "Pending",
-    "Failed": "Failed"
+    "Failed": "Failed",
+    "Cancel": "Cancel",
+    "Confirm": "Confirm"
 }

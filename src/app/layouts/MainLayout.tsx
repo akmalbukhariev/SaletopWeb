@@ -60,7 +60,7 @@ function MainLayout() {
   const handleLogout = async () => {
     if(await confirm(
       "Logout",
-      "Are you sure you want to logout?",
+      t("Are you sure you want to logout?", { ns: "messages" }),
       'confirm'
     ))
     {
@@ -136,6 +136,7 @@ function MainLayout() {
                 <Select value={language} defaultValue={"uz"} id="demo-simple-select-label" label={t("Language", { ns: "texts" })} onChange={(e) => handleLanguageChange(e.target.value)}>
                   <MenuItem value="en">EN</MenuItem>
                   <MenuItem value="uz">UZ</MenuItem>
+                  <MenuItem value="uz-Cyrl">KIRIL</MenuItem>
                 </Select>
               </FormControl>
               <Box sx={{ display: "flex", alignItems: "center" }}>

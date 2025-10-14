@@ -14,5 +14,7 @@
     "NotificationDesc": "Maxsus yoki umumiy bildirishlar yarating",
     "Language": "Til",
     "Pending": "Kutilmoqda",
-    "Failed": "Xatolik"
+    "Failed": "Xatolik",
+    "Cancel": "Bekor qilish",
+    "Confirm": "Tasdiqlash"
 }

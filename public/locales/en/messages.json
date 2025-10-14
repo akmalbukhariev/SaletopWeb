@@ -1,0 +1,14 @@
+{
+    "logOut": "Are you sure you want to logout?",
+    "deleteAdmin": "Are you sure you want to delete this admin?",
+    "changeCompanyStatusBlock": "Are you sure you want to block this company?",
+    "changeCompanyStatusUnblock": "Are you sure you want to unblock this company?",
+    "changeCompanyDelete": "Are you sure you want to mark this company as deleted?",
+    "changeCompanyUnDelete": "Are you sure you want to mark this company as not deleted?",
+    "deletePoster": "Are you sure you want to delete this poster?",
+    "changeUserStatusBlock": "Are you sure you want to block this user?",
+    "changeUserStatusUnblock": "Are you sure you want to unblock this user?",
+    "changeUserDelete": "Are you sure you want to mark this user as deleted?",
+    "changeUserUnDelete": "Are you sure you want to mark this user as not deleted?"
+
+}

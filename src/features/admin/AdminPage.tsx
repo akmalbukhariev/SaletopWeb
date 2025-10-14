@@ -85,7 +85,7 @@ function AdminPage() {
 
       if(await confirm(
         "Delete Admin",
-        "Are you sure you want to delete this admin?",
+        t("deleteAdmin", { ns: "messages" }),
         'delete'
       ))
       {

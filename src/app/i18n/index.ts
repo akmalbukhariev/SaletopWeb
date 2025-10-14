@@ -19,7 +19,7 @@ i18n
     backend: {
       loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`
     },
-    ns: ["sidebar", "buttons", "titles", "texts", "headers", "placeholders"],  // namespacelar ro‘yxati
+    ns: ["sidebar", "buttons", "titles", "texts", "headers", "placeholders", "messages"],  // namespacelar ro‘yxati
     //defaultNS: "common", // agar siz default namespace ishlatmoqchi bo‘lsangiz
     interpolation: {
       escapeValue: false // react already safes from xss

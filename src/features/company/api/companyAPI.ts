@@ -64,11 +64,12 @@ const companyAPI = createApi({
       }),
       providesTags: ["CompanyItems"],
     }),
-    deletePosterById: builder.query({
-      query: (poster_id: string | number ) => ({
+    deletePosterById: builder.mutation ({
+      query:  (poster_id: string | number ) => ({
         url: ENDPOINTS.COMPANIES.DELETE_POSTER_BY_ID(poster_id),
         method: "DELETE"
-      })
+      }),
+      invalidatesTags: ["CompanyItems"],
     })
   }),
 }) 
@@ -83,5 +84,5 @@ export const {
   useGetPosterListQuery,
   useApprovalPosterListMutation,
   useGetNewAddedPosterListQuery,
-  useDeletePosterByIdQuery
+  useDeletePosterByIdMutation
 } = companyAPI 

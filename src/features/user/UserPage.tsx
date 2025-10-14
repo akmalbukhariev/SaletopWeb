@@ -205,7 +205,11 @@ function UserPage() {
     status: string
   ) => {
     if (phone_number && status) {
-      if(await confirm("Change User status", `Are you sure you want to change this user status to ${status == 'BANNED' ? "BANNED" : "UNBLOCK"}?`, 'confirm'))
+      const message = status == 'BANNED' ? t("changeUserStatusBlock", { ns: "messages" }) : t("changeUserStatusUnblock", { ns: "messages" })
+      if(await confirm(
+        "Change User status", 
+        message,
+        'confirm'))
       {
         try {
           const res = await changeUserStatus({ phone_number, status }) 
@@ -240,8 +244,11 @@ function UserPage() {
   ) => {
     
     if (phone_number) {
-
-      if(await confirm("Delete soft?", `Are you sure you want to mark this user as ${deleted ? "deleted" : "not deleted"}?`, 'delete'))
+      const message = deleted ? t("changeUserDelete", { ns: "messages" }) : t("changeUserUnDelete", { ns: "messages" })
+      if(await confirm(
+        "Delete soft?", 
+        message, 
+        'delete'))
       {
         try {
           const res = await changeUserDeletionStatus({ deleted, phone_number }) 
