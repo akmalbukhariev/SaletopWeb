@@ -8,12 +8,16 @@ import {
   Popper,
   Stack,
   Switch,
+  TextField,
   Typography,
 } from "@mui/material" 
 import { DataGrid, GridColDef } from "@mui/x-data-grid" 
 import { CompanyRow } from "@/features/company/type/CompanyType" 
-import { useEffect, useMemo, useState, MouseEvent, useDebugValue } from "react" 
-import { useChangeCompanyDeletionStatusMutation, useGetAllCompaniesQuery } from "./api/companyAPI" 
+import { useEffect, useMemo, useState, MouseEvent, useRef } from "react" 
+import { 
+  useChangeCompanyDeletionStatusMutation, 
+  useGetAllCompaniesQuery,
+  useGetCompanyByPhoneNumQuery } from "./api/companyAPI" 
 import { useChangeCompanyStatusMutation } from "./api/companyAPI" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import toastNotify from "@/shared/components/toastNotify"
@@ -33,6 +37,11 @@ function CompanyPage() {
   const [openAction, setOpenAction] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
+  const [searchPhoneNumber, setSearchPhoneNumber] = useState("")
+  const [activeSearch, setActiveSearch] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+
   const { confirm, ConfirmDialog } = useConfirm()
 
   // Translation
@@ -45,36 +54,70 @@ function CompanyPage() {
 
   const {
     data: allCompanies,
-    isLoading,
-    isSuccess,
-    isError,
+    isSuccess: isAllSuccess,
+    isLoading : isAllLoading,
+    isError: isAllError
   } = useGetAllCompaniesQuery({
     offset: pageFormat.offset * pageFormat.pageSize,
     pageSize: pageFormat.pageSize,
+  }, {
+    skip: activeSearch,
   }) 
 
+  const {
+    data: searchUsers,
+    isSuccess: isSearchSuccess,
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+  } = useGetCompanyByPhoneNumQuery(searchPhoneNumber, {
+    skip: !activeSearch || searchPhoneNumber?.trim() === "",
+  })
+
   useEffect(() => {
-    if (isSuccess && allCompanies?.resultData) {
-      setRows(allCompanies.resultData.data || []) 
-      setTotalRows(allCompanies.resultData.total) 
+    if(activeSearch){
+      if (isSearchSuccess && searchUsers?.resultData) {
+        const searchResult = [searchUsers?.resultData]
+
+        setRows(searchResult || []) 
+        setTotalRows(searchUsers.resultData.total) 
+      } else if(isSearchSuccess && searchUsers.resultData == null){
+        setRows([])
+        setTotalRows(0)
+      }
+  
+      if(isSearchError && searchUsers?.resultCode !== RESULTCODE.SUCCESS) {
+        toastNotify(
+          searchUsers?.resultMsg || "Failed to fetch companies",
+          "error",
+        )
+      }
     }
 
-    if(isError && allCompanies?.resultCode !== RESULTCODE.SUCCESS) {
-      toastNotify(
-        allCompanies?.resultMsg || "Failed to fetch companies",
-        "error",
-      )
+    if(!activeSearch) {
+      if (isAllSuccess && allCompanies?.resultData) {
+        setRows(allCompanies.resultData.data || []) 
+        setTotalRows(allCompanies.resultData.total) 
+      }
+
+      if(isAllError && allCompanies?.resultCode !== RESULTCODE.SUCCESS) {
+        toastNotify(
+          allCompanies?.resultMsg || "Failed to fetch companies",
+          "error",
+        )
+      }
     }
+   
   }, [
-    isSuccess, 
+    isAllSuccess,
+    isSearchSuccess,
+    searchUsers, 
     allCompanies,
-    pageFormat.pageSize
+    activeSearch
   ]) 
 
   const id = openAction ? 'simple-popper' : undefined
   
   const handleActionClick = (user: CompanyRow) => (event: MouseEvent<HTMLButtonElement>) => {
-    console.log("handleActionClick", user)
     setSelectedCompany(user)
     setAnchorEl(event.currentTarget) 
     setOpenAction((prev) => !prev)
@@ -108,28 +151,12 @@ function CompanyPage() {
         flex: 1,
         minWidth: 150,
       },
-      { field: "business_type", headerName: t("Type"), width: 130 },
+      { field: "business_type", headerName: t("Type"), width: 150, flex: 1, minWidth: 100, },
       { field: "phone_number", headerName: t("Phone"), width: 150 },
-      {
-        field: "email",
-        headerName: t("Email"),
-        width: 220,
-        flex: 1,
-        minWidth: 100,
-      },
-      {
-        field: "active_products",
-        headerName: t("ActiveProducts"),
-        width: 120,
-        type: "number",
-      },
-      {
-        field: "non_active_products",
-        headerName: t("NonActiveProducts"),
-        width: 120,
-        type: "number",
-      },
-      { field: "rating", headerName: t("Rating"), width: 100, type: "number" },
+      // { field: "email", headerName: t("Email"), width: 220, flex: 1, minWidth: 100, },
+      // { field: "active_products", headerName: t("ActiveProducts"), width: 120, type: "number", },
+      // { field: "non_active_products", headerName: t("NonActiveProducts"), width: 120, type: "number", },
+      //{ field: "rating", headerName: t("Rating"), width: 100, type: "number" },
       {
         field: "status",
         headerName: t("Status"),
@@ -173,22 +200,10 @@ function CompanyPage() {
         ),
       },
       { field: "working_hours", headerName: t("WorkingHours"), width: 170 },
-      { field: "telegram_link", headerName: t("Telegram"), width: 170, flex: 1, maxWidth: 170 },
-      { field: "social_profile_link", headerName: t("SocialMedia"), width: 170, flex: 1, maxWidth: 170 },
-      {
-        field: "user_need_to_know",
-        headerName: t("NeedToKnow"),
-        width: 180,
-        flex: 1,
-        minWidth: 100,
-      },
-      {
-        field: "about",
-        headerName: t("About"),
-        width: 180,
-        flex: 1,
-        minWidth: 100,
-      },
+      //{ field: "telegram_link", headerName: t("Telegram"), width: 170, flex: 1, maxWidth: 170 },
+      //{ field: "social_profile_link", headerName: t("SocialMedia"), width: 170, flex: 1, maxWidth: 170 },
+      //{ field: "user_need_to_know", headerName: t("NeedToKnow"), width: 180, flex: 1, minWidth: 100, },
+      // { field: "about", headerName: t("About"), width: 180, flex: 1, minWidth: 100, },
       {
         field: "violation_count",
         headerName: t("ViolationCount"),
@@ -220,6 +235,13 @@ function CompanyPage() {
     [t]
   ) 
 
+  const paginationModel = useMemo(() => {
+    return {
+      page: pageFormat.offset,
+      pageSize: pageFormat.pageSize,
+    }
+  }, [pageFormat.offset, pageFormat.pageSize])
+  
   const handleUserStatusChange = async (
     phone_number?: string,
     status?: string
@@ -235,7 +257,6 @@ function CompanyPage() {
       {
         try {
           const res = await changeCompanyStatus({ phone_number, status }) 
-          console.log(res) 
           if (res.data?.resultCode == RESULTCODE.SUCCESS) {
             toastNotify(
               res.data?.resultMsg,
@@ -273,9 +294,7 @@ function CompanyPage() {
       {
         try {
           const res = await changeCompanyDeletionStatus({ deleted, phone_number }) 
-          console.log(res) 
           if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-            console.log(res) 
             toastNotify(
               res.data?.resultMsg,
               "success",
@@ -309,6 +328,25 @@ function CompanyPage() {
       })
     }
   }
+  
+  const handleSearchReset = () => {
+    // Input ni tozalash
+    if (searchInputRef.current) {
+      searchInputRef.current.value = ""
+    }
+    
+    setSearchPhoneNumber("")
+    setActiveSearch(false)
+  }
+
+  const handleSearchButtonClick = () => {
+    const phoneNumber = searchInputRef.current?.value || ""
+    console.log("phoneNumber", phoneNumber)
+    if (phoneNumber) {
+      setSearchPhoneNumber(phoneNumber)
+      setActiveSearch(true)
+    }
+  }
    
   return (
     <>
@@ -331,6 +369,28 @@ function CompanyPage() {
           sx={{ mb: 2, flexShrink: 0 }}
         >
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Companies", { ns: 'sidebar' })}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <TextField
+              inputRef={searchInputRef}
+              size="small"
+              label={t("Search", { ns: 'texts' }) + "..."}
+              variant="outlined"
+              defaultValue={searchPhoneNumber}
+              sx={{ width: { xs: '100%', sm: 'auto', lg: 300 } }}
+              onChange={() => setActiveSearch(false)}
+              onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                  handleSearchButtonClick()  
+                }
+              }}
+            />
+            <Button variant='contained' onClick={handleSearchButtonClick}>
+              {t("Search", { ns: "texts" })}
+            </Button>
+            <Button variant='contained' color='secondary' onClick={handleSearchReset}>
+              {t("Reset", { ns: "buttons" })}
+            </Button>
+          </Box>
         </Stack>
         <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden" }}>
           <DataGrid 
@@ -339,11 +399,8 @@ function CompanyPage() {
             columns={columns} 
             getRowId={r => r.company_id} 
             pageSizeOptions={[5, 10, 20, 25]}
-            paginationModel={{
-              page: pageFormat.offset,
-              pageSize: pageFormat.pageSize,
-            }}
-            loading={isLoading}
+            paginationModel={paginationModel}
+            loading={isAllLoading || isSearchLoading}
             rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
             paginationMode="server" // <-- Enable server-side pagination
             onPaginationModelChange={({ page, pageSize }) => {

@@ -11,17 +11,20 @@ import {
   Popper,
   PopperPlacementType,
   Button,
-  // IconButton
+  Stack,
+  Typography,
+  TextField
 } from "@mui/material" 
 import BlockIcon from "@mui/icons-material/Block"
 import DeleteIcon from "@mui/icons-material/Delete"
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid" 
-import { useEffect, useMemo, useState } from "react" 
+import { useEffect, useMemo, useRef, useState } from "react" 
 import {
   useChangeUserDeletionStatusMutation,
   useChangeUserStatusMutation,
   useGetAllUsersQuery,
+  useGetUserByPhoneNumQuery
 } from "./api/UserAPI" 
 import React from "react"
 import { useConfirm } from "@/shared/hooks/useConfirm"
@@ -42,18 +45,40 @@ function UserPage() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
-  const { data: allUsers, isSuccess, isLoading, isError } = useGetAllUsersQuery({
-    offset: pageFormat.offset * pageFormat.pageSize,
-    pageSize: pageFormat.pageSize,
-  }) 
-
-  console.log("allUsers", allUsers)
-
 
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null)
 
+  const [searchPhoneNumber, setSearchPhoneNumber] = useState("")
+
+  const [activeSearch, setActiveSearch] = useState(false)
+
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  const { 
+    data: allUsers, 
+    isSuccess: isAllSuccess, 
+    isLoading: isAllLoading, 
+    isError: isError 
+  } = useGetAllUsersQuery({
+    offset: pageFormat.offset * pageFormat.pageSize,
+    pageSize: pageFormat.pageSize,
+  }, {
+    skip: activeSearch // Skip if activeSearch is true
+  }) 
+
+  const {
+    data: searchUsers,
+    isSuccess: isSearchSuccess,
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+  } = useGetUserByPhoneNumQuery(searchPhoneNumber,
+    {
+      skip: !activeSearch || searchPhoneNumber?.trim() === "" // Skip if activeSearch is false or searchPhoneNumber is empty} 
+    }
+  )
+
   //Translation
-  const { t, i18n } = useTranslation(["headers", "texts"])
+  const { t, i18n } = useTranslation(["headers", "texts", "buttons"])
 
   const [changeUserStatus] = useChangeUserStatusMutation() 
   const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
@@ -61,30 +86,53 @@ function UserPage() {
   const { confirm, ConfirmDialog } = useConfirm()
   const navigate = useNavigate()
 
-
   useEffect(() => {
-    if (isSuccess && allUsers?.resultData) {
-      setRows(allUsers.resultData.data || []) 
-      if (typeof allUsers.resultData.total === "number") {
-        setTotalRows(allUsers.resultData.total) 
+    if(activeSearch) {
+      if (isSearchSuccess && searchUsers?.resultData) {
+        const searchResult = [searchUsers.resultData]
+        setRows(searchResult || []) 
+        if (typeof searchUsers.resultData.total === "number") {
+          setTotalRows(searchUsers.resultData.total) 
+        }
+      }
+      else if(isSearchSuccess && searchUsers.resultData == null){
+        setRows([])
+        setTotalRows(0)
+      }
+  
+      if(isSearchError && searchUsers?.resultCode !== RESULTCODE.SUCCESS) {
+        toastNotify(
+          searchUsers?.resultMsg || "Failed to fetch users",
+          "error",
+        ) 
       }
     }
 
-    if(isError && allUsers?.resultCode !== RESULTCODE.SUCCESS) {
-      toastNotify(
-        allUsers?.resultMsg || "Failed to fetch users",
-        "error",
-      ) 
+    if(!activeSearch) {
+      if (isAllSuccess && allUsers?.resultData) {
+        setRows(allUsers.resultData.data || []) 
+        if (typeof allUsers.resultData.total === "number") {
+          setTotalRows(allUsers.resultData.total) 
+        }
+      }
+
+      if(isError && allUsers?.resultCode !== RESULTCODE.SUCCESS) {
+        toastNotify(
+          allUsers?.resultMsg || "Failed to fetch users",
+          "error",
+        ) 
+      }
     }
   }, [
-    isSuccess, 
+    isAllSuccess,
+    isSearchSuccess, 
     allUsers,
-    pageFormat.pageSize
+    searchUsers,
+    activeSearch
   ]) 
 
   const id = openAction ? 'simple-popper' : undefined
   const handleActionClick = (user: UserRow) => (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("handleActionClick", user)
     setSelectedUser(user)
     setAnchorEl(event.currentTarget) 
     setOpenAction((prev) => !prev)
@@ -93,7 +141,6 @@ function UserPage() {
   const handleActionClose = () => {
     setAnchorEl(null)
     setOpenAction(false)
-
   }
     
   const columns: GridColDef<UserRow>[] = useMemo(
@@ -101,7 +148,7 @@ function UserPage() {
       {
         field: "profile_picture_url",
         headerName: t("Profile", { ns: "headers" }),
-        width: 60,
+        width: 70,
         sortable: false,
         filterable: false,
         renderCell: (params: GridRenderCellParams<UserRow>) => (
@@ -112,11 +159,11 @@ function UserPage() {
           />
         ),
       },
-      { field: "first_name", headerName: t("FirstName", { ns: "headers" }), width: 100 },
-      { field: "last_name", headerName: t("LastName", { ns: "headers" }), width: 100 },
-      { field: "full_name", headerName: t("FullName", { ns: "headers" }), width: 180, flex: 1 },
-      { field: "phone_number", headerName: t("Phone", { ns: "headers" }), width: 140 },
-      { field: "email", headerName: t("Email", { ns: "headers" }), width: 220, flex: 1 },
+      { field: "first_name", headerName: t("FirstName", { ns: "headers" }), width: 150, flex: 1 },
+      // { field: "last_name", headerName: t("LastName", { ns: "headers" }), width: 100 },
+      // { field: "full_name", headerName: t("FullName", { ns: "headers" }), width: 180, flex: 1 },
+      { field: "phone_number", headerName: t("Phone", { ns: "headers" }), width: 150, flex: 1 },
+      // { field: "email", headerName: t("Email", { ns: "headers" }), width: 220, flex: 1 },
       { 
         field: "status",
         headerName: t("Status", { ns: "headers" }),
@@ -197,7 +244,7 @@ function UserPage() {
         },
       },
     ],
-    [t]
+    [i18n.language]
   ) 
 
   const handleUserStatusChange = async (
@@ -213,9 +260,7 @@ function UserPage() {
       {
         try {
           const res = await changeUserStatus({ phone_number, status }) 
-          console.log(res) 
           if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-            console.log(res) 
             toastNotify(
               res.data?.resultMsg,
               "success"
@@ -252,9 +297,7 @@ function UserPage() {
       {
         try {
           const res = await changeUserDeletionStatus({ deleted, phone_number }) 
-          console.log(res) 
           if (res.data?.resultCode == RESULTCODE.SUCCESS) {
-            console.log(res) 
             toastNotify(
               res.data?.resultMsg,
               "success",
@@ -288,6 +331,33 @@ function UserPage() {
     }
   }
 
+  const handleSearchReset = () => {
+   
+    // Input ni tozalash
+    if (searchInputRef.current) {
+      searchInputRef.current.value = ""
+    }
+  
+    setSearchPhoneNumber("")
+    setActiveSearch(false)
+  }
+
+  const handleSearchButtonClick = () => {
+    const phoneNumber = searchInputRef.current?.value || ""
+    console.log("phoneNumber", phoneNumber)
+    if (phoneNumber) {
+      setSearchPhoneNumber(phoneNumber)
+      setActiveSearch(true)
+    }
+  }
+
+  const paginationModel = useMemo(() => {
+    return {
+      page: pageFormat.offset,
+      pageSize: pageFormat.pageSize,
+    }
+  }, [pageFormat.offset, pageFormat.pageSize])
+
   return (
     <>
       <Grid
@@ -302,6 +372,36 @@ function UserPage() {
           overflow: "hidden",
         }}
       >
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mb: 2, flexShrink: 0 }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Users", { ns: 'sidebar' })}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <TextField
+              inputRef={searchInputRef}
+              size="small"
+              label={t("Search", { ns: 'texts' }) + "..."}
+              variant="outlined"
+              defaultValue={searchPhoneNumber}
+              sx={{ width: { xs: '100%', sm: 'auto', lg: 300 } }}
+              onChange={() => setActiveSearch(false)}
+              onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                  handleSearchButtonClick()
+                }
+              }}
+            />
+            <Button variant='contained' onClick={handleSearchButtonClick}>
+              {t("Search", { ns: "texts" })}
+            </Button>
+            <Button variant='contained' color='secondary' onClick={handleSearchReset}>
+              {t("Reset", { ns: "buttons" })}
+            </Button>
+          </Box>
+        </Stack>
         <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
           <DataGrid
             key={i18n.language}
@@ -309,20 +409,9 @@ function UserPage() {
             editMode="row"
             rows={rows || []}
             columns={columns}
-            loading={isLoading}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: pageFormat.pageSize,
-                  page: pageFormat.offset,
-                },
-              },
-            }}
+            loading={isAllLoading || isSearchLoading}
             pageSizeOptions={[5, 10, 25, 50]}
-            paginationModel={{
-              page: pageFormat.offset,
-              pageSize: pageFormat.pageSize,
-            }}
+            paginationModel={paginationModel}
             rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
             paginationMode="server" // <-- Enable server-side pagination
             onPaginationModelChange={({ page, pageSize }) => {

@@ -29,7 +29,6 @@ function LoginForm() {
     setError(null) 
     try {
       const response = await signIn({ admin_id, password }, isRememberMe) 
-      console.log("res", response) 
       if (response.data?.resultCode == RESULTCODE.SUCCESS) {
         localStorage.removeItem(atob("selectedSidebar")) 
         navigate(ROUTES.HOME, { replace: true }) 
@@ -37,7 +36,6 @@ function LoginForm() {
         setError(response.data?.resultMsg || "Login failed") 
       }
     } catch (err) {
-      console.log(err) 
       setError(err instanceof Error ? err.message : "Login failed") 
     } finally {
       setLoading(false) 

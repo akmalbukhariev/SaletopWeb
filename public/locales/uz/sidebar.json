@@ -1,9 +1,9 @@
 {
     "Dashboard": "Boshqaruv",
-    "Users": "Foydalanuvchilar",
-    "Companies": "Kompaniyalar",
+    "Users": "Xaridorlar",
+    "Companies": "Sotuvchilar",
     "Admins": "Adminlar",
-    "Moderation": "Tasdiqlar",
+    "Moderation": "Mahsulot va Tasdiqlash",
     "Notifications": "Bildirishlar",
     "Settings": "Sozlamalar"
 }

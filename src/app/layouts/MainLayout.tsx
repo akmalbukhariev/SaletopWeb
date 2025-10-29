@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, FormControl, Grid, IconButton, InputLabel, MenuItem, Popover, Select, TextField, Typography } from "@mui/material" 
 import SideBar from "./components/SideBar" 
 import { Outlet } from "react-router" 
-import { setSearchValue } from "@/store/slices/searchSlice"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { useState, ChangeEvent, useEffect, MouseEvent } from "react"
 import { useSideBarList } from "@/shared/constants/sideBarList"
@@ -14,9 +13,6 @@ import { useConfirm } from '../../shared/hooks/useConfirm'
 
 function MainLayout() {
 
-  const dispatch = useAppDispatch()
-  const searchValue = useAppSelector(state => state.search.value)
-  const [search, setSearch] = useState("")
   const sideBarList = useSideBarList()
   const [openPopover, setOpenPopover] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -30,15 +26,11 @@ function MainLayout() {
 
   const { confirm, ConfirmDialog } = useConfirm()
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value)
-    dispatch(setSearchValue(event.target.value))
-  }
-
   const userInfo: IUserState = useAppSelector(state => state.user) 
 
   useEffect(() => {
     setLanguage(localStorage.getItem("i18nextLng") || "uz")
+
   }, [language, userInfo])
 
   const handleLanguageChange = (language: string) => {
@@ -79,7 +71,7 @@ function MainLayout() {
           <Box
             sx={{
               p: 2,
-              height: { sm: "70px", lg: "60px", xl: "80px" },
+              height: { sm: "70px", lg: "70px", xl: "80px" },
               borderBottom: "1px solid #d9d9d9",
               justifyContent: "center",
               alignItems: "center",
@@ -106,21 +98,21 @@ function MainLayout() {
           <Box
             sx={{
               borderBottom: "1px solid #d9d9d9",
-              height: { sm: "70px", lg: "60px", xl: "80px" },
+              height: { sm: "70px", lg: "70px", xl: "80px" },
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: 'flex-end',
               p: 4,
             }}
           >
-            <TextField
+            {/* <TextField
               size="small"
               label={t("Search") + "..."}
               variant="outlined"
               value={search}
               sx={{ width: "50%" }}
               onChange={handleSearchChange}
-            />
+            /> */}
             <Box
               sx={{
                 ml: 2,

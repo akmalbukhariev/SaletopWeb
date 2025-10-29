@@ -1,0 +1,120 @@
+            <IconButton id={id} onClick={handleActionClick(params.row)}>
+              <MoreVertIcon />
+            </IconButton>
+          ) 
+        },
+      },
+    ],
+    [i18n.language]
+  ) 
+
+  const handleUserStatusChange = async (
+    phone_number: string,
+    status: string
+  ) => {
+    if (phone_number && status) {
+      const message = status == 'BANNED' ? t("changeUserStatusBlock", { ns: "messages" }) : t("changeUserStatusUnblock", { ns: "messages" })
+      if(await confirm(
+        "Change User status", 
+        message,
+        'confirm'))
+      {
+        try {
+          const res = await changeUserStatus({ phone_number, status }) 
+          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+            toastNotify(
+              res.data?.resultMsg,
+              "success"
+            ) 
+          } else {
+            toastNotify(
+              res.data?.resultMsg,
+              "error",
+            ) 
+          }
+        } catch (error) {
+          toastNotify(
+          error as string,
+          "error",
+          ) 
+        }
+      }
+
+      handleActionClose()
+    }
+  } 
+
+  const handleUserDeletionChange = async (
+    deleted: boolean,
+    phone_number: string
+  ) => {
+    
+    if (phone_number) {
+      const message = deleted ? t("changeUserDelete", { ns: "messages" }) : t("changeUserUnDelete", { ns: "messages" })
+      if(await confirm(
+        "Delete soft?", 
+        message, 
+        'delete'))
+      {
+        try {
+          const res = await changeUserDeletionStatus({ deleted, phone_number }) 
+          if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+            toastNotify(
+              res.data?.resultMsg,
+              "success",
+            ) 
+
+          } else {
+            toastNotify(
+              res.data?.resultMsg,
+              "error",
+            ) 
+          }
+        } catch (error) {
+          toastNotify(
+          error as string,
+          "error",
+          ) 
+        }
+
+        handleActionClose()
+      }
+    }
+  } 
+
+  const handleAddNotification = (phone_number: string): void => {
+
+    if (phone_number) {
+      navigate( {
+        pathname: ROUTES.ADMIN.NOTIFICATIONS.SEND,
+        search: `?company=no&phone_number=${phone_number}`
+      })
+    }
+  }
+
+  const handleSearchReset = () => {
+    setSearchPhoneNumber("")
+    setActiveSearch(false)
+    searchInputRef.current?.innerText = "" 
+  }
+
+  const handleSearchButtonClick = () => {
+    const phoneNumber = searchInputRef.current?.value || ""
+    console.log("phoneNumber", phoneNumber)
+    if (phoneNumber) {
+      setSearchPhoneNumber(phoneNumber)
+      setActiveSearch(true)
+    }
+  }
+
+  const paginationModel = useMemo(() => {
+    return {
+      page: pageFormat.offset,
+      pageSize: pageFormat.pageSize,
+    }
+  }, [pageFormat.offset, pageFormat.pageSize])
+
+  return (
+    <>
+      <Grid
+        sx={{

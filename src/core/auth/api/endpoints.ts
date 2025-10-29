@@ -14,6 +14,11 @@ export const ENDPOINTS = {
     ADMIN_BY_ID: (id: string | number) => `admin/getAdminById/${id}`,
     DELETE_BY_ID: (adminId: string) => `admin/deleteAdminById/${adminId}`,
   },
+  DASHBOARD:{
+    COMPANY_STATISTICS: "company/statistics",
+    USER_STATISTICS: "user/statistics",
+    SYSTEM_STATUS: "system", // Retrieve overall system health
+  },
   USERS: {
     PAGINATED_LIST: "user/getPaginatedUsers",
     CHANGE_STATUS: "user/changeUserStatus",

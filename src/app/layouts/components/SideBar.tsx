@@ -41,7 +41,7 @@ function SideBar({ items }: { items: SideBarProps[] }) {
             key={item.id}
             sx={{
               borderRadius: 2,
-              "&:hover": { backgroundColor: "lightgrey" },
+              "&:hover": { backgroundColor: "lightgrey", overflow: 'hidden' },
             }}
             onClick={() => handleNavigation(item)}
             selected={selectedIndex == item.id}
@@ -49,7 +49,7 @@ function SideBar({ items }: { items: SideBarProps[] }) {
             <ListItemIcon sx={{ minWidth: "30px" }}>
               <item.icon />
             </ListItemIcon>
-            <ListItemText primary={item.name} />
+            <ListItemText sx={{ overflow: 'hidden' }} primary={item.name} />
           </ListItemButton>
         ))}
       </List>

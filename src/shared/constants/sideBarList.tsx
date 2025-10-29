@@ -14,7 +14,6 @@ export const useSideBarList = () => {
   
   const { t } = useTranslation("sidebar")
   
-  console.log("t", t)
   return [
     {
       id: 1,

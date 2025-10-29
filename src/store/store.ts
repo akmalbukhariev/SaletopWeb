@@ -4,14 +4,13 @@ import authAPI from "@/features/auth/api/authAPI"
 import companyAPI from "@/features/company/api/companyAPI" 
 import userAPI from "@/features/user/api/UserAPI" 
 import adminPageAPI from "@/features/admin/api/adminPageAPI"
-import searchReducer from "./slices/searchSlice"
 import notifyAPI from "@/features/notification/api/notifyAPI"
+import dashboardAPI from '../features/dashboard/api/dashboardAPI'
 
 export const store = configureStore({
   reducer: {
     //slice
     user: userSliceReducer,
-    search: searchReducer,
 
     //api
     [userAPI.reducerPath]: userAPI.reducer,
@@ -19,6 +18,7 @@ export const store = configureStore({
     [authAPI.reducerPath]: authAPI.reducer,
     [notifyAPI.reducerPath]: notifyAPI.reducer,
     [adminPageAPI.reducerPath]: adminPageAPI.reducer,
+    [dashboardAPI.reducerPath]: dashboardAPI.reducer
   },
 
   // api middleware
@@ -28,7 +28,8 @@ export const store = configureStore({
       .concat(companyAPI.middleware)
       .concat(authAPI.middleware)
       .concat(notifyAPI.middleware)
-      .concat(adminPageAPI.middleware),
+      .concat(adminPageAPI.middleware)
+      .concat(dashboardAPI.middleware),
 
   // Redux DevTools konfiguratsiyasi
   devTools: import.meta.env.MODE !== "production", // devtool faqat dev muhitida yoqiladi

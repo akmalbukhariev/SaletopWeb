@@ -7,5 +7,6 @@
     "Send": "Send",
     "Approve": "Approve",
     "Reject": "Reject",
-    "Close": "Close"
+    "Close": "Close",
+    "Reset": "Reset"
 }

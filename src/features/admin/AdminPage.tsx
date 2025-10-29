@@ -89,10 +89,8 @@ function AdminPage() {
         'delete'
       ))
       {
-        console.log("admin_id", admin_id) 
         const res = await deleteAdminById(`${admin_id}`) 
 
-        console.log(res) 
         if (res?.data?.resultCode == RESULTCODE.SUCCESS) {
           toastNotify(
             "Admin successfully deleted.", 

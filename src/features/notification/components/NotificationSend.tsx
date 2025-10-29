@@ -28,7 +28,6 @@ function NotificationSend() {
 
   const handleSendNotification = (): void => {
 
-    console.log(title, message, sendUserOrCompany, phone_number)
     if(!title.trim() || !message.trim())
     {
       toastNotify(
