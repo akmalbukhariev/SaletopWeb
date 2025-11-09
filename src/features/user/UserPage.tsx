@@ -13,7 +13,8 @@ import {
   Button,
   Stack,
   Typography,
-  TextField
+  TextField,
+  Zoom
 } from "@mui/material" 
 import BlockIcon from "@mui/icons-material/Block"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -53,6 +54,8 @@ function UserPage() {
   const [activeSearch, setActiveSearch] = useState(false)
 
   const searchInputRef = useRef<HTMLInputElement>(null)
+
+  const [selectedItem, setSelectedItem] = useState<UserRow>()
 
   const { 
     data: allUsers, 
@@ -358,6 +361,15 @@ function UserPage() {
     }
   }, [pageFormat.offset, pageFormat.pageSize])
 
+  const handleRowClicked = (params: any) => {
+    console.log("row clicked:", params)
+    if(params.field === "profile_picture_url") 
+    {
+      setSelectedItem(params.row as UserRow)
+    }
+  }
+
+
   return (
     <>
       <Grid
@@ -402,62 +414,119 @@ function UserPage() {
             </Button>
           </Box>
         </Stack>
-        <Box sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
-          <DataGrid
-            key={i18n.language}
-            getRowId={row => row.user_id}
-            editMode="row"
-            rows={rows || []}
-            columns={columns}
-            loading={isAllLoading || isSearchLoading}
-            pageSizeOptions={[5, 10, 25, 50]}
-            paginationModel={paginationModel}
-            rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
-            paginationMode="server" // <-- Enable server-side pagination
-            onPaginationModelChange={({ page, pageSize }) => {
-              setPageFormat(prev => ({
-                ...prev,
-                offset: page,
-                pageSize: pageSize,
-              })) 
-            }}
-          />
-          <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ minWidth: 160, zIndex: 9999, }}> 
-            <Box sx={{ border: '1px solid #d9d9d9', p: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
-              <Button
-                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
-                fullWidth
-                variant="text"
-                color="error"
-                onClick={() => {
-                  handleUserStatusChange(selectedUser?.phone_number ? selectedUser?.phone_number : "", selectedUser?.status == "BANNED" ? "INACTIVE" : "BANNED") 
-                }}
-                startIcon={<BlockIcon />}
-              >
-                { selectedUser?.status == "BANNED" ? t("Unblock", { ns: "texts" }) : t("Block", { ns: "texts" }) } 
-              </Button>
-              <Button
-                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
-                fullWidth
-                variant="text"
-                color="secondary"
-                startIcon={<DeleteIcon />}
-                onClick={() => handleUserDeletionChange(selectedUser?.deleted ? false : true, selectedUser?.phone_number ? selectedUser?.phone_number : "") }
-              >
-                { selectedUser?.deleted ? t("Undelete", { ns: "texts" }) : t("DeleteSoft", { ns: "texts" }) } 
-              </Button>
-              <Button 
-                onClick={() => handleAddNotification(selectedUser?.phone_number ? selectedUser?.phone_number : "")}
-                sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
-                fullWidth
-                variant="text"
-                color="success"
-                startIcon={<AddAlertIcon />}>
-                { t("AddNotification", { ns: "texts" }) }
-              </Button>
-            </Box>
-          </Popper>
-        </Box>
+        <Grid container spacing={2} columns={{ md: 12 }} sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
+          <Grid size={{ md: selectedItem ? 9 : 12 }} sx={{ height: "100%", overflow: "hidden" }}>
+            <DataGrid
+              key={i18n.language}
+              getRowId={row => row.user_id}
+              editMode="row"
+              rows={rows || []}
+              columns={columns}
+              loading={isAllLoading || isSearchLoading}
+              pageSizeOptions={[5, 10, 25, 50]}
+              paginationModel={paginationModel}
+              rowCount={totalRows} // <-- This tells DataGrid the total number of rows for server-side pagination
+              paginationMode="server" // <-- Enable server-side pagination
+              onPaginationModelChange={({ page, pageSize }) => {
+                setPageFormat(prev => ({
+                  ...prev,
+                  offset: page,
+                  pageSize: pageSize,
+                })) 
+              }}
+              onCellClick={(params) => handleRowClicked(params)}
+            />
+            <Popper id={id} open={openAction} anchorEl={anchorEl} placement={'bottom-end' as PopperPlacementType} sx={{ minWidth: 160, zIndex: 9999, }}> 
+              <Box sx={{ border: '1px solid #d9d9d9', p: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
+                <Button
+                  sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                  fullWidth
+                  variant="text"
+                  color="error"
+                  onClick={() => {
+                    handleUserStatusChange(selectedUser?.phone_number ? selectedUser?.phone_number : "", selectedUser?.status == "BANNED" ? "INACTIVE" : "BANNED") 
+                  }}
+                  startIcon={<BlockIcon />}
+                >
+                  { selectedUser?.status == "BANNED" ? t("Unblock", { ns: "texts" }) : t("Block", { ns: "texts" }) } 
+                </Button>
+                <Button
+                  sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                  fullWidth
+                  variant="text"
+                  color="secondary"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => handleUserDeletionChange(selectedUser?.deleted ? false : true, selectedUser?.phone_number ? selectedUser?.phone_number : "") }
+                >
+                  { selectedUser?.deleted ? t("Undelete", { ns: "texts" }) : t("DeleteSoft", { ns: "texts" }) } 
+                </Button>
+                <Button 
+                  onClick={() => handleAddNotification(selectedUser?.phone_number ? selectedUser?.phone_number : "")}
+                  sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                  fullWidth
+                  variant="text"
+                  color="success"
+                  startIcon={<AddAlertIcon />}>
+                  { t("AddNotification", { ns: "texts" }) }
+                </Button>
+              </Box>
+            </Popper>
+          </Grid>
+          <Zoom in={selectedItem ? true : false}>
+            <Grid display={selectedItem ? "flex" : "none"} container flexDirection='column' size={{ md: 3 }} sx={{ border: '1px solid #e1e1e1', borderRadius: 1, p:2, overflow: 'hidden' }}>
+              <Box sx={{ display: "flex", flexDirection: "column", height: "100%", gap: 2 }}>
+                <Box sx={{ mb: 2, overflow: "hidden" }}>
+                  <Typography variant='h4' sx={{ mb: 1 }}>
+                    {selectedItem?.first_name}
+                  </Typography>
+                  <Typography>
+                    {selectedItem?.phone_number}
+                  </Typography>
+                </Box>
+                <Box 
+                  sx={{ 
+                    width: "100%", 
+                    maxWidth: {
+                      xs: 80,
+                      sm: 100,
+                      md: 180,
+                      lg: 250,
+                      xl: 400 
+                    },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    height: {
+                      xs: 80,
+                      sm: 100,
+                      md: 180,
+                      lg: 250,
+                      xl: 400  
+                    }, 
+                    borderRadius: 2,
+                    overflow: 'hidden'
+                  }}>
+                  <img 
+                    src={selectedItem?.profile_picture_url || ""} 
+                    style={{ 
+                      height: "100%", 
+                      width: "100%",
+                      objectFit: 'cover', 
+                      borderRadius: 2 
+                    }}/>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: 'space-between' }}>
+                  {/* <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' onClick={() => handleItemApproveReject(true)}>{t("Approve", { ns: "buttons" })}</Button> */}
+                  {/* <Button sx={{ fontSize: { sm: 10, md: 9, lg:14 } }} variant='contained' color='error' onClick={() => handleItemApproveReject(false)}>{t("Reject", { ns: "buttons" })}</Button> */}
+                </Box>
+                <Box sx={{ mt:'auto', display: "flex", justifyContent  : 'space-between' }}>
+                  {/* <Button variant='contained' sx={{ mt: 2, fontSize: { sm: 10, md: 9, lg:14 } }} color='error' onClick={() => handleItemDelete()} >{t("Delete", { ns: "texts" })}</Button> */}
+                  <Button variant='outlined' sx={{ mt: 2, fontSize: { sm: 10, md: 9, lg:14 } }} color='error' onClick={() => setSelectedItem(undefined)} >{t("Close", { ns: "buttons" })}</Button>
+                </Box>
+              </Box>
+            </Grid>
+          </Zoom>
+        </Grid>
       </Grid>
       { ConfirmDialog } 
     </>

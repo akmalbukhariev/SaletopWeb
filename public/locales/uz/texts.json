@@ -16,5 +16,7 @@
     "Pending": "Kutilmoqda",
     "Failed": "Xatolik",
     "Cancel": "Bekor qilish",
-    "Confirm": "Tasdiqlash"
+    "Confirm": "Tasdiqlash",
+    "AmountDona": "dona",
+    "AmountTa": "ta"
 }

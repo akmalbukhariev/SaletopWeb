@@ -16,5 +16,7 @@
     "Pending": "Pending",
     "Failed": "Failed",
     "Cancel": "Cancel",
-    "Confirm": "Confirm"
+    "Confirm": "Confirm",
+    "AmountDona": "product(s)",
+    "AmountTa": "..."
 }

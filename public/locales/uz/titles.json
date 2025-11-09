@@ -1,4 +1,19 @@
 {
     "AdminPanel": "Admin panel",
-    "Username": "Foydalanuvchi nomi"
+    "Username": "Foydalanuvchi nomi",
+    "SellersInfo": "Sotuvchilar ma'lumoti",
+    "BuyersInfo": "Xaridorlar ma'lumoti",
+    "ServerStatus": "Server holati",
+    "ServerMemory": "Server xotirasi ishlatilishi",
+    "TotalSellers": "Jami sotuvchilar",
+    "ActiveSellers": "Faol sotuvchilar",
+    "InActiveSellers": "Nofaol sotuvchilar",
+    "BannedSellers": "Ta'qiqlangan sotuvchilar",
+    "TotalBuyers": "Jami xaridorlar",
+    "ActiveBuyers": "Faol xaridorlar",
+    "InActiveBuyers": "Nofaol xaridorlar",
+    "BannedBuyers": "Ta'qiqlangan xaridorlar",
+    "ApprovedProducts": "Tasdiqlangan mahsulotlar",
+    "UnapprovedProducts": "Tasdiqlanmagan mahsulotlar"
+        
 }

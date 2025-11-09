@@ -3,7 +3,7 @@ import { useConfirm } from "@/shared/hooks/useConfirm"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
 import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography, Zoom } from "@mui/material"
 import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
-import { use, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   useApprovalPosterListMutation,
@@ -364,7 +364,8 @@ function ModerationPage() {
                     xs: 80,
                     sm: 100,
                     md: 180,
-                    lg: 400  
+                    lg: 250,
+                    xl: 400   
                   },
                   display: "flex",
                   alignItems: "center",
@@ -373,7 +374,8 @@ function ModerationPage() {
                     xs: 80,
                     sm: 100,
                     md: 180,
-                    lg: 400  
+                    lg: 250,
+                    xl: 400   
                   }, 
                   borderRadius: 2,
                   overflow: 'hidden'

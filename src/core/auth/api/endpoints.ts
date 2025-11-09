@@ -17,7 +17,7 @@ export const ENDPOINTS = {
   DASHBOARD:{
     COMPANY_STATISTICS: "company/statistics",
     USER_STATISTICS: "user/statistics",
-    SYSTEM_STATUS: "system", // Retrieve overall system health
+    SYSTEM_STATUS: "status", // Retrieve overall system health
   },
   USERS: {
     PAGINATED_LIST: "user/getPaginatedUsers",

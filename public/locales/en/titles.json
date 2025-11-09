@@ -1,4 +1,18 @@
 {
     "AdminPanel": "Admin Panel",
-    "Username": "Username"
+    "Username": "Username",
+    "SellersInfo": "Sellers Information",
+    "BuyersInfo": "Buyers Information",
+    "ServerStatus": "Server Status",
+    "ServerMemory": "Server Memory Usage",
+    "TotalSellers": "Total Sellers",
+    "ActiveSellers": "Active Sellers",
+    "InActiveSellers": "InActive Sellers",
+    "BannedSellers": "Banned Sellers",
+    "TotalBuyers": "Total Buyers",
+    "ActiveBuyers": "Active Buyers",
+    "BannedBuyers": "Banned Buyers",
+    "InActiveBuyers": "InActive Buyers",
+    "ApprovedProducts": "Approved products",
+    "UnapprovedProducts": "Unapproved products"
 }

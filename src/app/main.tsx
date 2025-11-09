@@ -8,14 +8,18 @@ import App from "./App"
 import AuthProvider from "./providers/AuthProvider"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { ThemeProvider } from "@emotion/react"
+import theme from "@/theme/theme"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode >
-    <Provider store={store}>
-      <AuthProvider>
-        <App />
-        <ToastContainer />
-      </AuthProvider>
-    </Provider>
+    <ThemeProvider theme={ theme }>
+      <Provider store={store}>
+        <AuthProvider>
+          <App />
+          <ToastContainer />
+        </AuthProvider>
+      </Provider>
+    </ThemeProvider>
   </StrictMode>
 )
