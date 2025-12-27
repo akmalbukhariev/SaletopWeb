@@ -34,7 +34,8 @@ export const ENDPOINTS = {
     GET_POSTER_LIST: "company/getPosterList",
     CHANGE_APPROVAL_POSTER_LIST: "company/approvalPosterList",
     NEW_ADDED_POSTER_LIST: "company/getNewAddedPosterList",
-    DELETE_POSTER_BY_ID: (poster_id: string | number ) => `company/deletePoster/${poster_id}`
+    DELETE_POSTER_BY_ID: (poster_id: string | number ) => `company/deletePoster/${poster_id}`,
+    UPDATE_POSTER_CATEGORY: "company/updatePosterCategoryList",
   },
   NOTIFICATIONS: {
     PAGINATED_LIST: "notification/getAllNotifications",

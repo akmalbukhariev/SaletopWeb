@@ -1,17 +1,19 @@
 import toastNotify from "@/shared/components/toastNotify"
 import { useConfirm } from "@/shared/hooks/useConfirm"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
-import { Avatar, Box, Button, Chip, Grid, Stack, Switch, Typography, Zoom } from "@mui/material"
+import { Avatar, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Switch, Typography, Zoom } from "@mui/material"
 import { DataGrid, GridColDef, GridRowId, GridRowModel, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, StrictMode } from 'react'
 import { useTranslation } from "react-i18next"
 import {
   useApprovalPosterListMutation,
   useDeletePosterByIdMutation,
   useGetNewAddedPosterListQuery,
-  useGetPosterListQuery
+  useGetPosterListQuery,
+  useUpdatePosterCategoryListMutation
 } from "../company/api/companyAPI"
 import { ModerationRow } from './type/ModerationType'
+import { PosterCategoryTypes } from "@/shared/constants/PosterCategoryTypes"
 
 function ModerationPage() {
 
@@ -35,6 +37,7 @@ function ModerationPage() {
 
   const [ deletePosterById ] = useDeletePosterByIdMutation()
   
+  const [ updatePosterCategoryList ] = useUpdatePosterCategoryListMutation()
   //APi call
   const { 
     data: allPosterList, 
@@ -93,8 +96,8 @@ function ModerationPage() {
     () => [
       {
         field: "image_url",
-        headerName: t("Profile", { ns: "headers" }),
-        width: 70,
+        headerName: t("Product", { ns: "headers" }),
+        width: 100,
         sortable: false,
         filterable: false,
         renderCell: params => (
@@ -115,8 +118,19 @@ function ModerationPage() {
         field: "category",
         headerName: t("Category", { ns: "headers" }),
         width: 200,
-        flex: 1,
-        minWidth: 100,
+        renderCell: params => (
+          <Select 
+            sx={{ fontSize: 12, width: 150, height: 35 }} 
+            value={params.value} 
+            id="demo-simple-select-label" 
+            onChange={(e) => handleCategoriesSelect(e.target.value, params.row.poster_id)}>
+            {
+              PosterCategoryTypes && Object.keys(PosterCategoryTypes).map((key) => (
+                <MenuItem sx={{ fontSize: 12 }} key={key} value={key}>{key}</MenuItem>
+              ))
+            }
+          </Select>
+        )
       },
       { field: "title", headerName: t("Title", { ns: "headers" }), width: 130 },
       { field: "description", headerName: t("Description", { ns: "headers" }), width: 350, minWidth: 200, flex:1 },
@@ -285,6 +299,36 @@ function ModerationPage() {
     }
   }
 
+  // Handle category selection change
+  const handleCategoriesSelect = async (selectedCategory: string, posterId: number) => {
+    try {
+      const res = await updatePosterCategoryList(
+        {
+          posterIdList: [{
+            poster_id: posterId,
+            category: selectedCategory
+          }]
+        }
+      )
+      
+      if (res.data?.resultCode == RESULTCODE.SUCCESS) {
+        toastNotify(
+          res.data?.resultMsg,
+          "success"
+        ) 
+      } else {
+        toastNotify(
+          res.data?.resultMsg,
+          "error",
+        ) 
+      }
+    } catch (error) {
+      toastNotify(
+      error as string,
+      "error",
+      ) 
+    }
+  }
 
   return (
     <Grid
@@ -305,15 +349,30 @@ function ModerationPage() {
         justifyContent="space-between"
         sx={{ mb: 2, flexShrink: 0 }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Moderation", { ns: "sidebar" })}</Typography>
-        <Box sx={{ display: "flex", gap: 4 }}>
-          <Button variant='contained' color={filterType === "all" ? "success" : 'inherit'} onClick={() => handleFilterAction("all")}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>{t("Moderation", { ns: "sidebar" })}</Typography>
+          {/* <FormControl sx={{ fontSize: 14, width: 200 }} size="small">
+            <InputLabel id="demo-simple-select-label" htmlFor="demo-simple-select-label" >{t("Categories", { ns: "texts" })}</InputLabel>
+            <Select defaultValue={"uz"} id="demo-simple-select-label" label={t("Language", { ns: "texts" })} onChange={(e) => handleCategoriesSelect()}>
+              {
+                PosterCategoryTypes && Object.keys(PosterCategoryTypes).map((key) => (
+                  <MenuItem sx={{ fontSize: 12 }} key={key} value={key}>{key}</MenuItem>
+                ))
+              }
+             
+            </Select>
+          </FormControl>
+          <Button variant="contained" onClick={() => setSelectedItem(undefined)} >{t("SAVE", { ns: "buttons" })}</Button> */}
+        </Box>
+        
+        <Box sx={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "center" }}>
+          <Button variant='contained' color={filterType === "all" ? "success" : 'inherit'} sx={{ height: 38, fontSize: { xs: 8, sm: 8, md: 14 }, lineHeight: 1 }} onClick={() => handleFilterAction("all")}> 
             {t("All", { ns: "buttons" })} 
           </Button>
-          <Button variant="contained" color={filterType === "newAdded" ? "success" : 'inherit'} onClick={() => handleFilterAction("newAdded")}>
+          <Button variant="contained" color={filterType === "newAdded" ? "success" : 'inherit'} sx={{ height: 38, fontSize: { xs: 8, sm: 8, md: 12 }, lineHeight: 1 }} onClick={() => handleFilterAction("newAdded")}>
             {t("NewPosters", { ns: "buttons" })}
           </Button>
-          <Button disabled={isPosterLoading || isNewAddedPosterLoading} variant="contained" color='primary' onClick={() => handleAllPosterApproving()}>
+          <Button disabled={isPosterLoading || isNewAddedPosterLoading} variant="contained" color='primary' sx={{ height: 38, fontSize: { xs: 8, sm: 8, md: 12 }, lineHeight: 1 }} onClick={() => handleAllPosterApproving()}>
             {t("ApproveAll", { ns: "buttons" })}
           </Button>
         </Box>

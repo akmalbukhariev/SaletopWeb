@@ -70,7 +70,15 @@ const companyAPI = createApi({
         method: "DELETE"
       }),
       invalidatesTags: ["CompanyItems"],
-    })
+    }),
+    updatePosterCategoryList: builder.mutation ({
+      query: (data: { posterIdList: [{ poster_id: number, category: string }] }) => ({
+        url: ENDPOINTS.COMPANIES.UPDATE_POSTER_CATEGORY,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["CompanyItems"],
+    }),
   }),
 }) 
 
@@ -84,5 +92,6 @@ export const {
   useGetPosterListQuery,
   useApprovalPosterListMutation,
   useGetNewAddedPosterListQuery,
-  useDeletePosterByIdMutation
+  useDeletePosterByIdMutation,
+  useUpdatePosterCategoryListMutation,
 } = companyAPI 
