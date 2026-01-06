@@ -1,7 +1,7 @@
 import { IUserState } from "@/shared/types/IUserState" 
 import { useAppDispatch, useAppSelector } from "@/store/hooks" 
 import { login, logout } from "@/store/slices/userSlice" 
-import { useLoginUserMutation } from "@/features/auth/api/authAPI" 
+import { useLoginUserMutation } from "@/pages/auth/api/authAPI" 
 import { ROUTES } from "@/shared/constants/routes"
 import { useEffect } from "react"
 

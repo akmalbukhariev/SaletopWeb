@@ -26,7 +26,7 @@
         "src/shared/*"
       ],
       "@features/*": [
-        "src/features/*"
+        "src/pages/*"
       ],
       "@theme/*": [
         "src/theme/*"

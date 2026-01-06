@@ -1,5 +1,5 @@
 import toastNotify from "@/shared/components/toastNotify" 
-import { UserRow } from "@/features/user/type/UserType" 
+import { UserRow } from "@/pages/user/type/UserType" 
 import { RESULTCODE } from "@/shared/utils/ResultCode" 
 import {
   Avatar,

@@ -1,3 +1,9 @@
+public/
+├─locales/
+│  ├─en/
+│  ├─uz/
+│  └─uz-cyrl/
+│
 src/
 ├─ app/                        # Ilovaning "qobig‘i" va kirish nuqtasi
 │  ├─ App.tsx                  # Asosiy React komponent (root component)
@@ -56,14 +62,14 @@ src/
 │  │  ├─ pages/                # Cart.page, Checkout.page sahifalari
 │  │  ├─ models.ts             # Orders bilan bog‘liq turlar
 │  │  └─ index.ts
-│  └─ profile/
-│     ├─ api/                  # Profile API
-│     ├─ components/           # ProfileHeader, OrderHistoryTable
-│     ├─ hooks/                # useProfile hook
-│     ├─ pages/                # Profile.page sahifasi
-│     ├─ models.ts             # Profile turlari
-│     └─ index.ts
-│
+│  ├─ profile/
+│  │  ├─ api/                  # Profile API
+│  │  ├─ components/           # ProfileHeader, OrderHistoryTable
+│  │  ├─ hooks/                # useProfile hook
+│  │  ├─ pages/                # Profile.page sahifasi
+│  │  ├─ models.ts             # Profile turlari
+│  │  └─ index.ts
+│  └─ NotFound.page.tsx        # 404 sahifa
 ├─ theme/                      # MUI Theme markazlashtirilgan joy
 │  ├─ index.ts                 # createTheme va ThemeProvider yig‘ilishi
 │  ├─ palette.ts               # Rang sxemasi (brand ranglar, fon, text ranglar)
@@ -76,78 +82,6 @@ src/
 │
 ├─ store/                      # Butun app bo‘yicha state boshqaruvi (zustand/redux)
 │  └─ user.store.ts            # User bilan bog‘liq global state
-│
-├─ pages/                      # Juda ingichka (thin) top-level sahifalar (routing darajasida)
-│  ├─ Home.page.tsx            # Bosh sahifa
-│  └─ NotFound.page.tsx        # 404 sahifa
-
-
-src/
-├─ app/
-│  ├─ App.tsx
-│  ├─ main.tsx
-│  ├─ routes.tsx
-│  └─ providers/
-│     ├─ ThemeProvider.tsx
-│     ├─ QueryProvider.tsx
-│     └─ I18nProvider.tsx
-│
-├─ core/
-│  ├─ api/
-│  │  ├─ apiClient.ts
-│  │  └─ endpoints.ts
-│  ├─ auth/
-│  │  ├─ auth.guard.tsx
-│  │  └─ token.ts
-│  ├─ config/
-│  │  └─ env.ts
-│  ├─ errors/
-│  │  ├─ ErrorBoundary.tsx
-│  │  └─ errorMapping.ts
-│  └─ storage/
-│     └─ local.ts
-│
-├─ shared/
-│  ├─ ui/
-│  │  ├─ FormTextField.tsx
-│  │  └─ Section.tsx
-│  ├─ hooks/useDebounce.ts
-│  ├─ utils/formatters.ts
-│  ├─ constants/index.ts
-│  └─ types/global.d.ts
-│
-├─ features/
-│  ├─ auth/
-│  │  ├─ api/auth.api.ts
-│  │  ├─ components/LoginForm.tsx
-│  │  ├─ hooks/useAuth.ts
-│  │  ├─ pages/Login.page.tsx
-│  │  ├─ models.ts
-│  │  └─ index.ts
-│  └─ plates/
-│     ├─ api/plates.api.ts
-│     ├─ components/PlateCard.tsx
-│     ├─ hooks/usePlates.ts
-│     ├─ pages/Plates.page.tsx
-│     ├─ models.ts
-│     └─ index.ts
-│
-├─ theme/
-│  ├─ index.ts
-│  ├─ palette.ts
-│  ├─ typography.ts
-│  └─ components.ts
-│
-├─ styles/
-│  ├─ tailwind.css
-│  └─ globals.css
-│
-├─ store/
-│  └─ user.store.ts
-│
-├─ pages/
-│  ├─ Home.page.tsx
-│  └─ NotFound.page.tsx
 
 
 

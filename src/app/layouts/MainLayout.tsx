@@ -7,7 +7,7 @@ import { useSideBarList } from "@/shared/constants/sideBarList"
 import { useTranslation } from "react-i18next"
 import { IUserState } from "@/shared/types/IUserState"
 import PersonIcon from "@mui/icons-material/Person"
-import { useAuth } from "@/features/auth"
+import { useAuth } from "@/pages/auth"
 import { useConfirm } from '../../shared/hooks/useConfirm'
 
 

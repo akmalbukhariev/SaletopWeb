@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit" 
 import { userSliceReducer } from "@store/slices/userSlice" 
-import authAPI from "@/features/auth/api/authAPI" 
-import companyAPI from "@/features/company/api/companyAPI" 
-import userAPI from "@/features/user/api/UserAPI" 
-import adminPageAPI from "@/features/admin/api/adminPageAPI"
-import notifyAPI from "@/features/notification/api/notifyAPI"
-import dashboardAPI from '../features/dashboard/api/dashboardAPI'
+import authAPI from "@/pages/auth/api/authAPI" 
+import companyAPI from "@/pages/company/api/companyAPI" 
+import userAPI from "@/pages/user/api/UserAPI" 
+import adminPageAPI from "@/pages/admin/api/adminPageAPI"
+import notifyAPI from "@/pages/notification/api/notifyAPI"
+import dashboardAPI from '../pages/dashboard/api/dashboardAPI'
 
 export const store = configureStore({
   reducer: {

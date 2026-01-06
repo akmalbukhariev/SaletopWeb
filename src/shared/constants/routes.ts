@@ -14,7 +14,10 @@ export const ROUTES = {
       HOME: "/admin/notifications",
       SEND: "/admin/notifications/send",
     },
-
+    ANNOUNCEMENTS: {
+      HOME: "/admin/announcements",
+      CREATE: "/admin/announcements/create",
+    },
     SETTINGS: "/admin/settings",
   },
   NOT_FOUND: "*",

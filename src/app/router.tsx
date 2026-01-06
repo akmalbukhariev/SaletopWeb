@@ -8,27 +8,27 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 const MainLayout = React.lazy(() => import("@app/layouts/MainLayout")) 
 const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout")) 
 
-const AdminPage = React.lazy(() => import("@features/admin/AdminPage")) 
-const DashboardPage = React.lazy(() => import("@features/dashboard/MainPage")) 
-const UserPage = React.lazy(() => import("@features/user/UserPage")) 
-const CompanyPage = React.lazy(() => import("@features/company/CompanyPage")) 
+const AdminPage = React.lazy(() => import("@/pages/admin/AdminPage")) 
+const DashboardPage = React.lazy(() => import("@/pages/dashboard/MainPage")) 
+const UserPage = React.lazy(() => import("@/pages/user/UserPage")) 
+const CompanyPage = React.lazy(() => import("@/pages/company/CompanyPage")) 
 
 const ModerationPage = React.lazy(
-  () => import("@features/moderation/ModerationPage")
+  () => import("@/pages/moderation/ModerationPage")
 ) 
 
 const NotificationPage = React.lazy(
-  () => import("@features/notification/NotificationPage")
+  () => import("@/pages/notification/NotificationPage")
 ) 
 
-const LoginPage = React.lazy(() => import("@/features/auth/pages/LoginPage")) 
+const LoginPage = React.lazy(() => import("@/pages/auth/pages/LoginPage")) 
 
 const RegisterPage = React.lazy(
-  () => import("@/features/auth/pages/RegisterPage")
+  () => import("@/pages/auth/pages/RegisterPage")
 ) 
 
 const NotificationSend = React.lazy(
-  () => import("@features/notification/components/NotificationSend"))
+  () => import("@/pages/notification/components/NotificationSend"))
 
 const NotFound = React.lazy(() => import("@/pages/NotFound")) 
 
@@ -94,6 +94,22 @@ const router = createBrowserRouter([
         element: (
           <AuthGuard>
             <NotificationSend />
+          </AuthGuard>
+        )
+      },
+      {
+        path: ROUTES.ADMIN.ANNOUNCEMENTS.HOME,
+        element: (
+          <AuthGuard>
+            <Box />
+          </AuthGuard>
+        )
+      },
+      {
+        path: ROUTES.ADMIN.ANNOUNCEMENTS.CREATE,
+        element: (
+          <AuthGuard>
+            <Box />
           </AuthGuard>
         )
       },

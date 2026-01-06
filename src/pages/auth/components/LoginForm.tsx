@@ -1,4 +1,4 @@
-import { useAuth } from "@/features/auth" 
+import { useAuth } from "@/pages/auth" 
 import { ROUTES } from "@/shared/constants/routes" 
 import { RESULTCODE } from "@/shared/utils/ResultCode"
 import {

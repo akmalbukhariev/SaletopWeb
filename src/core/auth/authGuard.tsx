@@ -1,4 +1,4 @@
-import { useAuth } from "@/features/auth/hooks/useAuth" 
+import { useAuth } from "@/pages/auth/hooks/useAuth" 
 import { ReactNode, useEffect } from "react"
 
 interface AuthGuardProps {

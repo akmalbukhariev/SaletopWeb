@@ -1,4 +1,4 @@
-import { NotificationRow } from "@/features/notification/type/NotificationType"
+import { NotificationRow } from "@/pages/notification/type/NotificationType"
 import toastNotify from "@/shared/components/toastNotify"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
 import { Box, Button, Chip, Grid, IconButton, Link, Stack, Typography } from "@mui/material"

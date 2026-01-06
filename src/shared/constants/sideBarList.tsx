@@ -5,8 +5,8 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import StoreRoundedIcon from "@mui/icons-material/StoreRounded" 
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded" 
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded" 
-import TuneRoundedIcon from "@mui/icons-material/TuneRounded" 
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings" 
+import AnnouncementRoundedIcon from '@mui/icons-material/AnnouncementRounded'
 import { useTranslation } from "react-i18next"
 
 
@@ -56,6 +56,13 @@ export const useSideBarList = () => {
       path: ROUTES.ADMIN.NOTIFICATIONS.HOME,
       selected: false,
       icon: NotificationsRoundedIcon,
+    },
+    {
+      id: 7,
+      name: t("Announcements"),
+      path: ROUTES.ADMIN.ANNOUNCEMENTS.HOME,
+      selected: false,
+      icon: AnnouncementRoundedIcon,
     },
     // {
     //   id: 7,

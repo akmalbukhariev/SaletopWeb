@@ -13,7 +13,7 @@ import {
   Zoom,
 } from "@mui/material" 
 import { DataGrid, GridColDef } from "@mui/x-data-grid" 
-import { CompanyRow } from "@/features/company/type/CompanyType" 
+import { CompanyRow } from "@/pages/company/type/CompanyType" 
 import { useEffect, useMemo, useState, MouseEvent, useRef } from "react" 
 import { 
   useChangeCompanyDeletionStatusMutation, 
