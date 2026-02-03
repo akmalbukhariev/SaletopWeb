@@ -9,6 +9,9 @@
     "Unblock": "Blokdan chiqarish",
     "Block": "Bloklash",
     "AddNotification": "Bildirish qo`shish",
+    "AddAnnouncement": "E'lon qo`shish",
+    "RegisterAnnouncement": "E'lonni ro`yxatdan o`tkazish",
+    "AnnouncementsDesc": "Maxsus va umumiy e'lonlar yarating.",
     "Approved": "Tasdiqlangan",
     "NotApproved": "Tasdiqlanmagan",
     "NotificationDesc": "Maxsus yoki umumiy bildirishlar yarating",
@@ -18,5 +21,7 @@
     "Cancel": "Bekor qilish",
     "Confirm": "Tasdiqlash",
     "AmountDona": "dona",
-    "AmountTa": "ta"
+    "AmountTa": "ta",
+    "PleaseFillInTheInformation": "Iltimos, ma'lumotlarni to'liq kiriting",
+    "PleaseSelectAtLeastOneUser": "Iltimos, kamida bitta foydalanuvchini tanlang"
 }

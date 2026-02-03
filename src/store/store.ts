@@ -6,6 +6,7 @@ import userAPI from "@/pages/user/api/UserAPI"
 import adminPageAPI from "@/pages/admin/api/adminPageAPI"
 import notifyAPI from "@/pages/notification/api/notifyAPI"
 import dashboardAPI from '../pages/dashboard/api/dashboardAPI'
+import announcementAPI from "@/pages/announcement/api/announcementAPI"
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     [authAPI.reducerPath]: authAPI.reducer,
     [notifyAPI.reducerPath]: notifyAPI.reducer,
     [adminPageAPI.reducerPath]: adminPageAPI.reducer,
-    [dashboardAPI.reducerPath]: dashboardAPI.reducer
+    [dashboardAPI.reducerPath]: dashboardAPI.reducer,
+    [announcementAPI.reducerPath]: announcementAPI.reducer,
   },
 
   // api middleware
@@ -29,7 +31,8 @@ export const store = configureStore({
       .concat(authAPI.middleware)
       .concat(notifyAPI.middleware)
       .concat(adminPageAPI.middleware)
-      .concat(dashboardAPI.middleware),
+      .concat(dashboardAPI.middleware)
+      .concat(announcementAPI.middleware),
 
   // Redux DevTools konfiguratsiyasi
   devTools: import.meta.env.MODE !== "production", // devtool faqat dev muhitida yoqiladi

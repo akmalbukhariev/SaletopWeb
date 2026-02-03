@@ -12,11 +12,16 @@
     "Approved": "Тасдиқланган",
     "NotApproved": "Тасдиқланмаган",
     "NotificationDesc": "Махсус ёки умумий билдиришлар яратинг",
+    "AddAnnouncement": "Эълон қўшиш",
+    "RegisterAnnouncement": "Эълонни рўйхатдан ўтказиш",
+    "AnnouncementsDesc": "Махсус ва умумий эълонлар яратинг.",
     "Language": "Тил",
     "Pending": "Кутилмоқда",
     "Failed": "Хатолик",
     "Cancel": "Бекор қилиш",
     "Confirm": "Тасдиқлаш",
     "AmountDona": "дона",
-    "AmountTa": "та"
+    "AmountTa": "та",
+    "PleaseFillInTheInformation": "Илтимос, маълумотларни тўлиқ киритинг",
+    "PleaseSelectAtLeastOneUser": "Илтимос, камида битта фойдаланувчини танланг"
 }

@@ -9,6 +9,9 @@
     "Unblock": "Unblock",
     "Block": "Block",
     "AddNotification": "Add Notification",
+    "AddAnnouncement": "Add Announcement",
+    "RegisterAnnouncement": "Register Announcement",
+    "AnnouncementsDesc": "Create special and general announcements.",
     "Approved": "Approved",
     "NotApproved": "Not Approved"       ,
     "NotificationDesc": "Create special and general notifications.",
@@ -18,5 +21,7 @@
     "Cancel": "Cancel",
     "Confirm": "Confirm",
     "AmountDona": "product(s)",
-    "AmountTa": "..."
+    "PleaseFillInTheInformation": "Please fill in the information completely",
+    "AmountTa": "...",
+    "PleaseSelectAtLeastOneUser": "Please select at least one user"
 }

@@ -1,7 +1,7 @@
 import { Label, Tune } from "@mui/icons-material"
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextareaAutosize, TextField, Typography } from "@mui/material"
 import React, { useState } from "react"
-import { useSearchParams } from "react-router"
+import { useLocation, useSearchParams } from "react-router"
 import toastNotify from "@/shared/components/toastNotify"
 import { useSendNotificationToAllMutation, useSendNotificationToUserMutation } from "../api/notifyAPI"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
@@ -13,10 +13,13 @@ function NotificationSend() {
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
 
-  const [searchParams] = useSearchParams()
-  const searchCompany = searchParams.get('company') ?? false
+  const location = useLocation()
+
+  const state = location.state as { company?: string; phone_number?: string } | undefined
+
+  const searchCompany = state?.company ?? false
   const sendUserOrCompany = searchCompany === 'yes' ? true : false
-  const phone_number = searchParams.get('phone_number') ?? null
+  const phone_number = state?.phone_number ?? null
 
   //Translation
   const { t } = useTranslation(["headers", "buttons", "texts", "placeholders"])

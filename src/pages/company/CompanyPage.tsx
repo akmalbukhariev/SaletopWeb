@@ -12,7 +12,7 @@ import {
   Typography,
   Zoom,
 } from "@mui/material" 
-import { DataGrid, GridColDef } from "@mui/x-data-grid" 
+import { DataGrid, GridColDef, GridRowId, GridRowModel, useGridApiRef } from "@mui/x-data-grid" 
 import { CompanyRow } from "@/pages/company/type/CompanyType" 
 import { useEffect, useMemo, useState, MouseEvent, useRef } from "react" 
 import { 
@@ -30,7 +30,11 @@ import { useConfirm } from "@/shared/hooks/useConfirm"
 import AddAlertIcon from '@mui/icons-material/AddAlert'
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation"
 import { useTranslation } from "react-i18next"
+import AnnouncementIcon from '@mui/icons-material/Announcement'
+import { AnnouncementStateType } from "@/pages/announcement/types/RequestTypes"
+
 function CompanyPage() {
+
   const [rows, setRows] = useState<CompanyRow[]>([]) 
   const [pageFormat, setPageFormat] = useState({ offset: 0, pageSize: 10 }) 
   const [totalRows, setTotalRows] = useState(pageFormat.pageSize) 
@@ -45,6 +49,9 @@ function CompanyPage() {
   const [selectedItem, setSelectedItem] = useState<CompanyRow>()
 
   const { confirm, ConfirmDialog } = useConfirm()
+
+  // DataGrid API ref
+  const dataGridApiRef = useGridApiRef()
 
   // Translation
   const { t, i18n } = useTranslation(["headers", "buttons", "sidebar", "titles", "placeholders", "texts", "messages"])
@@ -75,6 +82,8 @@ function CompanyPage() {
   } = useGetCompanyByPhoneNumQuery(searchPhoneNumber, {
     skip: !activeSearch || searchPhoneNumber?.trim() === "",
   })
+
+
 
   useEffect(() => {
     if(activeSearch){
@@ -359,6 +368,39 @@ function CompanyPage() {
     }
   }
     
+  const handleAddAnnouncement = (): void => {
+    
+    const selectedRows: Map<GridRowId, GridRowModel> | undefined = dataGridApiRef.current?.getSelectedRows()
+     
+    const targets: AnnouncementStateType['targets'] = []
+     
+    // Get selected rows user_id and prepare targets
+    const values = selectedRows?.forEach((row) => {
+      targets.push({
+        targetId: Number(row.company_id),
+        targetType: "COMPANY"
+      })
+    })
+     
+    if(targets.length > 0) {
+      const stateData : AnnouncementStateType = {
+        scope: "TARGETED",
+        targets: targets,
+      }
+ 
+      // NAvigate to announcement create page with state
+      navigate.toAnnouncementsCreate(
+        stateData
+      )
+    }
+    else{
+      toastNotify(
+        t("PleaseSelectAtLeastOneUser", { ns: "texts" }),
+        "warning",
+      )
+    }
+  }
+
   return (
     <>
       <Grid
@@ -408,6 +450,7 @@ function CompanyPage() {
             <DataGrid 
               key={i18n.language}
               rows={rows} 
+              apiRef={dataGridApiRef}
               columns={columns} 
               checkboxSelection
               disableRowSelectionOnClick
@@ -459,6 +502,15 @@ function CompanyPage() {
                   color="success"
                   startIcon={<AddAlertIcon />}>
                   {t("AddNotification", { ns: 'texts' })}
+                </Button>
+                <Button 
+                  onClick={() => handleAddAnnouncement()}
+                  sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                  fullWidth
+                  variant="text"
+                  color='warning'
+                  startIcon={<AnnouncementIcon />}>
+                  { t("AddAnnouncement", { ns: "texts" }) }
                 </Button>
               </Box>
             </Popper>

@@ -1,3 +1,4 @@
 {
-    "NotificationsTextArea": "Write here to send ... " 
+    "NotificationsTextArea": "Write here to send ... " ,
+    "AnnouncementTextArea": "Write body text here to announce ... "
 }

@@ -42,6 +42,12 @@ export const ENDPOINTS = {
     SEND_TO_USER: "notification/sendNotificationToUser",
     SEND_TO_ALL: "notification/sendNotificationToAll", 
   },
+  ANNOUNCEMENTS: {
+    CREATE_ANNOUNCEMENT: "announcement/registerAnnouncement",
+    GET_ANNOUNCEMENTS_BY_ACTOR: "announcement/getAnnouncements",
+    GET_ALL_ANNOUNCEMENTS: "announcement/getAllAnnouncements",
+    DELETE_ANNOUNCEMENT_BY_IDLIST: "announcement/deleteAnnouncementsByIdList"
+  }
 } as const 
 
 export type Endpoints = typeof ENDPOINTS 

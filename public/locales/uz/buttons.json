@@ -8,5 +8,7 @@
     "Approve": "Tasdiqlash",
     "Reject": "Rad etish",
     "Close": "Yopish",
-    "Reset": "Tozalash"
+    "Reset": "Tozalash",
+    "Register": "Ro`yxatdan o`tish",
+    "CreateAnnouncement": "E'lon yaratish"
 }

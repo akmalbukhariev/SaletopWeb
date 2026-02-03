@@ -30,6 +30,12 @@ const RegisterPage = React.lazy(
 const NotificationSend = React.lazy(
   () => import("@/pages/notification/components/NotificationSend"))
 
+const AnnouncementPage = React.lazy(() => import("@/pages/announcement/AnnouncementPage"))
+const CreateAnnouncementPage = React.lazy(
+  () => import("@/pages/announcement/CreateAnnouncementPage")
+)
+
+
 const NotFound = React.lazy(() => import("@/pages/NotFound")) 
 
 const router = createBrowserRouter([
@@ -101,7 +107,7 @@ const router = createBrowserRouter([
         path: ROUTES.ADMIN.ANNOUNCEMENTS.HOME,
         element: (
           <AuthGuard>
-            <Box />
+            <AnnouncementPage />
           </AuthGuard>
         )
       },
@@ -109,7 +115,7 @@ const router = createBrowserRouter([
         path: ROUTES.ADMIN.ANNOUNCEMENTS.CREATE,
         element: (
           <AuthGuard>
-            <Box />
+            <CreateAnnouncementPage />
           </AuthGuard>
         )
       },

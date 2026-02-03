@@ -15,18 +15,18 @@ export const PosterCategoryTypes = {
    
   // Temporary removed categories for future use
   // // --- Daily goods ---
-  // HYGIENE : "HYGIENE" as const, // Gigiyena
-  // HOUSEHOLD : "HOUSEHOLD" as const, // Uy-ro'zg'or
-  // KIDS : "KIDS" as const, // Bolalar
+  HYGIENE : "HYGIENE" as const, // Gigiyena
+  HOUSEHOLD : "HOUSEHOLD" as const, // Uy-ro'zg'or
+  KIDS : "KIDS" as const, // Bolalar
     
   // // --- Non-food / future ---
-  // ELECTRONICS : "ELECTRONICS" as const,
-  // CLOTHING : "CLOTHING" as const,
-  // FURNITURE : "FURNITURE" as const,
-  // BEAUTY : "BEAUTY" as const,
-  // SPORTS : "SPORTS" as const,
-  // BOOKS : "BOOKS" as const,
-  // TOYS : "TOYS" as const,
+  ELECTRONICS : "ELECTRONICS" as const,
+  CLOTHING : "CLOTHING" as const,
+  FURNITURE : "FURNITURE" as const,
+  BEAUTY : "BEAUTY" as const,
+  SPORTS : "SPORTS" as const,
+  BOOKS : "BOOKS" as const,
+  TOYS : "TOYS" as const,
 
   OTHER : "OTHER" as const
 } 

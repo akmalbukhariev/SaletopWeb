@@ -19,7 +19,7 @@ import {
 import BlockIcon from "@mui/icons-material/Block"
 import DeleteIcon from "@mui/icons-material/Delete"
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid" 
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowId, GridRowModel, useGridApiRef } from "@mui/x-data-grid" 
 import { useEffect, useMemo, useRef, useState } from "react" 
 import {
   useChangeUserDeletionStatusMutation,
@@ -30,9 +30,11 @@ import {
 import React from "react"
 import { useConfirm } from "@/shared/hooks/useConfirm"
 import AddAlertIcon from '@mui/icons-material/AddAlert'
-import { useNavigate } from "react-router"
-import { ROUTES } from "@/shared/constants/routes"
 import { useTranslation } from "react-i18next"
+import AnnouncementIcon from '@mui/icons-material/Announcement'
+import { AnnouncementStateType } from "@/pages/announcement/types/RequestTypes"
+import { ref } from "node:process"
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation"
 
 function UserPage() {
 
@@ -56,6 +58,9 @@ function UserPage() {
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   const [selectedItem, setSelectedItem] = useState<UserRow>()
+
+  // DataGrid API ref
+  const dataGridApiRef = useGridApiRef()
 
   const { 
     data: allUsers, 
@@ -87,7 +92,7 @@ function UserPage() {
   const [changeUserDeletionStatus] = useChangeUserDeletionStatusMutation() 
 
   const { confirm, ConfirmDialog } = useConfirm()
-  const navigate = useNavigate()
+  const navigate = useAppNavigation()
 
   useEffect(() => {
     if(activeSearch) {
@@ -324,16 +329,54 @@ function UserPage() {
     }
   } 
 
+  // Add Notification Handler
   const handleAddNotification = (phone_number: string): void => {
 
     if (phone_number) {
-      navigate( {
-        pathname: ROUTES.ADMIN.NOTIFICATIONS.SEND,
-        search: `?company=no&phone_number=${phone_number}`
-      })
+      navigate.toNotificationsSend(
+        {
+          company: "no",
+          phone_number: phone_number
+        }
+      )
     }
   }
 
+  // Announcement qo'shish uchun
+  const handleAddAnnouncement = (): void => {
+   
+    const selectedRows: Map<GridRowId, GridRowModel> | undefined = dataGridApiRef.current?.getSelectedRows()
+    
+    const targets: AnnouncementStateType['targets'] = []
+    
+    // Get selected rows user_id and prepare targets
+    const values = selectedRows?.forEach((row) => {
+      targets.push({
+        targetId: Number(row.user_id),
+        targetType: "USER"
+      })
+    })
+    
+    if(targets.length > 0) {
+
+      const stateData : AnnouncementStateType = {
+        scope: "TARGETED",
+        targets: targets,
+      }
+
+      // NAvigate to announcement create page with state
+      navigate.toAnnouncementsCreate(
+        stateData
+      )
+    }
+    else{
+      toastNotify(
+        t("PleaseSelectAtLeastOneUser", { ns: "texts" }),
+        "error",
+      )
+    }
+  }
+  
   const handleSearchReset = () => {
    
     // Input ni tozalash
@@ -361,6 +404,8 @@ function UserPage() {
     }
   }, [pageFormat.offset, pageFormat.pageSize])
 
+
+  // Row ni bosganda ishlaydi va profile_picture bo'lsa image ni ko'rsatadi
   const handleRowClicked = (params: any) => {
     console.log("row clicked:", params)
     if(params.field === "profile_picture_url") 
@@ -368,7 +413,6 @@ function UserPage() {
       setSelectedItem(params.row as UserRow)
     }
   }
-
 
   return (
     <>
@@ -417,9 +461,12 @@ function UserPage() {
         <Grid container spacing={2} columns={{ md: 12 }} sx={{ flex: 1, minHeight: 0, width: "100%", overflow: "hidden", position: "relative" }}>
           <Grid size={{ md: selectedItem ? 9 : 12 }} sx={{ height: "100%", overflow: "hidden" }}>
             <DataGrid
+              apiRef={dataGridApiRef}
               key={i18n.language}
               getRowId={row => row.user_id}
               editMode="row"
+              checkboxSelection
+              disableRowSelectionOnClick
               rows={rows || []}
               columns={columns}
               loading={isAllLoading || isSearchLoading}
@@ -468,6 +515,15 @@ function UserPage() {
                   color="success"
                   startIcon={<AddAlertIcon />}>
                   { t("AddNotification", { ns: "texts" }) }
+                </Button>
+                <Button 
+                  onClick={() => handleAddAnnouncement()}
+                  sx={{ textTransform: 'none', display: 'flex', justifyContent: 'flex-start' }}
+                  fullWidth
+                  variant="text"
+                  color='warning'
+                  startIcon={<AnnouncementIcon />}>
+                  { t("AddAnnouncement", { ns: "texts" }) }
                 </Button>
               </Box>
             </Popper>

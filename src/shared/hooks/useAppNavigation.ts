@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router"
 import { ROUTES } from "../constants/routes"
-import { useEffect } from "react"
+import { AnnouncementStateType } from "../../pages/announcement/types/RequestTypes"
 
 // Typing (query params for notifications send)
 type SendNotificationParams = {
@@ -29,15 +29,21 @@ export function useAppNavigation() {
     // --- Notifications ---
     toNotificationsHome: () => navigate(ROUTES.ADMIN.NOTIFICATIONS.HOME),
 
-    toNotificationsSend: (params?: SendNotificationParams) => {
-      if (params) {
-        const query = new URLSearchParams({
-          ...(params.company !== undefined && { company: params.company.toString() }),
-          ...(params.phone_number && { phone_number: params.phone_number }),
-        })
-        navigate(`${ROUTES.ADMIN.NOTIFICATIONS.SEND}?${query.toString()}`)
+    toNotificationsSend: (state?: SendNotificationParams) => {
+      if (state) {
+        navigate(ROUTES.ADMIN.NOTIFICATIONS.SEND, { state: state })
       } else {
         navigate(ROUTES.ADMIN.NOTIFICATIONS.SEND)
+      }
+    },
+
+    // --- Announcements ---
+    toAnnouncementsHome: () => navigate(ROUTES.ADMIN.ANNOUNCEMENTS.HOME),
+    toAnnouncementsCreate: (state?: AnnouncementStateType) => {
+      if (state) {
+        navigate(ROUTES.ADMIN.ANNOUNCEMENTS.CREATE, { state: state })
+      } else {
+        navigate(ROUTES.ADMIN.ANNOUNCEMENTS.CREATE)
       }
     },
 

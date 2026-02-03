@@ -65,7 +65,7 @@ export const useSideBarList = () => {
       icon: AnnouncementRoundedIcon,
     },
     // {
-    //   id: 7,
+    //   id: 8,
     //   name: "Settings",
     //   path: ROUTES.ADMIN.SETTINGS,
     //   selected: false,
