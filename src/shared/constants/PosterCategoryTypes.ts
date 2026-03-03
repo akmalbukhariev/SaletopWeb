@@ -1,7 +1,9 @@
 export const PosterCategoryTypes = {
   // --- Food (core SaleTop categories) ---
   FOOD_GENERAL : "FOOD_GENERAL" as const, // Oziq-ovqat
+  COOKING_OIL: "COOKING_OIL" as const,             // Yog' / Pishirish yog'i
   DRINKS : "DRINKS" as const, // Ichimliklar
+  COFFEE: "COFFEE" as const,                       // Qahva
   DAIRY : "DAIRY" as const, // Sut mahsulotlari
   MEAT : "MEAT" as const, // Go'sht / Kolbasa
   BAKERY : "BAKERY" as const, // Non / Shirinlik
