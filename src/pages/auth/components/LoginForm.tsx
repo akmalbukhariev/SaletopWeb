@@ -1,5 +1,5 @@
-import { useAuth } from "@/pages/auth" 
-import { ROUTES } from "@/shared/constants/routes" 
+import { useAuth } from "@/pages/auth"
+import { ROUTES } from "@/shared/constants/routes"
 import { RESULTCODE } from "@/shared/utils/ResultCode"
 import {
   Box,
@@ -10,9 +10,9 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material" 
-import { FormEvent, useState } from "react" 
-import { useNavigate } from "react-router" 
+} from "@mui/material"
+import { FormEvent, useState } from "react"
+import { useNavigate } from "react-router"
 
 function LoginForm() {
   const navigate = useNavigate() 

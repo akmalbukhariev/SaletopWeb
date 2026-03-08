@@ -1,7 +1,7 @@
-import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query"
-import { RESULTCODE } from "../utils/ResultCode"
 import { logout } from "@/store/slices/userSlice"
+import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { ROUTES } from "../constants/routes"
+import { RESULTCODE } from "../utils/ResultCode"
 
 const baseUrl =
   import.meta.env.MODE === "development"
@@ -28,7 +28,6 @@ unknown,
 FetchBaseQueryError> = async (args, api, extraOptions) => {
 
   const result = await rowBaseQuery(args, api, extraOptions) 
-  console.log("API Response:", result)
 
   if (result.data && typeof result.data === "object") {
 
@@ -36,8 +35,7 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
     switch(Number(code)) {
       case RESULTCODE.TOKEN_INVALID:
         api.dispatch(logout())
-        window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
-        console.error("Token invalid. Redirecting to login...", result.data)
+        window.location.href = "/admin-page/" + ROUTES.AUTH.LOGIN 
         break 
       case RESULTCODE.LOGIN_DUPLICATE:
         // Handle LOGIN_DUPLICATE case
@@ -56,7 +54,7 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
         break 
       case RESULTCODE.AUTHENTICATION_ERROR:
         api.dispatch(logout())
-        window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
+        window.location.href = "/admin-page/" + ROUTES.AUTH.LOGIN 
         console.error("Authentication error. Redirecting to login...", result.data)
         // Handle AUTHENTICATION_ERROR case
         break 
@@ -87,7 +85,7 @@ FetchBaseQueryError> = async (args, api, extraOptions) => {
       // Token invalid
       console.error("Token expired or invalid. Redirecting to login...") 
       api.dispatch(logout())
-      window.location.href = "/admin-page" + ROUTES.AUTH.LOGIN 
+      window.location.href = "/admin-page/" + ROUTES.AUTH.LOGIN 
     }
   }
 

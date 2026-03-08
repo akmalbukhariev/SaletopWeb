@@ -1,9 +1,14 @@
-import AuthGuard from "@/core/auth/authGuard" 
-import { ROUTES } from "@/shared/constants/routes" 
-import { Box } from "@mui/material" 
-import { basename } from "path"
-import React from "react" 
-import { createBrowserRouter, RouterProvider } from "react-router" 
+import AuthGuard from "@/core/auth/authGuard"
+import { ROUTES } from "@/shared/constants/routes"
+import { Box, CircularProgress } from "@mui/material"
+import React, { Suspense } from "react"
+import { createBrowserRouter, RouterProvider } from "react-router"
+
+const LoadingFallback = () => (
+  <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+    <CircularProgress />
+  </Box>
+)
 
 const MainLayout = React.lazy(() => import("@app/layouts/MainLayout")) 
 const AuthLayout = React.lazy(() => import("@app/layouts/AuthLayout")) 
@@ -49,83 +54,43 @@ const router = createBrowserRouter([
     children: [
       {
         path: ROUTES.ADMIN.DASHBOARD,
-        element: (
-          <AuthGuard>
-            <DashboardPage />
-          </AuthGuard>
-        ),
+        element: <DashboardPage />,
       },
       {
         path: ROUTES.ADMIN.ADMINS,
-        element: (
-          <AuthGuard>
-            <AdminPage />
-          </AuthGuard>
-        ),
+        element: <AdminPage />,
       },
       {
         path: ROUTES.ADMIN.USERS,
-        element: (
-          <AuthGuard>
-            <UserPage />
-          </AuthGuard>
-        ),
+        element: <UserPage />,
       },
       {
         path: ROUTES.ADMIN.COMPANIES,
-        element: (
-          <AuthGuard>
-            <CompanyPage />
-          </AuthGuard>
-        ),
+        element: <CompanyPage />,
       },
       {
         path: ROUTES.ADMIN.MODERATION,
-        element: (
-          <AuthGuard>
-            <ModerationPage />
-          </AuthGuard>
-        ),
+        element: <ModerationPage />,
       },
       {
         path: ROUTES.ADMIN.NOTIFICATIONS.HOME,
-        element: (
-          <AuthGuard>
-            <NotificationPage />
-          </AuthGuard>
-        ),
+        element: <NotificationPage />,
       },
       {
         path: ROUTES.ADMIN.NOTIFICATIONS.SEND,
-        element: (
-          <AuthGuard>
-            <NotificationSend />
-          </AuthGuard>
-        )
+        element: <NotificationSend />,
       },
       {
         path: ROUTES.ADMIN.ANNOUNCEMENTS.HOME,
-        element: (
-          <AuthGuard>
-            <AnnouncementPage />
-          </AuthGuard>
-        )
+        element: <AnnouncementPage />,
       },
       {
         path: ROUTES.ADMIN.ANNOUNCEMENTS.CREATE,
-        element: (
-          <AuthGuard>
-            <CreateAnnouncementPage />
-          </AuthGuard>
-        )
+        element: <CreateAnnouncementPage />,
       },
       {
         path: ROUTES.ADMIN.SETTINGS,
-        element: (
-          <AuthGuard>
-            <Box />
-          </AuthGuard>
-        ),
+        element: <Box />,
       },
     ],
   },
@@ -139,11 +104,7 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.AUTH.REGISTER,
-        element: (
-          <AuthGuard>
-            <RegisterPage />
-          </AuthGuard>
-        ),
+        element: <RegisterPage />,
       },
     ],
   },
@@ -157,7 +118,11 @@ const router = createBrowserRouter([
 }) 
 
 function Router() {
-  return <RouterProvider router={router} /> 
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  )
 }
 
 export default Router 
